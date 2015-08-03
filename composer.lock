@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "be3a666cbdc41f41e2ef6bd15d6ce234",
+    "hash": "bba7f96175d501e2248a7870c59cd687",
     "packages": [
         {
             "name": "tecnick.com/tc-lib-unicode-data",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tecnickcom/tc-lib-unicode-data.git",
-                "reference": "d638e699520881b1b866a5e4486e26c4ea3f325a"
+                "reference": "0aa2d6cece970fc7278d1ebbc41ec7a5bdc9da27"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tecnickcom/tc-lib-unicode-data/zipball/d638e699520881b1b866a5e4486e26c4ea3f325a",
-                "reference": "d638e699520881b1b866a5e4486e26c4ea3f325a",
+                "url": "https://api.github.com/repos/tecnickcom/tc-lib-unicode-data/zipball/0aa2d6cece970fc7278d1ebbc41ec7a5bdc9da27",
+                "reference": "0aa2d6cece970fc7278d1ebbc41ec7a5bdc9da27",
                 "shasum": ""
             },
             "require": {
@@ -40,7 +40,6 @@
                     "Com\\Tecnick\\Unicode\\Data\\": "src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "GNU-LGPL v3"
             ],
@@ -54,12 +53,16 @@
             "description": "PHP library containing Unicode definitions",
             "homepage": "http://www.tecnick.com",
             "keywords": [
+                "PDF",
+                "UTF-8",
                 "font",
-                "pdf",
-                "tc-lib-unicode-data",
-                "utf-8"
+                "tc-lib-unicode-data"
             ],
-            "time": "2015-08-03 13:56:28"
+            "support": {
+                "source": "https://github.com/tecnickcom/tc-lib-unicode-data/tree/1.2.1",
+                "issues": "https://github.com/tecnickcom/tc-lib-unicode-data/issues"
+            },
+            "time": "2015-08-03 16:00:22"
         }
     ],
     "packages-dev": [

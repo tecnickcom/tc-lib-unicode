@@ -31,5 +31,11 @@
         "psr-4":{
             "Com\\Tecnick\\Unicode\\": "src"
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:tecnickcom/tc-lib-unicode-data.git"
+        }
+    ]
 }

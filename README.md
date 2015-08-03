@@ -105,7 +105,7 @@ The packages are generated under the `target` directory.
 
 When this library is installed using an RPM or DEB package, you can use it your code by including the autoloader:
 ```
-require_once ('/usr/share/php/Com/Tecnick/Pdf/Font/Data/autoload.php');
+require_once ('/usr/share/php/Com/Tecnick/Unicode/autoload.php');
 ```
 
 

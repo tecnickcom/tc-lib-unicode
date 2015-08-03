@@ -15,9 +15,9 @@
 
 namespace Com\Tecnick\Unicode\Bidi;
 
-use \Com\Tecnick\Unicode\Data\Type;
-use \Com\Tecnick\Unicode\Data\Constant;
-use \Com\Tecnick\Unicode\Data\Arabic;
+use \Com\Tecnick\Unicode\Data\Type as UniType;
+use \Com\Tecnick\Unicode\Data\Constant as UniConstant;
+use \Com\Tecnick\Unicode\Data\Arabic as UniArabic;
 
 /**
  * Com\Tecnick\Unicode\Bidi\Shaping
@@ -102,7 +102,7 @@ class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
     {
         $this->setAlChars();
         for ($idx = 0; $idx < $this->numchars; ++$idx) {
-            if (Type::$uni[$this->chardata[$idx]['char']] == 'AL') {
+            if (UniType::$uni[$this->chardata[$idx]['char']] == 'AL') {
                 $thischar = $this->chardata[$idx];
                 $pos = $thischar['x'];
                 $prevchar = (($pos > 0) ? $this->alchars[($pos - 1)] : false);
@@ -123,9 +123,9 @@ class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
     {
         $this->numalchars = 0;
         for ($idx = 0; $idx < $this->numchars; ++$idx) {
-            if ((Type::$uni[$this->chardata[$idx]['char']] == 'AL')
-                || ($this->chardata[$idx]['char'] == Constant::SPACE)
-                || ($this->chardata[$idx]['char'] == Constant::ZERO_WIDTH_NON_JOINER)
+            if ((UniType::$uni[$this->chardata[$idx]['char']] == 'AL')
+                || ($this->chardata[$idx]['char'] == UniConstant::SPACE)
+                || ($this->chardata[$idx]['char'] == UniConstant::ZERO_WIDTH_NON_JOINER)
             ) {
                 $this->alchars[$this->numalchars] = $this->chardata[$idx];
                 $this->alchars[$this->numalchars]['i'] = $idx;
@@ -144,11 +144,13 @@ class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
     {
         $last = ($this->numchars - 1);
         for ($idx = 0; $idx < $last; ++$idx) {
-            if (($this->newchardata[$idx]['char'] == Arabic::SHADDA)
-                && (isset(Arabic::$diacritic[($this->newchardata[($idx + 1)]['char'])]))
+            if (($this->newchardata[$idx]['char'] == UniArabic::SHADDA)
+                && (isset(UniArabic::$diacritic[($this->newchardata[($idx + 1)]['char'])]))
             ) {
                 $this->newchardata[$idx]['char'] = false;
-                $this->newchardata[($idx + 1)]['char'] = Arabic::$diacritic[($this->newchardata[($idx + 1)]['char'])];
+                $this->newchardata[($idx + 1)]['char'] = UniArabic::$diacritic[
+                    ($this->newchardata[($idx + 1)]['char'])
+                ];
             }
         }
     }

@@ -23,8 +23,8 @@ use \Com\Tecnick\Unicode\Bidi\StepW;
 use \Com\Tecnick\Unicode\Bidi\StepN;
 use \Com\Tecnick\Unicode\Bidi\StepI;
 use \Com\Tecnick\Unicode\Bidi\StepL;
-use \Com\Tecnick\Unicode\Data\Pattern;
-use \Com\Tecnick\Unicode\Data\Type;
+use \Com\Tecnick\Unicode\Data\Pattern as UniPattern;
+use \Com\Tecnick\Unicode\Data\Type as UniType;
 
 /**
  * Com\Tecnick\Unicode\Bidi
@@ -238,8 +238,8 @@ class Bidi
      */
     protected function isRtlMode()
     {
-        $this->arabic = preg_match(Pattern::ARABIC, $this->str);
-        return (($this->forcertl !== false) || $this->arabic || preg_match(Pattern::RTL, $this->str));
+        $this->arabic = preg_match(UniPattern::ARABIC, $this->str);
+        return (($this->forcertl !== false) || $this->arabic || preg_match(UniPattern::RTL, $this->str));
     }
 
     /**
@@ -259,7 +259,7 @@ class Bidi
         // P3. If a character is found in P2 and it is of type AL or R,
         //     then set the paragraph embedding level to one; otherwise, set it to zero.
         foreach ($this->ordarr as $ord) {
-            $type = Type::$uni[$ord];
+            $type = UniType::$uni[$ord];
             if ($type === 'L') {
                 return 0;
             }

@@ -85,41 +85,41 @@ class BidiTest extends \PHPUnit_Framework_TestCase
             ),
             array(
                 'اختبار بسيط',
-                'طيسب رابتخا'
+                'ﻂﻴﺴﺑ ﺭﺎﺒﺘﺧﺍ'
             ),
             array(
                 json_decode('"\u0671AB\u0679\u0683"'),
-                'ڃٹABٱ'
+                'ﭷﭩABٱ'
             ),
             array(
                 json_decode('"\u067137\u0679\u0683"'),
-                'ڃٹ37ٱ'
+                'ﭷﭩ37ٱ'
             ),
             array(
                 json_decode('"AB\u0683"'),
-                'ABڃ'
+                'ABﭶ'
             ),
             array(
                 json_decode('"AB\u0683"'),
-                'ABڃ',
+                'ABﭶ',
                 'L'
             ),
             array(
                 json_decode('"AB\u0683"'),
-                'ڃAB',
+                'ﭶAB',
                 'R'
             ),
             array(
                 json_decode('"he said \"\u0671\u0679! \u0683\" to her"'),
-                'he said "ٹٱ! ڃ" to her'
+                'he said "ﭧٱ! ﭶ" to her'
             ),
             array(
                 json_decode('"he said \"\u0671\u0679!\" to her"'),
-                'he said "ٹٱ!" to her'
+                'he said "ﭧٱ!" to her'
             ),
             array(
                 json_decode('"he said \"\u0671\u0679! \u200F\" to her"'),
-                'he said "ٹٱ! ‏" to her'
+                'he said "ﭧٱ! ‏" to her'
             ),
             array(
                 json_decode('"START CODES \u202bRLE\u202a LRE \u202eRLO\u202d LRO \u202cPDF\u202c END"'),
@@ -131,7 +131,7 @@ class BidiTest extends \PHPUnit_Framework_TestCase
             ),
             array(
                 json_decode('"\u202D\u0671\u0679\u0683\u202C"'),
-                'ٱٹڃ'
+                'ٱﭩﭷ'
             ),
             array(
                 json_decode('"START RLE'
@@ -145,6 +145,10 @@ class BidiTest extends \PHPUnit_Framework_TestCase
                     .'"'),
                 'START RLE'
             ),
+            array(
+                json_decode('"he said \"\u0671\u0679! \u0683\" to her \u2028\u2029"'),
+                'he said "ﭧٱ! ﭶ" to her   '
+            ),
         );
     }
 
@@ -154,8 +158,8 @@ class BidiTest extends \PHPUnit_Framework_TestCase
     public function testBidiOrd($ordarr, $expected, $forcertl = false)
     {
         $bidi = new \Com\Tecnick\Unicode\Bidi(null, null, $ordarr, $forcertl);
-        //var_export($bidi->getOrdArray());
-        //echo "\n\n".$bidi->getString()."\n\n";
+        //var_export($bidi->getOrdArray()); // DEBUG
+        //echo "\n\n".$bidi->getString()."\n\n"; // DEBUG
         $this->assertEquals($expected, $bidi->getOrdArray());
         
     }
@@ -165,25 +169,48 @@ class BidiTest extends \PHPUnit_Framework_TestCase
         return array(
             array(
                 array(1649,65,66,1657,1667),
-                array(1667,1657,65,66,1649)
+                array(64375,64361,65,66,1649),
             ),
             array(
                 array(1667,1657,65,66,1649),
-                array(1649,65,66,1657,1667)
+                array(64337,65,66,64361,64376),
             ),
             array(
                 array(65,66,1667),
-                array(65,66,1667)
+                array(65,66,64374),
             ),
             array(
                 array(65,66,1667),
-                array(65,66,1667),
+                array(65,66,64374),
                 'L'
             ),
             array(
                 array(65,66,1667),
-                array(1667,65,66),
+                array(64374,65,66),
                 'R'
+            ),
+            array(
+                array(917760,917761,917762,917763),
+                array(917763,917762,917761,917760),
+                'R'
+            ),
+            array(
+                array(48,8314,48,8314,48,8314),
+                array(8314,48,8314,48,8314,48),
+                'R'
+            ),
+            array(
+                array(1632,8239,1632,8239,1632,8239),
+                array(8239,1632,8239,1632,8239,1632),
+                'R'
+            ),
+            array(
+                array(1667,1657,65,66,48,162,49,50,1649),
+                array(64337,65,66,48,162,49,50,64361,64376),
+            ),
+            array(
+                array(65,66,1636,1637,1667,8233),
+                array(65,66,64374,1636,1637,8233),
             ),
         );
     }

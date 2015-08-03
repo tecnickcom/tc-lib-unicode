@@ -15,9 +15,10 @@
 
 namespace Com\Tecnick\Unicode\Bidi;
 
-use \Com\Tecnick\Unicode\Data\Type;
-use \Com\Tecnick\Unicode\Data\Constant;
-use \Com\Tecnick\Unicode\Data\Mirror;
+use \Com\Tecnick\Unicode\Bidi\Shaping;
+use \Com\Tecnick\Unicode\Data\Type as UniType;
+use \Com\Tecnick\Unicode\Data\Constant as UniConstant;
+use \Com\Tecnick\Unicode\Data\Mirror as UniMirror;
 
 /**
  * Com\Tecnick\Unicode\Bidi\StepL
@@ -144,11 +145,11 @@ class StepL
             for ($idx = 0; $idx < $this->numchars; ++$idx) {
                 if ($this->chardata[$idx]['level'] >= $jdx) {
                     $onlevel = true;
-                    if (isset(Mirror::$uni[$this->chardata[$idx]['char']])) {
+                    if (isset(UniMirror::$uni[$this->chardata[$idx]['char']])) {
                         // L4. A character is depicted by a mirrored glyph if and only if
                         //     (a) the resolved directionality of that character is R, and
                         //     (b) the Bidi_Mirrored property value of that character is true.
-                        $this->chardata[$idx]['char'] = Mirror::$uni[$this->chardata[$idx]['char']];
+                        $this->chardata[$idx]['char'] = UniMirror::$uni[$this->chardata[$idx]['char']];
                     }
                     $revarr[] = $this->chardata[$idx];
                 } else {
@@ -178,5 +179,8 @@ class StepL
      */
     protected function processShaping()
     {
+        $shaping = new Shaping($this->chardata, $this->numchars);
+        $this->chardata = $shaping->getChrData();
+        $this->numchars = count($this->chardata);
     }
 }

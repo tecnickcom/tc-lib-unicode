@@ -15,8 +15,8 @@
 
 namespace Com\Tecnick\Unicode\Bidi;
 
-use \Com\Tecnick\Unicode\Data\Type;
-use \Com\Tecnick\Unicode\Data\Constant;
+use \Com\Tecnick\Unicode\Data\Type as UniType;
+use \Com\Tecnick\Unicode\Data\Constant as UniConstant;
 
 /**
  * Com\Tecnick\Unicode\Bidi\StepX
@@ -90,14 +90,25 @@ class StepX
      *
      * @var array
      */
-    protected $checkX7In = array(Constant::RLE, Constant::LRE, Constant::RLO,Constant::LRO);
+    protected $checkX7In = array(
+        UniConstant::RLE,
+        UniConstant::LRE,
+        UniConstant::RLO,
+        UniConstant::LRO
+    );
 
     /**
      * Array of UTF-8 codepoints for the X7 step check (out)
      *
      * @var array
      */
-    protected $checkX7Out = array(Constant::RLE, Constant::LRE, Constant::RLO,Constant::LRO, Constant::PDF);
+    protected $checkX7Out = array(
+        UniConstant::RLE,
+        UniConstant::LRE,
+        UniConstant::RLO,
+        UniConstant::LRO,
+        UniConstant::PDF
+    );
 
     /**
      * X Steps for Bidirectional algorithm
@@ -114,8 +125,6 @@ class StepX
         $this->eor = $this->sor;
         $this->tmpchrdata = array();
         $this->chardata = array();
-        $this->checkX7In = array(Constant::RLE, Constant::LRE, Constant::RLO,Constant::LRO);
-        $this->checkX7Out = array(Constant::RLE, Constant::LRE, Constant::RLO,Constant::LRO, Constant::PDF);
         $this->processX();
     }
 
@@ -141,43 +150,43 @@ class StepX
         //     In the resolution of levels in rules I1 and I2, the maximum embedding level of 62 can be reached.
         foreach ($this->ordarr as $ord) {
             switch ($ord) {
-                case Constant::RLE:
+                case UniConstant::RLE:
                     // X2. With each RLE, compute the least greater odd embedding level.
                     //     a. If this new level would be valid, then this embedding code is valid.
                     //        Remember (push) the current embedding level and override status.
                     //        Reset the current level to this new level, and reset the override status to neutral.
                     //     b. If the new level would not be valid, then this code is invalid.
                     //        Do not change the current level or override status.
-                    $this->setTmpData(($this->cel + ($this->cel % 2) + 1), Constant::RLE, 'N');
+                    $this->setTmpData(($this->cel + ($this->cel % 2) + 1), UniConstant::RLE, 'N');
                     break;
-                case Constant::LRE:
+                case UniConstant::LRE:
                     // X3. With each LRE, compute the least greater even embedding level.
                     //     a. If this new level would be valid, then this embedding code is valid.
                     //        Remember (push) the current embedding level and override status.
                     //        Reset the current level to this new level, and reset the override status to neutral.
                     //     b. If the new level would not be valid, then this code is invalid.
                     //        Do not change the current level or override status.
-                    $this->setTmpData(($this->cel + 2 - ($this->cel % 2)), Constant::LRE, 'N');
+                    $this->setTmpData(($this->cel + 2 - ($this->cel % 2)), UniConstant::LRE, 'N');
                     break;
-                case Constant::RLO:
+                case UniConstant::RLO:
                     // X4. With each RLO, compute the least greater odd embedding level.
                     //     a. If this new level would be valid, then this embedding code is valid.
                     //        Remember (push) the current embedding level and override status.
                     //        Reset the current level to this new level, and reset the override status to right-to-left.
                     //     b. If the new level would not be valid, then this code is invalid.
                     //        Do not change the current level or override status.
-                    $this->setTmpData(($this->cel + ($this->cel % 2) + 1), Constant::RLO, 'R');
+                    $this->setTmpData(($this->cel + ($this->cel % 2) + 1), UniConstant::RLO, 'R');
                     break;
-                case Constant::LRO:
+                case UniConstant::LRO:
                     // X5. With each LRO, compute the least greater even embedding level.
                     //     a. If this new level would be valid, then this embedding code is valid.
                     //        Remember (push) the current embedding level and override status.
                     //        Reset the current level to this new level, and reset the override status to left-to-right.
                     //     b. If the new level would not be valid, then this code is invalid.
                     //        Do not change the current level or override status.
-                    $this->setTmpData(($this->cel + 2 - ($this->cel % 2)), Constant::LRO, 'L');
+                    $this->setTmpData(($this->cel + 2 - ($this->cel % 2)), UniConstant::LRO, 'L');
                     break;
-                case Constant::PDF:
+                case UniConstant::PDF:
                     // X7. With each PDF, determine the matching embedding or override code.
                     //     If there was a valid matching code,
                     //     restore (pop) the last remembered (pushed) embedding level and directional override.
@@ -250,7 +259,7 @@ class StepX
             if ($this->dos !== 'N') {
                 $chardir = $this->dos;
             } else {
-                $chardir = (isset(Type::$uni[$ord]) ? Type::$uni[$ord] : 'L');
+                $chardir = (isset(UniType::$uni[$ord]) ? UniType::$uni[$ord] : 'L');
             }
             // stores string characters and other information
             $this->chardata[] = array(

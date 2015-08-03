@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tecnickcom/tc-lib-unicode-data.git",
-                "reference": "0aa2d6cece970fc7278d1ebbc41ec7a5bdc9da27"
+                "reference": "fd3bca4360d3196300c2e1f351198b8b087f069d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tecnickcom/tc-lib-unicode-data/zipball/0aa2d6cece970fc7278d1ebbc41ec7a5bdc9da27",
-                "reference": "0aa2d6cece970fc7278d1ebbc41ec7a5bdc9da27",
+                "url": "https://api.github.com/repos/tecnickcom/tc-lib-unicode-data/zipball/fd3bca4360d3196300c2e1f351198b8b087f069d",
+                "reference": "fd3bca4360d3196300c2e1f351198b8b087f069d",
                 "shasum": ""
             },
             "require": {
@@ -59,10 +59,10 @@
                 "tc-lib-unicode-data"
             ],
             "support": {
-                "source": "https://github.com/tecnickcom/tc-lib-unicode-data/tree/1.2.1",
+                "source": "https://github.com/tecnickcom/tc-lib-unicode-data/tree/1.2.2",
                 "issues": "https://github.com/tecnickcom/tc-lib-unicode-data/issues"
             },
-            "time": "2015-08-03 16:00:22"
+            "time": "2015-08-03 19:14:52"
         }
     ],
     "packages-dev": [

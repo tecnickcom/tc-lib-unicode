@@ -133,6 +133,18 @@ class BidiTest extends \PHPUnit_Framework_TestCase
                 json_decode('"\u202D\u0671\u0679\u0683\u202C"'),
                 'ٱٹڃ'
             ),
+            array(
+                json_decode('"START RLE'
+                    .'\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b'
+                    .'\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b'
+                    .'\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b'
+                    .'\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b'
+                    .'\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b'
+                    .'\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b'
+                    .'\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b'
+                    .'"'),
+                'START RLE'
+            ),
         );
     }
 

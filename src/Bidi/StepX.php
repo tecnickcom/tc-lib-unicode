@@ -223,16 +223,15 @@ class StepX
      */
     protected function processPdfCase()
     {
-        if (empty($this->tmpchrdata)) {
-            return;
-        }
-        $lastel = end($this->tmpchrdata);
-        if (in_array($lastel['num'], $this->checkX7In)) {
-            $match = array_pop($this->tmpchrdata);
-            $this->cel = $match['cel'];
-            $this->dos = $match['dos'];
-            $this->sor = $this->eor;
-            $this->eor = (((($this->cel>$match['cel']) ? $this->cel : $match['cel']) === 0) ? 'L' : 'R');
+        if (!empty($this->tmpchrdata)) {
+            $lastel = end($this->tmpchrdata);
+            if (in_array($lastel['num'], $this->checkX7In)) {
+                $match = array_pop($this->tmpchrdata);
+                $this->cel = $match['cel'];
+                $this->dos = $match['dos'];
+                $this->sor = $this->eor;
+                $this->eor = (((($this->cel>$match['cel']) ? $this->cel : $match['cel']) === 0) ? 'L' : 'R');
+            }
         }
     }
 

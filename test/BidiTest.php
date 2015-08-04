@@ -229,6 +229,11 @@ class BidiTest extends \PHPUnit_Framework_TestCase
                 array(65,66,67,68,69),
                 'R'
             ),
+            array(
+                array(65,8297,8297,66,8236,8236,67),
+                array(65,66,67),
+                'R'
+            ),
         );
     }
 }

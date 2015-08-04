@@ -25,6 +25,7 @@ use \Com\Tecnick\Unicode\Bidi\StepI;
 use \Com\Tecnick\Unicode\Bidi\StepL;
 use \Com\Tecnick\Unicode\Data\Pattern as UniPattern;
 use \Com\Tecnick\Unicode\Data\Type as UniType;
+use \Com\Tecnick\Unicode\Data\Constant as UniConstant;
 
 /**
  * Com\Tecnick\Unicode\Bidi
@@ -157,6 +158,10 @@ class Bidi
         $this->forcertl = (($forcertl === false) ? false : strtoupper($forcertl[0]));
         $this->numchars = count($ordarr);
 
+        // P1. Split the text into separate paragraphs.
+        // A paragraph separator is kept with the previous paragraph.
+        // Within each paragraph, apply all the other rules of this algorithm.
+        // NOTE: we assume that the strings are individual paragraphs, so we skip P1.
         $this->process();
     }
 
@@ -243,6 +248,21 @@ class Bidi
     }
 
     /**
+     * Update the level of explicit directional isolates
+     *
+     * @return int
+     */
+    protected function getIsolateLevel($ord, $isolate)
+    {
+        if (($ord == UniConstant::LRI) || ($ord == UniConstant::RLI) || ($ord == UniConstant::FSI)) {
+            ++$isolate;
+        } elseif ($ord == UniConstant::PDI) {
+            --$isolate;
+        }
+        return max(0, $isolate);
+    }
+
+    /**
      * Get the Paragraph embedding level
      *
      * @return int
@@ -255,16 +275,22 @@ class Bidi
         if ($this->forcertl === 'L') {
             return 0;
         }
-        // P2. In each paragraph, find the first character of type L, AL, or R.
+        // P2. In each paragraph, find the first character of type L, AL, or R
+        //     while skipping over any characters between an isolate initiator and its matching PDI or,
+        //     if it has no matching PDI, the end of the paragraph.
         // P3. If a character is found in P2 and it is of type AL or R,
         //     then set the paragraph embedding level to one; otherwise, set it to zero.
+        $isolate = 0;
         foreach ($this->ordarr as $ord) {
-            $type = UniType::$uni[$ord];
-            if ($type === 'L') {
-                return 0;
-            }
-            if (($type === 'R') || ($type === 'AL')) {
-                return 1;
+            $isolate = $this->getIsolateLevel($ord, $isolate);
+            if (($isolate == 0) && isset(UniType::$uni[$ord])) {
+                $type = UniType::$uni[$ord];
+                if ($type === 'L') {
+                    return 0;
+                }
+                if (($type === 'R') || ($type === 'AL')) {
+                    return 1;
+                }
             }
         }
         return 0;

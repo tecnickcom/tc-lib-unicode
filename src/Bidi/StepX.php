@@ -251,24 +251,29 @@ class StepX
      */
     protected function processChar($ord)
     {
-        if (!in_array($ord, $this->checkX7Out)) {
-            // X6. For all types besides RLE, LRE, RLO, LRO, and PDF:
-            //    a. Set the level of the current character to the current embedding level.
-            //    b. Whenever the directional override status is not neutral,
-            //       reset the current character type to the directional override status.
-            if ($this->dos !== 'N') {
-                $chardir = $this->dos;
-            } else {
-                $chardir = (isset(UniType::$uni[$ord]) ? UniType::$uni[$ord] : 'L');
-            }
-            // stores string characters and other information
-            $this->chardata[] = array(
-                'char'  => $ord,
-                'level' => $this->cel,
-                'type'  => $chardir,
-                'sor'   => $this->sor,
-                'eor'   => $this->eor
-            );
+        // X6. For all types besides B, BN, RLE, LRE, RLO, LRO, PDF, RLI, LRI, FSI, and PDI:
+        //     - Set the current character’s embedding level to the embedding level
+        //       of the last entry on the directional status stack.
+        //     - Whenever the directional override status of the last entry on the directional status stack
+        //       is not neutral, reset the current character type according to the directional override status
+        //       of the last entry on the directional status stack.
+        if (in_array($ord, UniType::$explicit_formatting)
+            || (isset(UniType::$uni[$ord]) && ((UniType::$uni[$ord] == 'B') || (UniType::$uni[$ord] == 'BN')))
+        ) {
+            return;
         }
+        if ($this->dos !== 'N') {
+            $chardir = $this->dos;
+        } else {
+            $chardir = (isset(UniType::$uni[$ord]) ? UniType::$uni[$ord] : 'L');
+        }
+        // stores string characters and other information
+        $this->chardata[] = array(
+            'char'  => $ord,
+            'level' => $this->cel,
+            'type'  => $chardir,
+            'sor'   => $this->sor,
+            'eor'   => $this->eor
+        );
     }
 }

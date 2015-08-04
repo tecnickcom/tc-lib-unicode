@@ -145,10 +145,6 @@ class BidiTest extends \PHPUnit_Framework_TestCase
                     .'"'),
                 'START RLE'
             ),
-            array(
-                json_decode('"he said \"\u0671\u0679! \u0683\" to her \u2028\u2029"'),
-                'he said "ﭧٱ! ﭶ" to her   '
-            ),
         );
     }
 
@@ -210,7 +206,11 @@ class BidiTest extends \PHPUnit_Framework_TestCase
             ),
             array(
                 array(65,66,1636,1637,1667,8233),
-                array(65,66,64374,1636,1637,8233),
+                array(65,66,64374,1636,1637),
+            ),
+            array(
+                array(8295,65,66,67,8297,65,1667,1657),
+                array(65,66,67,65,64359,64376),
             ),
         );
     }

@@ -166,8 +166,6 @@ class BidiTest extends \PHPUnit_Framework_TestCase
     public function testBidiOrd($ordarr, $expected, $forcertl = false)
     {
         $bidi = new \Com\Tecnick\Unicode\Bidi(null, null, $ordarr, $forcertl);
-        //var_export($bidi->getOrdArray()); // DEBUG
-        //echo "\n\n".$bidi->getString()."\n\n"; // DEBUG
         $this->assertEquals($expected, $bidi->getOrdArray());
         
     }
@@ -238,6 +236,21 @@ class BidiTest extends \PHPUnit_Framework_TestCase
                 array(65,66,13,67,68,10,69,70,31,71,72),
                 array(65,66,13,67,68,10,71,72,31,69,70),
                 'R'
+            ),
+            array(
+                array(59,60,8235,61,62,8234,63,64,8236,91,92,8236,8235,93,94,8236,95,96),
+                array(59,60,94,91,92,93,63,64,60,61,95,96),
+                'L'
+            ),
+            array(
+                array(59,60,8295,61,62,8294,63,64,8297,91,92,8297,8295,93,94,8297,95,96),
+                array(59,60,94,91,92,93,63,64,60,61,95,96),
+                'L'
+            ),
+            array(
+                array(59,60,8235,61,62,8294,63,64,8235,91,92,8297,93,94,8236,95,96),
+                array(59,60,94,91,63,64,92,93,60,61,95,96),
+                'L'
             ),
         );
     }

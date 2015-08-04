@@ -142,6 +142,18 @@ class BidiTest extends \PHPUnit_Framework_TestCase
                     .'\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b'
                     .'\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b'
                     .'\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b'
+                    .'\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b'
+                    .'\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b'
+                    .'\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b'
+                    .'\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b'
+                    .'\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b'
+                    .'\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b'
+                    .'\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b'
+                    .'\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b'
+                    .'\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b'
+                    .'\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b'
+                    .'\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b'
+                    .'\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b\u202b'
                     .'"'),
                 'START RLE'
             ),
@@ -206,7 +218,7 @@ class BidiTest extends \PHPUnit_Framework_TestCase
             ),
             array(
                 array(65,66,1636,1637,1667,8233),
-                array(65,66,64374,1636,1637),
+                array(65,66,64374,1636,1637,8233),
             ),
             array(
                 array(8295,65,66,67,8297,65,1667,1657),

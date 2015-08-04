@@ -262,8 +262,9 @@ class Bidi
                 $this->bidiordarr[] = $chd['char'];
             }
             // add back the paragraph separators
-            if (isset(UniType::$uni[end($par)]) && (UniType::$uni[end($par)] == 'B')) {
-                $this->bidiordarr[] = end($this->ordarr);
+            $lastchar = end($par);
+            if (isset(UniType::$uni[$lastchar]) && (UniType::$uni[$lastchar] == 'B')) {
+                $this->bidiordarr[] = $lastchar;
             }
         }
     }

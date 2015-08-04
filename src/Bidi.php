@@ -251,14 +251,7 @@ class Bidi
 
         // Within each paragraph, apply all the other rules of this algorithm.
         foreach ($paragraph as $par) {
-            if ($this->forcertl === 'R') {
-                $pel = 1;
-            } elseif ($this->forcertl === 'L') {
-                $pel = 0;
-            } else {
-                $stepp = new StepP($par);
-                $pel = $stepp->getPel(); //Paragraph embedding level
-            }
+            $pel = $this->getPel($par);
             $stepx = new StepX($par, $pel);
             $stepw = new StepW($stepx->getChrData());
             $stepn = new StepN($stepw->getChrData());
@@ -269,10 +262,29 @@ class Bidi
                 $this->bidiordarr[] = $chd['char'];
             }
             // add back the paragraph separators
-            if (UniType::$uni[end($par)] == 'B') {
+            if (isset(UniType::$uni[end($par)]) && (UniType::$uni[end($par)] == 'B')) {
                 $this->bidiordarr[] = end($this->ordarr);
             }
         }
+    }
+
+    /**
+     * Get the paragraph embedding level
+     *
+     * @param array $par Paragraph
+     *
+     * @return int
+     */
+    protected function getPel($par)
+    {
+        if ($this->forcertl === 'R') {
+            return 1;
+        }
+        if ($this->forcertl === 'L') {
+            return 0;
+        }
+        $stepp = new StepP($par);
+        return $stepp->getPel();
     }
 
     /**

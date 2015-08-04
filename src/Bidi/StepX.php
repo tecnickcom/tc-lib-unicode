@@ -412,25 +412,9 @@ class StepX
         //      the FSI as an RLI in rule X5a. Otherwise, treat it as an LRI in rule X5b.
         $stepp = new StepP(array_slice($this->ordarr, $key));
         if ($stepp->getPel() == 0) {
-            $this->setDss(
-                $this->getLEven($edss['cel']),
-                UniConstant::LRI,
-                'N',
-                true,
-                $edss['eor'],
-                'oic',
-                1
-            );
+            $this->setDss($this->getLEven($edss['cel']), UniConstant::LRI, 'N', true, $edss['eor'], 'oic', 1);
         } else {
-            $this->setDss(
-                $this->getLOdd($edss['cel']),
-                UniConstant::RLI,
-                'N',
-                true,
-                $edss['eor'],
-                'oic',
-                1
-            );
+            $this->setDss($this->getLOdd($edss['cel']), UniConstant::RLI, 'N', true, $edss['eor'], 'oic', 1);
         }
     }
 }

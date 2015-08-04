@@ -189,6 +189,8 @@ class StepX
      *
      * @param int $key Char position
      * @param int $ord Char code
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function processXcase($key, $ord)
     {

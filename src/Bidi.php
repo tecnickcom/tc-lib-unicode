@@ -91,6 +91,13 @@ class Bidi
     protected $forcertl = false;
 
     /**
+     * If true enable shaping
+     *
+     * @var bool
+     */
+    protected $shaping = true;
+
+    /**
      * True if the string contains arabic characters
      *
      * @var bool
@@ -126,12 +133,14 @@ class Bidi
      * @param array  $chrarr   Array of UTF-8 chars (if empty it will be generated from $str or $ordarr)
      * @param array  $ordarr   Array of UTF-8 codepoints (if empty it will be generated from $str or $chrarr)
      * @param mixed  $forcertl If 'R' forces RTL, if 'L' forces LTR
+     * @param bool   $shaping  If true enable the shaping algorithm
      */
-    public function __construct($str = null, $chrarr = null, $ordarr = null, $forcertl = false)
+    public function __construct($str = null, $chrarr = null, $ordarr = null, $forcertl = false, $shaping = true)
     {
         if (($str === null) && empty($chrarr) && empty($ordarr)) {
             throw new UnicodeException('empty input');
         }
+        $this->conv = new Convert();
         $this->setInput($str, $chrarr, $ordarr, $forcertl);
 
         if (!$this->isRtlMode()) {
@@ -140,6 +149,8 @@ class Bidi
             $this->bidiordarr = $this->ordarr;
             return;
         }
+
+        $this->shaping = ($shaping && $this->arabic);
 
         $this->process();
     }
@@ -155,7 +166,6 @@ class Bidi
      */
     public function setInput($str = null, $chrarr = null, $ordarr = null, $forcertl = false)
     {
-        $this->conv = new Convert();
         if ($str === null) {
             if (empty($chrarr)) {
                 $chrarr = $this->conv->ordArrToChrArr($ordarr);
@@ -253,7 +263,7 @@ class Bidi
             $stepw = new StepW($stepx->getChrData());
             $stepn = new StepN($stepw->getChrData());
             $stepi = new StepI($stepn->getChrData());
-            $stepl = new StepL($stepi->getChrData(), $stepi->getMaxLevel(), $pel, $this->arabic);
+            $stepl = new StepL($stepi->getChrData(), $stepi->getMaxLevel(), $pel, $this->shaping);
             $chardata = $stepl->getChrData();
             foreach ($chardata as $chd) {
                 $this->bidiordarr[] = $chd['char'];

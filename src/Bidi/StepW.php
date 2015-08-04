@@ -52,7 +52,7 @@ class StepW extends \Com\Tecnick\Unicode\Bidi\StepBase
     protected function processW1($idx, $levcount)
     {
         if ($this->chardata[$idx]['type'] == 'NSM') {
-            if ($levcount) {
+            if ($levcount > 0) {
                 $this->chardata[$idx]['type'] = $this->chardata[$idx]['sor'];
             } elseif ($idx > 0) {
                 $this->chardata[$idx]['type'] = $this->chardata[($idx - 1)]['type'];

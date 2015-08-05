@@ -15,7 +15,6 @@
 
 namespace Com\Tecnick\Unicode\Bidi;
 
-use \Com\Tecnick\Unicode\Bidi\Shaping;
 use \Com\Tecnick\Unicode\Data\Mirror as UniMirror;
 
 /**
@@ -46,13 +45,6 @@ class StepL
     protected $numchars = 0;
 
     /**
-     * Max level
-     *
-     * @var int
-     */
-    protected $maxlevel = 0;
-
-    /**
      * Paragraph embedding level
      *
      * @var int
@@ -63,20 +55,14 @@ class StepL
      * L steps
      *
      * @param array $chardata Array of characters data
-     * @param int   $maxlevel Maximum level
      * @param int   $pel      Paragraph embedding level
-     * @param bool  $shaping  If true process character shaping (i.e. Arabic)
      */
-    public function __construct($chardata, $maxlevel, $pel, $shaping = false)
+    public function __construct($chardata, $pel)
     {
         $this->chardata = $chardata;
         $this->numchars = count($this->chardata);
-        $this->maxlevel = $maxlevel;
         $this->pel = $pel;
         $this->processL1();
-        if ($shaping) {
-            $this->processShaping();
-        }
         $this->processL2();
     }
 
@@ -100,9 +86,9 @@ class StepL
     protected function processL1()
     {
         for ($idx = 0; $idx < $this->numchars; ++$idx) {
-            if (($this->chardata[$idx]['type'] == 'B') || ($this->chardata[$idx]['type'] == 'S')) {
+            if (($this->chardata[$idx]['otype'] == 'B') || ($this->chardata[$idx]['otype'] == 'S')) {
                 $this->chardata[$idx]['level'] = $this->pel;
-            } elseif ($this->chardata[$idx]['type'] == 'WS') {
+            } elseif ($this->chardata[$idx]['otype'] == 'WS') {
                 $this->processL1b($idx);
             }
         }
@@ -117,12 +103,12 @@ class StepL
     {
         $jdx = ($idx + 1);
         while ($jdx < $this->numchars) {
-            if ((($this->chardata[$jdx]['type'] == 'B') || ($this->chardata[$jdx]['type'] == 'S'))
-                || (($jdx == ($this->numchars - 1)) && ($this->chardata[$jdx]['type'] == 'WS'))
+            if ((($this->chardata[$jdx]['otype'] == 'B') || ($this->chardata[$jdx]['otype'] == 'S'))
+                || (($jdx == ($this->numchars - 1)) && ($this->chardata[$jdx]['otype'] == 'WS'))
             ) {
                 $this->chardata[$idx]['level'] = $this->pel;
                 break;
-            } elseif ($this->chardata[$jdx]['type'] != 'WS') {
+            } elseif ($this->chardata[$jdx]['otype'] != 'WS') {
                 break;
             }
             ++$jdx;
@@ -166,19 +152,5 @@ class StepL
             }
             $this->chardata = $ordarray;
         }
-    }
-
-    /**
-     * Shaping
-     * Cursively connected scripts, such as Arabic or Syriac,
-     * require the selection of positional character shapes that depend on adjacent characters.
-     * Shaping is logically applied after the Bidirectional Algorithm is used and is limited to
-     * characters within the same directional run.
-     */
-    protected function processShaping()
-    {
-        $shaping = new Shaping($this->chardata, $this->numchars);
-        $this->chardata = $shaping->getChrData();
-        $this->numchars = count($this->chardata);
     }
 }

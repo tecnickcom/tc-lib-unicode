@@ -75,8 +75,8 @@ class StepXten
     /**
      * X Steps for Bidirectional algorithm
      *
-     * @param int    $pel       Paragraph Embedding Level
      * @param array  $chardata  Array of UTF-8 codepoints
+     * @param int    $pel       Paragraph Embedding Level
      */
     public function __construct($chardata, $pel)
     {
@@ -110,7 +110,7 @@ class StepXten
             return $idx;
         }
         --$idx;
-        while (($idx > $fence) && ($this->chardata[$idx]['unitype'] == 'BN')) {
+        while (($idx > $fence) && ($this->chardata[$idx]['type'] == 'BN')) {
             --$idx;
         }
         return $idx;
@@ -130,11 +130,12 @@ class StepXten
             return $idx;
         }
         ++$idx;
-        while (($idx < $fence) && ($this->chardata[$idx]['unitype'] == 'BN')) {
+        while (($idx < $fence) && ($this->chardata[$idx]['type'] == 'BN')) {
             ++$idx;
         }
         return $idx;
     }
+
     /**
      * Get the embedded direction (L or R)
      *
@@ -182,6 +183,7 @@ class StepXten
                 $start = $seq['start'];
                 $isorun = array(
                     'e'      => $seq['e'],
+                    'edir'   => $this->getEmbeddedDirection($seq['e']),     // embedded direction
                     'length' => ($seq['end'] - $seq['start'] + 1),
                     'item'   => array()
                 );
@@ -189,7 +191,7 @@ class StepXten
                     $isorun['item'][$jdx] = $this->chardata[($start + $jdx)];
                 }
                 $end = $seq['end'];
-                if ($this->chardata[$end]['unitype'] == 'BN') {
+                if ($this->chardata[$end]['type'] == 'BN') {
                     $end = $this->getPreviousValidChar($end, $start);
                 }
             }
@@ -209,7 +211,7 @@ class StepXten
                     }
 
                     $end = $this->runseq[$jdx]['end'];
-                    if ($this->chardata[$end]['unitype'] == 'BN') {
+                    if ($this->chardata[$end]['type'] == 'BN') {
                         $end = $this->getPreviousValidChar($end, $this->runseq[$idx]['start']);
                     }
                     $this->runseq[$jdx]['start'] = -1;
@@ -235,7 +237,7 @@ class StepXten
                 $isorun['eos'] = $isorun['sos'];
             } else {
                 // eos could be an BN
-                if ($this->chardata[$end]['unitype'] == 'BN') {
+                if ($this->chardata[$end]['type'] == 'BN') {
                     $real_end = $this->getPreviousValidChar($end, ($start - 1));
                     if ($real_end < $start) {
                         $real_end = $start;

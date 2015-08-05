@@ -24,6 +24,7 @@ use \Com\Tecnick\Unicode\Bidi\StepXten;
 use \Com\Tecnick\Unicode\Bidi\StepW;
 use \Com\Tecnick\Unicode\Bidi\StepN;
 use \Com\Tecnick\Unicode\Bidi\StepI;
+use \Com\Tecnick\Unicode\Bidi\Shaping;
 use \Com\Tecnick\Unicode\Bidi\StepL;
 use \Com\Tecnick\Unicode\Data\Pattern as UniPattern;
 use \Com\Tecnick\Unicode\Data\Type as UniType;
@@ -258,14 +259,24 @@ class Bidi
             $stepx10 = new StepXten($stepx->getChrData(), $pel);
             $ilrs = $stepx10->getIsolatedLevelRunSequences();
 
-            foreach ($this->ilrs as $seq) {
+            $chardata = array();
+            foreach ($ilrs as $seq) {
                 $stepw = new StepW($seq);
-                $stepn = new StepN($stepw->getChrData());
-                $stepi = new StepI($stepn->getChrData());
+                $stepn = new StepN($stepw->getSequence());
+                $stepi = new StepI($stepn->getSequence());
+                $seq = $stepi->getSequence();
+                if ($this->shaping) {
+                    $shaping = new Shaping($seq);
+                    $seq = $shaping->getSequence();
+                }
+                $chardata += $seq['item'];
             }
 
-            $stepl = new StepL($stepi->getChrData(), $stepi->getMaxLevel(), $pel, $this->shaping);
+            var_export($chardata);exit;//DEBUG *********************************************************************
+            
+            $stepl = new StepL($chardata, $pel);  // to be completed
             $chardata = $stepl->getChrData();
+
             foreach ($chardata as $chd) {
                 $this->bidiordarr[] = $chd['char'];
             }

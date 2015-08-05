@@ -29,58 +29,20 @@ namespace Com\Tecnick\Unicode\Bidi;
 abstract class StepBase
 {
     /**
-     * Array of characters data to return
+     * Sequence to process and return
      *
      * @var array
      */
-    protected $chardata = array();
+    protected $seq = array();
 
     /**
-     * Number of characters in $this->chardata
+     * Initialize Sequence to process
      *
-     * @var int
-     */
-    protected $numchars = 0;
-
-    /**
-     * Sequence Level
-     *
-     * @var int
-     */
-    protected $level = 0;
-
-    /**
-     * Start Order Sequence
-     *
-     * @var string
-     */
-    protected $sos;
-
-    /**
-     * End Order Sequence
-     *
-     * @var string
-     */
-    protected $eos;
-
-    /**
-     * W Steps for Bidirectional algorithm
-     *
-     * 3.3.3 Resolving Weak Types
-     * Weak types are now resolved one level run at a time.
-     * At level run boundaries where the type of the character on the other side of the boundary is required,
-     * the type assigned to sor or eor is used.
-     * Nonspacing marks are now resolved based on the previous characters.
-     *
-     * @param array  $seq isolated Sequence array
+     * @param array $seq isolated Sequence array
      */
     public function __construct($seq)
     {
-        $this->chardata = $seq['item'];
-        $this->numchars = $seq['length'];
-        $this->level = $seq['e'];
-        $this->sos = $seq['sos'];
-        $this->eos = $seq['eos'];
+        $this->seq = $seq;
         $this->process();
     }
 
@@ -89,9 +51,9 @@ abstract class StepBase
      *
      * @return array
      */
-    public function getChrData()
+    public function getSequence()
     {
-        return $this->chardata;
+        return $this->seq;
     }
 
     /**
@@ -106,8 +68,49 @@ abstract class StepBase
      */
     protected function processStep($method)
     {
-        for ($idx = 0; $idx < $this->numchars; ++$idx) {
+        for ($idx = 0; $idx < $this->seq['length']; ++$idx) {
             $this->$method($idx);
         }
+    }
+
+    /**
+     * Gent Next Valid Char
+     *
+     * @param int $idx Current char index
+     * 
+     * @return int
+     */
+    protected function getNextValidChar($idx)
+    {
+        if ($idx >= ($this->seq['length'] - 1)) {
+            return -1;
+        }
+        ++$idx;
+        while (($idx < $this->seq['length']) && ($this->seq['item'][$idx]['type'] == 'BN')) {
+            ++$idx;
+        }
+        if ($idx == $this->seq['length']) {
+            return -1;
+        }
+        return $idx;
+    }
+
+    /**
+     * Gent Previous Valid Char
+     *
+     * @param int $idx Current char index
+     * 
+     * @return int
+     */
+    protected function getPreviousValidChar($idx)
+    {
+        if ($idx <= 0) {
+            return -1;
+        }
+        --$idx;
+        while (($idx > -1) && ($this->seq['item'][$idx]['type'] == 'BN')) {
+            --$idx;
+        }
+        return $idx;
     }
 }

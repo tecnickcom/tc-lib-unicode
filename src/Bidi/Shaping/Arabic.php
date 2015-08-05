@@ -141,7 +141,7 @@ abstract class Arabic
      */
     protected function setInitialChar($idx, $thischar, $arabicarr)
     {
-        if (isset($arabicarr[$this->chardata[$idx]['char']][2])) {
+        if (isset($arabicarr[$this->seq['item'][$idx]['char']][2])) {
             $this->newchardata[$idx]['char'] = $arabicarr[$thischar['char']][2];
         }
     }
@@ -158,8 +158,8 @@ abstract class Arabic
     {
         if (($idx > 1)
             && ($thischar['char'] == UniArabic::HEH)
-            && ($this->chardata[($idx - 1)]['char'] == UniArabic::LAM)
-            && ($this->chardata[($idx - 2)]['char'] == UniArabic::LAM)
+            && ($this->seq['item'][($idx - 1)]['char'] == UniArabic::LAM)
+            && ($this->seq['item'][($idx - 2)]['char'] == UniArabic::LAM)
         ) {
             // Allah Word
             $this->newchardata[($idx - 2)]['char'] = false;

@@ -81,6 +81,7 @@ class StepX
 
     /**
      * X Steps for Bidirectional algorithm
+     * Explicit Levels and Directions
      *
      * @param array  $ordarr   Array of UTF-8 codepoints
      * @param int    $pel      Paragraph embedding level
@@ -97,10 +98,8 @@ class StepX
         //       a neutral directional override status, and a false directional isolate status.
         $this->dss[] = array(
             'cel' => $pel,
-            'dos' => 'N',
-            'dis' => false,
-            'sor' => (($pel === 0) ? 'L' : 'R'),
-            'eor' => (($pel === 0) ? 'L' : 'R')
+            'dos' => 'NI',
+            'dis' => false
         );
         //     - Set the overflow isolate count to zero.
         $this->oic = 0;
@@ -173,11 +172,11 @@ class StepX
         switch ($ord) {
             case UniConstant::RLE:
                 // X2
-                $this->setDss($this->getLOdd($edss['cel']), UniConstant::RLE, 'N', false, $edss['eor'], 'oec');
+                $this->setDss($this->getLOdd($edss['cel']), UniConstant::RLE, 'NI', false, $edss['eor'], 'oec');
                 break;
             case UniConstant::LRE:
                 // X3
-                $this->setDss($this->getLEven($edss['cel']), UniConstant::LRE, 'N', false, $edss['eor'], 'oec');
+                $this->setDss($this->getLEven($edss['cel']), UniConstant::LRE, 'NI', false, $edss['eor'], 'oec');
                 break;
             case UniConstant::RLO:
                 // X4
@@ -190,12 +189,12 @@ class StepX
             case UniConstant::RLI:
                 // X5a
                 $this->processChar($ord, $edss);
-                $this->setDss($this->getLOdd($edss['cel']), UniConstant::RLI, 'N', true, $edss['eor'], 'oic', 1);
+                $this->setDss($this->getLOdd($edss['cel']), UniConstant::RLI, 'NI', true, $edss['eor'], 'oic', 1);
                 break;
             case UniConstant::LRI:
                 // X5b
                 $this->processChar($ord, $edss);
-                $this->setDss($this->getLEven($edss['cel']), UniConstant::LRI, 'N', true, $edss['eor'], 'oic', 1);
+                $this->setDss($this->getLEven($edss['cel']), UniConstant::LRI, 'NI', true, $edss['eor'], 'oic', 1);
                 break;
             case UniConstant::FSI:
                 // X5c
@@ -251,9 +250,7 @@ class StepX
             'ord' => $ord,
             'cel' => $cel,
             'dos' => $dos,
-            'dis' => $dis,
-            'sor' => $eor,
-            'eor' => (($cel === 0) ? 'L' : 'R')
+            'dis' => $dis
         );
     }
 
@@ -279,10 +276,8 @@ class StepX
         $this->chardata[] = array(
             'char'    => $ord,
             'level'   => $edss['cel'],
-            'type'    => (($edss['dos'] !== 'N') ? $edss['dos'] : $unitype),
-            'unitype' => $unitype,
-            'sor'     => $edss['sor'],
-            'eor'     => $edss['eor']
+            'type'    => (($edss['dos'] !== 'NI') ? $edss['dos'] : $unitype),
+            'otype'   => $unitype // original type
         );
     }
 
@@ -369,7 +364,6 @@ class StepX
         //        - If the entry's directional override status is not neutral, reset the current character type
         //          from PDI to L if the override status is left-to-right, and to R if the override status is
         //          right-to-left.
-        // ^^^ ???
     }
 
     /**

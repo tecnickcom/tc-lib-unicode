@@ -32,18 +32,11 @@ use \Com\Tecnick\Unicode\Data\Arabic as UniArabic;
 class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
 {
     /**
-     * Array of input characters data
+     * Sequence to process and return
      *
      * @var array
      */
-    protected $chardata = array();
-
-    /**
-     * Number of characters in $chardata
-     *
-     * @var int
-     */
-    protected $numchars = 0;
+    protected $seq = array();
 
     /**
      * Array of processed chars
@@ -73,25 +66,23 @@ class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
      * Shaping is logically applied after the Bidirectional Algorithm is used and is limited to
      * characters within the same directional run.
      *
-     * @param array $chardata Array of characters data
-     * @param int   $numchars Number of chars in $chardata
+     * @param array $seq isolated Sequence array
      */
-    public function __construct($chardata, $numchars)
+    public function __construct($seq)
     {
-        $this->chardata = $chardata;
-        $this->numchars = $numchars;
-        $this->newchardata = $chardata;
+        $this->seq = $seq;
+        $this->newchardata = $seq['item'];
         $this->process();
     }
 
     /**
-     * Returns the processed array
+     * Returns the processed sequence
      *
      * @return array
      */
-    public function getChrData()
+    public function getSequence()
     {
-        return $this->chardata;
+        return $this->seq;
     }
 
     /**
@@ -100,9 +91,9 @@ class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
     protected function process()
     {
         $this->setAlChars();
-        for ($idx = 0; $idx < $this->numchars; ++$idx) {
-            if ($this->chardata[$idx]['unitype'] == 'AL') {
-                $thischar = $this->chardata[$idx];
+        for ($idx = 0; $idx < $this->seq['length']; ++$idx) {
+            if ($this->seq['item'][$idx]['unitype'] == 'AL') {
+                $thischar = $this->seq['item'][$idx];
                 $pos = $thischar['x'];
                 $prevchar = (($pos > 0) ? $this->alchars[($pos - 1)] : false);
                 $nextchar = ((($pos + 1) < $this->numalchars) ? $this->alchars[($pos + 1)] : false);
@@ -111,7 +102,7 @@ class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
         }
         $this->combineShadda();
         $this->removeDeletedChars();
-        $this->chardata = array_values($this->newchardata);
+        $this->seq['item'] = array_values($this->newchardata);
         unset($this->newchardata);
     }
 
@@ -121,14 +112,14 @@ class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
     protected function setAlChars()
     {
         $this->numalchars = 0;
-        for ($idx = 0; $idx < $this->numchars; ++$idx) {
-            if (($this->chardata[$idx]['unitype'] == 'AL')
-                || ($this->chardata[$idx]['char'] == UniConstant::SPACE)
-                || ($this->chardata[$idx]['char'] == UniConstant::ZERO_WIDTH_NON_JOINER)
+        for ($idx = 0; $idx < $this->seq['length']; ++$idx) {
+            if (($this->seq['item'][$idx]['unitype'] == 'AL')
+                || ($this->seq['item'][$idx]['char'] == UniConstant::SPACE)
+                || ($this->seq['item'][$idx]['char'] == UniConstant::ZERO_WIDTH_NON_JOINER)
             ) {
-                $this->alchars[$this->numalchars] = $this->chardata[$idx];
+                $this->alchars[$this->numalchars] = $this->seq['item'][$idx];
                 $this->alchars[$this->numalchars]['i'] = $idx;
-                $this->chardata[$idx]['x'] = $this->numalchars;
+                $this->seq['item'][$idx]['x'] = $this->numalchars;
                 ++$this->numalchars;
             }
         }
@@ -141,7 +132,7 @@ class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
      */
     protected function combineShadda()
     {
-        $last = ($this->numchars - 1);
+        $last = ($this->seq['length'] - 1);
         for ($idx = 0; $idx < $last; ++$idx) {
             if (($this->newchardata[$idx]['char'] == UniArabic::SHADDA)
                 && (isset(UniArabic::$diacritic[($this->newchardata[($idx + 1)]['char'])]))

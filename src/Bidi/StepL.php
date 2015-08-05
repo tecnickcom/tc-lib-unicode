@@ -16,6 +16,7 @@
 namespace Com\Tecnick\Unicode\Bidi;
 
 use \Com\Tecnick\Unicode\Data\Mirror as UniMirror;
+use \Com\Tecnick\Unicode\Data\Constant as UniConstant;
 
 /**
  * Com\Tecnick\Unicode\Bidi\StepL
@@ -80,15 +81,20 @@ class StepL
      * L1. On each line, reset the embedding level of the following characters to the paragraph embedding level:
      *     1. Segment separators,
      *     2. Paragraph separators,
-     *     3. Any sequence of whitespace characters preceding a segment separator or paragraph separator, and
-     *     4. Any sequence of white space characters at the end of the line.
+     *     3. Any sequence of whitespace characters and/or isolate formatting characters (FSI, LRI, RLI, and PDI)
+     *        preceding a segment separator or paragraph separator, and
+     *     4. Any sequence of whitespace characters and/or isolate formatting characters (FSI, LRI, RLI, and PDI)
+     *        at the end of the line.
      */
     protected function processL1()
     {
         for ($idx = 0; $idx < $this->numchars; ++$idx) {
-            if (($this->chardata[$idx]['otype'] == 'B') || ($this->chardata[$idx]['otype'] == 'S')) {
+            if (($this->chardata[$idx]['otype'] == 'S') || ($this->chardata[$idx]['otype'] == 'B')) {
                 $this->chardata[$idx]['level'] = $this->pel;
-            } elseif ($this->chardata[$idx]['otype'] == 'WS') {
+            } elseif (($this->chardata[$idx]['otype'] == 'WS')
+                || (($this->chardata[$idx]['char'] >= UniConstant::LRI)
+                && ($this->chardata[$idx]['char'] <= UniConstant::PDI))
+            ) {
                 $this->processL1b($idx);
             }
         }
@@ -103,12 +109,15 @@ class StepL
     {
         $jdx = ($idx + 1);
         while ($jdx < $this->numchars) {
-            if ((($this->chardata[$jdx]['otype'] == 'B') || ($this->chardata[$jdx]['otype'] == 'S'))
+            if ((($this->chardata[$jdx]['otype'] == 'S') || ($this->chardata[$jdx]['otype'] == 'B'))
                 || (($jdx == ($this->numchars - 1)) && ($this->chardata[$jdx]['otype'] == 'WS'))
             ) {
                 $this->chardata[$idx]['level'] = $this->pel;
                 break;
-            } elseif ($this->chardata[$jdx]['otype'] != 'WS') {
+            } elseif (($this->chardata[$jdx]['otype'] != 'WS')
+                && (($this->chardata[$idx]['char'] < UniConstant::LRI)
+                || ($this->chardata[$idx]['char'] > UniConstant::PDI))
+            ) {
                 break;
             }
             ++$jdx;

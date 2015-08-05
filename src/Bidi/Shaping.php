@@ -15,7 +15,6 @@
 
 namespace Com\Tecnick\Unicode\Bidi;
 
-use \Com\Tecnick\Unicode\Data\Type as UniType;
 use \Com\Tecnick\Unicode\Data\Constant as UniConstant;
 use \Com\Tecnick\Unicode\Data\Arabic as UniArabic;
 
@@ -102,7 +101,7 @@ class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
     {
         $this->setAlChars();
         for ($idx = 0; $idx < $this->numchars; ++$idx) {
-            if (UniType::$uni[$this->chardata[$idx]['char']] == 'AL') {
+            if ($this->chardata[$idx]['unitype'] == 'AL') {
                 $thischar = $this->chardata[$idx];
                 $pos = $thischar['x'];
                 $prevchar = (($pos > 0) ? $this->alchars[($pos - 1)] : false);
@@ -123,7 +122,7 @@ class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
     {
         $this->numalchars = 0;
         for ($idx = 0; $idx < $this->numchars; ++$idx) {
-            if ((UniType::$uni[$this->chardata[$idx]['char']] == 'AL')
+            if (($this->chardata[$idx]['unitype'] == 'AL')
                 || ($this->chardata[$idx]['char'] == UniConstant::SPACE)
                 || ($this->chardata[$idx]['char'] == UniConstant::ZERO_WIDTH_NON_JOINER)
             ) {

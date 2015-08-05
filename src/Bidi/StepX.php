@@ -80,31 +80,6 @@ class StepX
     protected $ordarr = array();
 
     /**
-     * Array of UTF-8 codepoints for the X7 step check (in)
-     *
-     * @var array
-     */
-    protected $checkX7In = array(
-        UniConstant::RLE,
-        UniConstant::LRE,
-        UniConstant::RLO,
-        UniConstant::LRO
-    );
-
-    /**
-     * Array of UTF-8 codepoints for the X7 step check (out)
-     *
-     * @var array
-     */
-    protected $checkX7Out = array(
-        UniConstant::RLE,
-        UniConstant::LRE,
-        UniConstant::RLO,
-        UniConstant::LRO,
-        UniConstant::PDF
-    );
-
-    /**
      * X Steps for Bidirectional algorithm
      *
      * @param array  $ordarr   Array of UTF-8 codepoints
@@ -214,18 +189,22 @@ class StepX
                 break;
             case UniConstant::RLI:
                 // X5a
+                $this->processChar($ord, $edss);
                 $this->setDss($this->getLOdd($edss['cel']), UniConstant::RLI, 'N', true, $edss['eor'], 'oic', 1);
                 break;
             case UniConstant::LRI:
                 // X5b
+                $this->processChar($ord, $edss);
                 $this->setDss($this->getLEven($edss['cel']), UniConstant::LRI, 'N', true, $edss['eor'], 'oic', 1);
                 break;
             case UniConstant::FSI:
                 // X5c
+                $this->processChar($ord, $edss);
                 $this->processFsiCase($key, $edss);
                 break;
             case UniConstant::PDI:
                 // X6a
+                $this->processChar($ord, $edss);
                 $this->processPdiCase($edss);
                 break;
             case UniConstant::PDF:
@@ -292,23 +271,18 @@ class StepX
         //     - Whenever the directional override status of the last entry on the directional status stack
         //       is not neutral, reset the current character type according to the directional override
         //       status of the last entry on the directional status stack.
-        if (in_array($ord, UniType::$explicit_formatting)
-            || (isset(UniType::$uni[$ord]) && ((UniType::$uni[$ord] == 'B') || (UniType::$uni[$ord] == 'BN')))
-        ) {
+        if (isset(UniType::$uni[$ord]) && ((UniType::$uni[$ord] == 'B') || (UniType::$uni[$ord] == 'BN'))) {
             return;
         }
-        if ($edss['dos'] !== 'N') {
-            $type = $edss['dos'];
-        } else {
-            $type = (isset(UniType::$uni[$ord]) ? UniType::$uni[$ord] : 'L');
-        }
+        $unitype = (isset(UniType::$uni[$ord]) ? UniType::$uni[$ord] : $edss['dos']);
         // stores string characters and other information
         $this->chardata[] = array(
-            'char'  => $ord,
-            'level' => $edss['cel'],
-            'type'  => $type,
-            'sor'   => $edss['sor'],
-            'eor'   => $edss['eor']
+            'char'    => $ord,
+            'level'   => $edss['cel'],
+            'type'    => (($edss['dos'] !== 'N') ? $edss['dos'] : $unitype),
+            'unitype' => $unitype,
+            'sor'     => $edss['sor'],
+            'eor'     => $edss['eor']
         );
     }
 

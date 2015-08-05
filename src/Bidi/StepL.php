@@ -16,8 +16,6 @@
 namespace Com\Tecnick\Unicode\Bidi;
 
 use \Com\Tecnick\Unicode\Bidi\Shaping;
-use \Com\Tecnick\Unicode\Data\Type as UniType;
-use \Com\Tecnick\Unicode\Data\Constant as UniConstant;
 use \Com\Tecnick\Unicode\Data\Mirror as UniMirror;
 
 /**

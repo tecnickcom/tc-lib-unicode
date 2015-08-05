@@ -15,9 +15,6 @@
 
 namespace Com\Tecnick\Unicode\Bidi;
 
-use \Com\Tecnick\Unicode\Data\Type as UniType;
-use \Com\Tecnick\Unicode\Data\Constant as UniConstant;
-
 /**
  * Com\Tecnick\Unicode\Bidi\StepI
  *

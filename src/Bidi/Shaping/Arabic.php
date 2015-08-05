@@ -15,8 +15,6 @@
 
 namespace Com\Tecnick\Unicode\Bidi\Shaping;
 
-use \Com\Tecnick\Unicode\Data\Type as UniType;
-use \Com\Tecnick\Unicode\Data\Constant as UniConstant;
 use \Com\Tecnick\Unicode\Data\Arabic as UniArabic;
 
 /**
@@ -59,7 +57,7 @@ abstract class Arabic
     protected function hasNextChar($thischar, $nextchar)
     {
         return (($nextchar !== false)
-            && ((UniType::$uni[$nextchar['char']] == 'AL') || (UniType::$uni[$nextchar['char']] == 'NSM'))
+            && (($nextchar['unitype'] == 'AL') || ($nextchar['unitype'] == 'NSM'))
             && ($nextchar['type'] == $thischar['type'])
             && ($nextchar['char'] != UniArabic::QUESTION_MARK)
         );
@@ -76,7 +74,7 @@ abstract class Arabic
     protected function hasPrevChar($prevchar, $thischar)
     {
         return ((($prevchar !== false)
-            && ((UniType::$uni[$prevchar['char']] == 'AL') || (UniType::$uni[$prevchar['char']] == 'NSM'))
+            && (($prevchar['unitype'] == 'AL') || ($prevchar['unitype'] == 'NSM'))
             && ($prevchar['type'] == $thischar['type']))
         );
     }

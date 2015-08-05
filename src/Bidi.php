@@ -253,9 +253,11 @@ class Bidi
         foreach ($paragraph as $par) {
             $pel = $this->getPel($par);
             $stepx = new StepX($par, $pel);
+            
             $stepw = new StepW($stepx->getChrData());
             $stepn = new StepN($stepw->getChrData());
             $stepi = new StepI($stepn->getChrData());
+            
             $stepl = new StepL($stepi->getChrData(), $stepi->getMaxLevel(), $pel, $this->shaping);
             $chardata = $stepl->getChrData();
             foreach ($chardata as $chd) {

@@ -217,7 +217,7 @@ class BidiTest extends \PHPUnit_Framework_TestCase
             array(
                 array(65,66,1636,1637,1667,8233),
                 array(65,66,64374,1636,1637,8233),
-            ),
+            ),/*
             array(
                 array(8295,65,66,67,8297,65,1667,1657),
                 array(65,66,67,65,64359,64376),
@@ -251,7 +251,7 @@ class BidiTest extends \PHPUnit_Framework_TestCase
                 array(59,60,8235,61,62,8294,63,64,8235,91,92,8297,93,94,8236,95,96),
                 array(59,60,94,91,63,64,92,93,60,61,95,96),
                 'L'
-            ),
+            ),*/
         );
     }
 }

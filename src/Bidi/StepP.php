@@ -49,7 +49,7 @@ class StepP
     }
 
     /**
-     * Get the Paragraph embedding level
+     * Get the Paragraph Embedding Level
      *
      * @return int
      */

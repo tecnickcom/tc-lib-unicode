@@ -20,6 +20,7 @@ use \Com\Tecnick\Unicode\Exception as UnicodeException;
 use \Com\Tecnick\Unicode\Convert;
 use \Com\Tecnick\Unicode\Bidi\StepP;
 use \Com\Tecnick\Unicode\Bidi\StepX;
+use \Com\Tecnick\Unicode\Bidi\StepXten;
 use \Com\Tecnick\Unicode\Bidi\StepW;
 use \Com\Tecnick\Unicode\Bidi\StepN;
 use \Com\Tecnick\Unicode\Bidi\StepI;
@@ -254,9 +255,15 @@ class Bidi
             $pel = $this->getPel($par);
             $stepx = new StepX($par, $pel);
             
-            $stepw = new StepW($stepx->getChrData());
-            $stepn = new StepN($stepw->getChrData());
-            $stepi = new StepI($stepn->getChrData());
+            $stepx10 = new StepXten($stepx->getChrData(), $pel);
+            $ilrs = $stepx10->getIsolatedLevelRunSequences();
+
+            var_export($ilrs); // DEBUG
+            echo "\n\n";       // DEBUG
+            
+                $stepw = new StepW($stepx->getChrData());
+                $stepn = new StepN($stepw->getChrData());
+                $stepi = new StepI($stepn->getChrData());
             
             $stepl = new StepL($stepi->getChrData(), $stepi->getMaxLevel(), $pel, $this->shaping);
             $chardata = $stepl->getChrData();

@@ -261,7 +261,7 @@ class StepX
      * Process normal char (X6)
      *
      * @param int    $ord     Char code
-     * @param array  $edss Last entry in the Directioal Status Stack
+     * @param array  $edss Last entry in the Directional Status Stack
      */
     protected function processChar($ord, $edss)
     {
@@ -289,7 +289,7 @@ class StepX
     /**
      * Process the PDF type character
      *
-     * @param array  $edss Last entry in the Directioal Status Stack
+     * @param array  $edss Last entry in the Directional Status Stack
      */
     protected function processPdfCase($edss)
     {
@@ -322,7 +322,7 @@ class StepX
     /**
      * Process the PDI type character
      *
-     * @param array  $edss Last entry in the Directioal Status Stack
+     * @param array  $edss Last entry in the Directional Status Stack
      */
     protected function processPdiCase($edss)
     {
@@ -376,7 +376,7 @@ class StepX
      * Process the PDF type character
      *
      * @param int    $key     Current char position
-     * @param array  $edss Last entry in the Directioal Status Stack
+     * @param array  $edss Last entry in the Directional Status Stack
      */
     protected function processFsiCase($key, $edss)
     {

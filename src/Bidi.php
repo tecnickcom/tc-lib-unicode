@@ -258,13 +258,12 @@ class Bidi
             $stepx10 = new StepXten($stepx->getChrData(), $pel);
             $ilrs = $stepx10->getIsolatedLevelRunSequences();
 
-            var_export($ilrs); // DEBUG
-            echo "\n\n";       // DEBUG
-            
-                $stepw = new StepW($stepx->getChrData());
+            foreach ($this->ilrs as $seq) {
+                $stepw = new StepW($seq);
                 $stepn = new StepN($stepw->getChrData());
                 $stepi = new StepI($stepn->getChrData());
-            
+            }
+
             $stepl = new StepL($stepi->getChrData(), $stepi->getMaxLevel(), $pel, $this->shaping);
             $chardata = $stepl->getChrData();
             foreach ($chardata as $chd) {

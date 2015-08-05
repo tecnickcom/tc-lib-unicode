@@ -43,6 +43,27 @@ abstract class StepBase
     protected $numchars = 0;
 
     /**
+     * Sequence Level
+     *
+     * @var int
+     */
+    protected $level = 0;
+
+    /**
+     * Start Order Sequence
+     *
+     * @var string
+     */
+    protected $sos;
+
+    /**
+     * End Order Sequence
+     *
+     * @var string
+     */
+    protected $eos;
+
+    /**
      * W Steps for Bidirectional algorithm
      *
      * 3.3.3 Resolving Weak Types
@@ -51,12 +72,15 @@ abstract class StepBase
      * the type assigned to sor or eor is used.
      * Nonspacing marks are now resolved based on the previous characters.
      *
-     * @param array $chardata Array of characters data
+     * @param array  $seq isolated Sequence array
      */
-    public function __construct($chardata)
+    public function __construct($seq)
     {
-        $this->chardata = $chardata;
-        $this->numchars = count($chardata);
+        $this->chardata = $seq['item'];
+        $this->numchars = $seq['length'];
+        $this->level = $seq['e'];
+        $this->sos = $seq['sos'];
+        $this->eos = $seq['eos'];
         $this->process();
     }
 
@@ -82,16 +106,8 @@ abstract class StepBase
      */
     protected function processStep($method)
     {
-        $prevlevel = -1; // track level changes
-        $levcount = 0; // counts consecutive chars at the same level
         for ($idx = 0; $idx < $this->numchars; ++$idx) {
-            $this->$method($idx, $levcount, $prevlevel);
-            if ($this->chardata[$idx]['level'] != $prevlevel) {
-                $levcount = 0;
-            } else {
-                ++$levcount;
-            }
-            $prevlevel = $this->chardata[$idx]['level'];
+            $this->$method($idx);
         }
     }
 }

@@ -15,6 +15,8 @@
 
 namespace Com\Tecnick\Unicode\Bidi;
 
+use \Com\Tecnick\Unicode\Data\Constant as UniConstant;
+
 /**
  * Com\Tecnick\Unicode\Bidi\StepW
  *
@@ -39,41 +41,93 @@ class StepW extends \Com\Tecnick\Unicode\Bidi\StepBase
     }
 
     /**
-     * W1. Examine each nonspacing mark (NSM) in the level run,
-     *     and change the type of the NSM to the type of the previous character.
-     *     If the NSM is at the start of the level run, it will get the type of sor.
+     * Gent Next Valid Char
      *
-     * @param int $idx       Current character position
-     * @param int $levcount  Level count
+     * @param int $idx Current char index
+     * 
+     * @return int
      */
-    protected function processW1($idx, $levcount)
+    protected function getNextValidChar($idx)
+    {
+        if ($idx >= ($this->numchars - 1)) {
+            return -1;
+        }
+        ++$idx;
+        while (($idx < $this->numchars) && ($this->chardata[$idx]['type'] == 'BN')) {
+            ++$idx;
+        }
+        if ($idx == $this->numchars) {
+            return -1;
+        }
+        return $idx;
+    }
+
+    /**
+     * Gent Previous Valid Char
+     *
+     * @param int $idx Current char index
+     * 
+     * @return int
+     */
+    protected function getPreviousValidChar($idx)
+    {
+        if ($idx <= 0) {
+            return -1;
+        }
+        --$idx;
+        while (($idx > -1) && ($this->chardata[$idx]['type'] == 'BN')) {
+            --$idx;
+        }
+        return $idx;
+    }
+
+    /**
+     * W1. Examine each nonspacing mark (NSM) in the isolating run sequence, and
+     *     change the type of the NSM to Other Neutral if the previous character is an isolate initiator or PDI, and
+     *     to the type of the previous character otherwise.
+     *     If the NSM is at the start of the isolating run sequence, it will get the type of sos.
+     *     (Note that in an isolating run sequence, an isolate initiator followed by an NSM or any type
+     *     other than PDI must be an overflow isolate initiator.)
+     *
+     * @param int $idx Current character position
+     */
+    protected function processW1($idx)
     {
         if ($this->chardata[$idx]['type'] == 'NSM') {
-            if ($levcount > 0) {
-                $this->chardata[$idx]['type'] = $this->chardata[$idx]['sor'];
-            } elseif ($idx > 0) {
-                $this->chardata[$idx]['type'] = $this->chardata[($idx - 1)]['type'];
+            $jdx = $this->getPreviousValidChar($idx);
+            if ($jdx == -1) {
+                $this->chardata[$idx]['type'] = $this->sos;
+            } elseif (($this->chardata[$jdx]['char'] >= UniConstant::LRI)
+                && ($this->chardata[$jdx]['char'] <= UniConstant::PDI)
+            ) {
+                $this->chardata[$idx]['type'] = 'ON';
+            } else {
+                $this->chardata[$idx]['type'] = $this->chardata[$jdx]['type'];
             }
         }
     }
 
     /**
-     * W2. Search backward from each instance of a European number until the
-     *     first strong type (R, L, AL, or sor) is found. If an AL is found,
-     *     change the type of the European number to Arabic number.
+     * W2. Search backward from each instance of a European number until the first strong type (R, L, AL, or sos)
+     *     is found. If an AL is found, change the type of the European number to Arabic number.
      *
-     * @param int $idx       Current character position
-     * @param int $levcount  Level count
+     * @param int $idx Current character position
      */
-    protected function processW2($idx, $levcount)
+    protected function processW2($idx)
     {
         if ($this->chardata[$idx]['char'] == 'EN') {
-            for ($jdx = $levcount; $jdx >= 0; --$jdx) {
-                if ($this->chardata[$jdx]['type'] == 'AL') {
-                    $this->chardata[$idx]['type'] = 'AN';
-                } elseif (($this->chardata[$jdx]['type'] == 'L') || ($this->chardata[$jdx]['type'] == 'R')) {
+            $jdx = $this->getPreviousValidChar($idx);
+            while ($jdx > -1) {
+                if (($this->chardata[$jdx]['type'] == 'R')
+                    || ($this->chardata[$jdx]['type'] == 'L')
+                    || ($this->chardata[$jdx]['type'] == 'AL')
+                ) {
+                    if ($this->chardata[$jdx]['type'] == 'AL') {
+                        $this->chardata[$idx]['type'] = 'AN';
+                    }
                     break;
                 }
+                $jdx = $this->getPreviousValidChar($jdx);
             }
         }
     }
@@ -81,7 +135,7 @@ class StepW extends \Com\Tecnick\Unicode\Bidi\StepBase
     /**
      * W3. Change all ALs to R.
      *
-     * @param int $idx       Current character position
+     * @param int $idx Current character position
      */
     protected function processW3($idx)
     {
@@ -94,21 +148,17 @@ class StepW extends \Com\Tecnick\Unicode\Bidi\StepBase
      * W4. A single European separator between two European numbers changes to a European number.
      *     A single common separator between two numbers of the same type changes to that type.
      *
-     * @param int $idx       Current character position
-     * @param int $levcount  Level count
-     * @param int $prevlevel Previous level
+     * @param int $idx Current character position
      */
-    protected function processW4($idx, $levcount, $prevlevel)
+    protected function processW4($idx)
     {
-        if (($levcount > 0)
-            && (($idx + 1) < $this->numchars)
-            && ($this->chardata[($idx + 1)]['level'] == $prevlevel)
-        ) {
-            $tmp = $this->chardata[($idx-1)]['type'].$this->chardata[$idx]['type'].$this->chardata[($idx+1)]['type'];
-            if (($tmp == 'ENESEN') || ($tmp == 'ENCSEN')) {
-                $this->chardata[$idx]['type'] = 'EN';
-            } elseif ($tmp == 'ANCSAN') {
-                $this->chardata[$idx]['type'] = 'AN';
+        if (($this->chardata[$idx]['type'] == 'ES') || ($this->chardata[$idx]['type'] == 'CS')) {
+            $bdx = $this->getPreviousValidChar($idx);
+            $fdx = $this->getNextValidChar($idx);
+            if (($bdx >= 0) && ($fdx >= 0) && ($this->chardata[$bdx]['type'] == $this->chardata[$fdx]['type'])) {
+                if (($this->chardata[$bdx]['type'] == 'EN') || ($this->chardata[$bdx]['type'] == 'AN')) {
+                    $this->chardata[$idx]['type'] = $this->chardata[$bdx]['type'];
+                }
             }
         }
     }
@@ -116,11 +166,9 @@ class StepW extends \Com\Tecnick\Unicode\Bidi\StepBase
     /**
      * W5. A sequence of European terminators adjacent to European numbers changes to all European numbers.
      *
-     * @param int $idx       Current character position
-     * @param int $levcount  Level count
-     * @param int $prevlevel Previous level
+     * @param int $idx Current character position
      */
-    protected function processW5($idx, $levcount, $prevlevel)
+    protected function processW5($idx)
     {
         if ($this->chardata[$idx]['type'] == 'ET') {
             if (($levcount > 0) && ($this->chardata[($idx - 1)]['type'] == 'EN')) {

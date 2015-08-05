@@ -53,16 +53,24 @@ class StepL
     protected $pel = 0;
 
     /**
+     * Maximul level
+     *
+     * @var int
+     */
+    protected $maxlevel = 0;
+
+    /**
      * L steps
      *
      * @param array $chardata Array of characters data
      * @param int   $pel      Paragraph embedding level
      */
-    public function __construct($chardata, $pel)
+    public function __construct($chardata, $pel, $maxlevel)
     {
         $this->chardata = $chardata;
         $this->numchars = count($this->chardata);
         $this->pel = $pel;
+        $this->maxlevel = $maxlevel;
         $this->processL1();
         $this->processL2();
     }

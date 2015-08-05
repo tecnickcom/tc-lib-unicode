@@ -57,7 +57,7 @@ abstract class Arabic
     protected function hasNextChar($thischar, $nextchar)
     {
         return (($nextchar !== false)
-            && (($nextchar['unitype'] == 'AL') || ($nextchar['unitype'] == 'NSM'))
+            && (($nextchar['otype'] == 'AL') || ($nextchar['otype'] == 'NSM'))
             && ($nextchar['type'] == $thischar['type'])
             && ($nextchar['char'] != UniArabic::QUESTION_MARK)
         );
@@ -74,7 +74,7 @@ abstract class Arabic
     protected function hasPrevChar($prevchar, $thischar)
     {
         return ((($prevchar !== false)
-            && (($prevchar['unitype'] == 'AL') || ($prevchar['unitype'] == 'NSM'))
+            && (($prevchar['otype'] == 'AL') || ($prevchar['otype'] == 'NSM'))
             && ($prevchar['type'] == $thischar['type']))
         );
     }

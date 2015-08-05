@@ -272,9 +272,7 @@ class Bidi
                 $chardata += $seq['item'];
             }
 
-            var_export($chardata);exit;//DEBUG *********************************************************************
-            
-            $stepl = new StepL($chardata, $pel);  // to be completed
+            $stepl = new StepL($chardata, $pel, $seq['maxlevel']);
             $chardata = $stepl->getChrData();
 
             foreach ($chardata as $chd) {

@@ -172,29 +172,29 @@ class StepX
         switch ($ord) {
             case UniConstant::RLE:
                 // X2
-                $this->setDss($this->getLOdd($edss['cel']), UniConstant::RLE, 'NI', false, $edss['eor'], 'oec');
+                $this->setDss($this->getLOdd($edss['cel']), UniConstant::RLE, 'NI', false, 'oec');
                 break;
             case UniConstant::LRE:
                 // X3
-                $this->setDss($this->getLEven($edss['cel']), UniConstant::LRE, 'NI', false, $edss['eor'], 'oec');
+                $this->setDss($this->getLEven($edss['cel']), UniConstant::LRE, 'NI', false, 'oec');
                 break;
             case UniConstant::RLO:
                 // X4
-                $this->setDss($this->getLOdd($edss['cel']), UniConstant::RLO, 'R', false, $edss['eor'], 'oec');
+                $this->setDss($this->getLOdd($edss['cel']), UniConstant::RLO, 'R', false, 'oec');
                 break;
             case UniConstant::LRO:
                 // X5
-                $this->setDss($this->getLEven($edss['cel']), UniConstant::LRO, 'L', false, $edss['eor'], 'oic');
+                $this->setDss($this->getLEven($edss['cel']), UniConstant::LRO, 'L', false, 'oic');
                 break;
             case UniConstant::RLI:
                 // X5a
                 $this->processChar($ord, $edss);
-                $this->setDss($this->getLOdd($edss['cel']), UniConstant::RLI, 'NI', true, $edss['eor'], 'oic', 1);
+                $this->setDss($this->getLOdd($edss['cel']), UniConstant::RLI, 'NI', true, 'oic', 1);
                 break;
             case UniConstant::LRI:
                 // X5b
                 $this->processChar($ord, $edss);
-                $this->setDss($this->getLEven($edss['cel']), UniConstant::LRI, 'NI', true, $edss['eor'], 'oic', 1);
+                $this->setDss($this->getLEven($edss['cel']), UniConstant::LRI, 'NI', true, 'oic', 1);
                 break;
             case UniConstant::FSI:
                 // X5c
@@ -224,11 +224,10 @@ class StepX
      * @param int    $ord    Char code
      * @param string $dos    Directional override status
      * @param bool   $dis    Directional isolate status
-     * @param string $eor    End-Of-Run (L or R)
      * @param string $incr   Index to increment ('oic' or 'oec')
      * @param int    $ivic   increment for the valid isolate count
      */
-    protected function setDss($cel, $ord, $dos, $dis, $eor, $incr, $ivic = 0)
+    protected function setDss($cel, $ord, $dos, $dis, $incr, $ivic = 0)
     {
         // X2 to X5
         //     - Compute the least odd|even embedding level greater than the embedding level of the last entry
@@ -380,9 +379,9 @@ class StepX
         //      the FSI as an RLI in rule X5a. Otherwise, treat it as an LRI in rule X5b.
         $stepp = new StepP(array_slice($this->ordarr, $key));
         if ($stepp->getPel() == 0) {
-            $this->setDss($this->getLEven($edss['cel']), UniConstant::LRI, 'N', true, $edss['eor'], 'oic', 1);
+            $this->setDss($this->getLEven($edss['cel']), UniConstant::LRI, 'N', true, 'oic', 1);
         } else {
-            $this->setDss($this->getLOdd($edss['cel']), UniConstant::RLI, 'N', true, $edss['eor'], 'oic', 1);
+            $this->setDss($this->getLOdd($edss['cel']), UniConstant::RLI, 'N', true, 'oic', 1);
         }
     }
 }

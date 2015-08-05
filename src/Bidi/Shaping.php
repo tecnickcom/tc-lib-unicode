@@ -92,7 +92,7 @@ class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
     {
         $this->setAlChars();
         for ($idx = 0; $idx < $this->seq['length']; ++$idx) {
-            if ($this->seq['item'][$idx]['unitype'] == 'AL') {
+            if ($this->seq['item'][$idx]['otype'] == 'AL') {
                 $thischar = $this->seq['item'][$idx];
                 $pos = $thischar['x'];
                 $prevchar = (($pos > 0) ? $this->alchars[($pos - 1)] : false);
@@ -113,7 +113,7 @@ class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
     {
         $this->numalchars = 0;
         for ($idx = 0; $idx < $this->seq['length']; ++$idx) {
-            if (($this->seq['item'][$idx]['unitype'] == 'AL')
+            if (($this->seq['item'][$idx]['otype'] == 'AL')
                 || ($this->seq['item'][$idx]['char'] == UniConstant::SPACE)
                 || ($this->seq['item'][$idx]['char'] == UniConstant::ZERO_WIDTH_NON_JOINER)
             ) {

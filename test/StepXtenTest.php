@@ -36,7 +36,7 @@ class StepXtenTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider stepXtenDataProvider
      */
-    public function testStepX($chardata, $expected)
+    public function testStepXteN($chardata, $expected)
     {
         $stepxten = new \Com\Tecnick\Unicode\Bidi\StepXten($chardata, 0);
         $this->assertEquals($expected, $stepxten->getIsolatedLevelRunSequences());
@@ -54,18 +54,39 @@ class StepXtenTest extends \PHPUnit_Framework_TestCase
                     array('char' => 39,   'level' => 0, 'type' => 'ON', 'otype' => 'ON')
                 ),
                 array(
-                    array('e' => 0, 'edir' => 'L', 'length' => 1,
+                    array(
+                        'e' => 0,
+                        'edir' => 'L',
+                        'start' => 0,
+                        'end' => 0,
+                        'length' => 1,
+                        'sos' => 'L',
+                        'eos' => 'R',
                         'item' => array(
                             array('char' => 33, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
                         ),
                     ),
-                    array('e' => 1, 'edir' => 'R', 'length' => 2,
+                    array(
+                        'e' => 1,
+                        'edir' => 'R',
+                        'start' => 1,
+                        'end' => 2,
+                        'length' => 2,
+                        'sos' => 'R',
+                        'eos' => 'R',
                         'item' => array(
                             array('char' => 34, 'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
                             array('char' => 38, 'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
                         ),
                     ),
-                    array('e' => 0, 'edir' => 'L', 'length' => 1,
+                    array(
+                        'e' => 0,
+                        'edir' => 'L',
+                        'start' => 3,
+                        'end' => 3,
+                        'length' => 1,
+                        'sos' => 'R',
+                        'eos' => 'L',
                         'item' => array(
                             array('char' => 39, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
                         ),
@@ -85,7 +106,14 @@ class StepXtenTest extends \PHPUnit_Framework_TestCase
                     array('char' => 39,   'level' => 0, 'type' => 'ON', 'otype' => 'ON')
                 ),
                 array(
-                    array('e' => 0, 'edir' => 'L', 'length' => 6,
+                    array(
+                        'e' => 0,
+                        'edir' => 'L',
+                        'start' => 0,
+                        'end' => 12,
+                        'length' => 6,
+                        'sos' => 'L',
+                        'eos' => 'L',
                         'item' => array(
                             array('char' => 33, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
                             array('char' => 8295, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
@@ -95,12 +123,26 @@ class StepXtenTest extends \PHPUnit_Framework_TestCase
                             array('char' => 39, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
                         ),
                     ),
-                    array('e' => 1, 'edir' => 'R', 'length' => 1,
+                    array(
+                        'e' => 1,
+                        'edir' => 'R',
+                        'start' => 2,
+                        'end' => 2,
+                        'length' => 1,
+                        'sos' => 'R',
+                        'eos' => 'R',
                         'item' => array(
                             array('char' => 34, 'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
                         ),
                     ),
-                    array('e' => 1, 'edir' => 'R', 'length' => 1,
+                    array(
+                        'e' => 1,
+                        'edir' => 'R',
+                        'start' => 5,
+                        'end' => 5,
+                        'length' => 1,
+                        'sos' => 'R',
+                        'eos' => 'R',
                         'item' => array(
                             array('char' => 38, 'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
                         ),
@@ -123,7 +165,14 @@ class StepXtenTest extends \PHPUnit_Framework_TestCase
                     array('char' => 42,   'level' => 0, 'type' => 'ON', 'otype' => 'ON')
                 ),
                 array(
-                    array('e' => 0, 'edir' => 'L', 'length' => 4,
+                    array(
+                        'e' => 0,
+                        'edir' => 'L',
+                        'start' => 0,
+                        'end' => 11,
+                        'length' => 4,
+                        'sos' => 'L',
+                        'eos' => 'L',
                         'item' => array(
                             array('char' => 33, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
                             array('char' => 8295, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
@@ -131,7 +180,14 @@ class StepXtenTest extends \PHPUnit_Framework_TestCase
                             array('char' => 42, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
                         ),
                     ),
-                    array('e' => 1, 'edir' => 'R', 'length' => 4,
+                    array(
+                        'e' => 1,
+                        'edir' => 'R',
+                        'start' => 2,
+                        'end' => 11,
+                        'length' => 4,
+                        'sos' => 'R',
+                        'eos' => 'R',
                         'item' => array(
                             array('char' => 34, 'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
                             array('char' => 8294, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
@@ -139,17 +195,38 @@ class StepXtenTest extends \PHPUnit_Framework_TestCase
                             array('char' => 41, 'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
                         ),
                     ),
-                    array('e' => 2, 'edir' => 'L', 'length' => 1,
+                    array(
+                        'e' => 2,
+                        'edir' => 'L',
+                        'start' => 4,
+                        'end' => 4,
+                        'length' => 1,
+                        'sos' => 'L',
+                        'eos' => 'R',
                         'item' => array(
                             array('char' => 38, 'level' => 2, 'type' => 'ON', 'otype' => 'ON'),
                         ),
                     ),
-                    array('e' => 3, 'edir' => 'R', 'length' => 1,
+                    array(
+                        'e' => 3,
+                        'edir' => 'R',
+                        'start' => 5,
+                        'end' => 5,
+                        'length' => 1,
+                        'sos' => 'R',
+                        'eos' => 'R',
                         'item' => array(
                             array('char' => 39, 'level' => 3, 'type' => 'ON', 'otype' => 'ON'),
                         ),
                     ),
-                    array('e' => 2, 'edir' => 'L', 'length' => 1,
+                    array(
+                        'e' => 2,
+                        'edir' => 'L',
+                        'start' => 6,
+                        'end' => 6,
+                        'length' => 1,
+                        'sos' => 'R',
+                        'eos' => 'L',
                         'item' => array(
                             array('char' => 40, 'level' => 2, 'type' => 'ON', 'otype' => 'ON'),
                         ),
@@ -167,28 +244,63 @@ class StepXtenTest extends \PHPUnit_Framework_TestCase
                     array('char' => 41,   'level' => 0, 'type' => 'ON', 'otype' => 'ON')
                 ),
                 array(
-                    array('e' => 0, 'edir' => 'L', 'length' => 1,
+                    array(
+                        'e' => 0,
+                        'edir' => 'L',
+                        'start' => 0,
+                        'end' => 0,
+                        'length' => 1,
+                        'sos' => 'L',
+                        'eos' => 'R',
                         'item' => array(
                             array('char' => 33, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
                         ),
                     ),
-                    array('e' => 1, 'edir' => 'R', 'length' => 1,
+                    array(
+                        'e' => 1,
+                        'edir' => 'R',
+                        'start' => 1,
+                        'end' => 1,
+                        'length' => 1,
+                        'sos' => 'R',
+                        'eos' => 'L',
                         'item' => array(
                             array('char' => 34, 'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
                         ),
                     ),
-                    array('e' => 2, 'edir' => 'L', 'length' => 1,
+                    array(
+                        'e' => 2,
+                        'edir' => 'L',
+                        'start' => 2,
+                        'end' => 2,
+                        'length' => 1,
+                        'sos' => 'L',
+                        'eos' => 'L',
                         'item' => array(
                             array('char' => 38, 'level' => 2, 'type' => 'ON', 'otype' => 'ON'),
                         ),
                     ),
-                    array('e' => 1, 'edir' => 'R', 'length' => 2,
+                    array(
+                        'e' => 1,
+                        'edir' => 'R',
+                        'start' => 3,
+                        'end' => 4,
+                        'length' => 2,
+                        'sos' => 'L',
+                        'eos' => 'R',
                         'item' => array(
                             array('char' => 39, 'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
                             array('char' => 40, 'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
                         ),
                     ),
-                    array('e' => 0, 'edir' => 'L', 'length' => 1,
+                    array(
+                        'e' => 0,
+                        'edir' => 'L',
+                        'start' => 5,
+                        'end' => 5,
+                        'length' => 1,
+                        'sos' => 'R',
+                        'eos' => 'L',
                         'item' => array(
                             array('char' => 41, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
                         ),
@@ -212,7 +324,14 @@ class StepXtenTest extends \PHPUnit_Framework_TestCase
                     array('char' => 41,   'level' => 0, 'type' => 'ON', 'otype' => 'ON')
                 ),
                 array(
-                    array('e' => 0, 'edir' => 'L', 'length' => 6,
+                    array(
+                        'e' => 0,
+                        'edir' => 'L',
+                        'start' => 0,
+                        'end' => 20,
+                        'length' => 6,
+                        'sos' => 'L',
+                        'eos' => 'L',
                         'item' => array(
                             array('char' => 33, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
                             array('char' => 8295, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
@@ -222,7 +341,14 @@ class StepXtenTest extends \PHPUnit_Framework_TestCase
                             array('char' => 41, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
                         ),
                     ),
-                    array('e' => 1, 'edir' => 'R', 'length' => 4,
+                    array(
+                        'e' => 1,
+                        'edir' => 'R',
+                        'start' => 2,
+                        'end' => 9,
+                        'length' => 4,
+                        'sos' => 'R',
+                        'eos' => 'R',
                         'item' => array(
                             array('char' => 34, 'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
                             array('char' => 8294, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
@@ -230,12 +356,26 @@ class StepXtenTest extends \PHPUnit_Framework_TestCase
                             array('char' => 39, 'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
                         ),
                     ),
-                    array('e' => 2, 'edir' => 'L', 'length' => 1,
+                    array(
+                        'e' => 2,
+                        'edir' => 'L',
+                        'start' => 4,
+                        'end' => 4,
+                        'length' => 1,
+                        'sos' => 'L',
+                        'eos' => 'L',
                         'item' => array(
                             array('char' => 38, 'level' => 2, 'type' => 'ON', 'otype' => 'ON'),
                         ),
                     ),
-                    array('e' => 1, 'edir' => 'R', 'length' => 1,
+                    array(
+                        'e' => 1,
+                        'edir' => 'R',
+                        'start' => 9,
+                        'end' => 9,
+                        'length' => 1,
+                        'sos' => 'R',
+                        'eos' => 'R',
                         'item' => array(
                             array('char' => 40, 'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
                         ),
@@ -255,12 +395,26 @@ class StepXtenTest extends \PHPUnit_Framework_TestCase
                     array('char' => 41,   'level' => 0, 'type' => 'ON', 'otype' => 'ON')
                 ),
                 array(
-                    array('e' => 0, 'edir' => 'L', 'length' => 1,
+                    array(
+                        'e' => 0,
+                        'edir' => 'L',
+                        'start' => 0,
+                        'end' => 0,
+                        'length' => 1,
+                        'sos' => 'L',
+                        'eos' => 'R',
                         'item' => array(
                             array('char' => 33, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
                         ),
                     ),
-                    array('e' => 1, 'edir' => 'R', 'length' => 4,
+                    array(
+                        'e' => 1,
+                        'edir' => 'R',
+                        'start' => 1,
+                        'end' => 8,
+                        'length' => 4,
+                        'sos' => 'R',
+                        'eos' => 'R',
                         'item' => array(
                             array('char' => 34, 'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
                             array('char' => 8294, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
@@ -268,17 +422,38 @@ class StepXtenTest extends \PHPUnit_Framework_TestCase
                             array('char' => 40, 'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
                         ),
                     ),
-                    array('e' => 2, 'edir' => 'L', 'length' => 1,
+                    array(
+                        'e' => 2,
+                        'edir' => 'L',
+                        'start' => 3,
+                        'end' => 3,
+                        'length' => 1,
+                        'sos' => 'L',
+                        'eos' => 'R',
                         'item' => array(
                             array('char' => 38, 'level' => 2, 'type' => 'ON', 'otype' => 'ON'),
                         ),
                     ),
-                    array('e' => 3, 'edir' => 'R', 'length' => 1,
+                    array(
+                        'e' => 3,
+                        'edir' => 'R',
+                        'start' => 4,
+                        'end' => 4,
+                        'length' => 1,
+                        'sos' => 'R',
+                        'eos' => 'R',
                         'item' => array(
                             array('char' => 39, 'level' => 3, 'type' => 'ON', 'otype' => 'ON'),
                         ),
                     ),
-                    array('e' => 0, 'edir' => 'L', 'length' => 1,
+                    array(
+                        'e' => 0,
+                        'edir' => 'L',
+                        'start' => 7,
+                        'end' => 7,
+                        'length' => 1,
+                        'sos' => 'R',
+                        'eos' => 'L',
                         'item' => array(
                             array('char' => 41, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
                         ),

@@ -195,7 +195,11 @@ class StepXten
             $isorun = array(
                 'e'      => $seq['e'],
                 'edir'   => $this->getEmbeddedDirection($seq['e']), // embedded direction
+                'start'  => $seq['start'], // position of the first char
+                'end'    => $seq['end'],   // position of the last char
                 'length' => ($seq['end'] - $seq['start'] + 1),
+                'sos'    => '', // start-of-sequence
+                'eos'    => '', // end-of-sequence
                 'item'   => array()
             );
             for ($jdx = 0; $jdx < $isorun['length']; ++$jdx) {
@@ -226,6 +230,7 @@ class StepXten
                 $parent = $this->chardata[$seq['start']]['pdimatch'];
                 $this->ilrs[$parent]['item'] = array_merge($this->ilrs[$parent]['item'], $isorun['item']);
                 $this->ilrs[$parent]['length'] += $isorun['length'];
+                $this->ilrs[$parent]['end'] += $isorun['end'];
                 if ($pdimatch >= 0) {
                     $this->chardata[$pdimatch]['pdimatch'] = $parent;
                 }
@@ -234,23 +239,43 @@ class StepXten
                 ++$numiso;
             }
         }
+        $this->setStartEndOfSequence();
     }
 
     /**
-     * Get updated $jdx index
-     *
-     * @return int
+     * Determine the start-of-sequence (sos) and end-of-sequence (eos) types, either L or R,
+     * for each isolating run sequence.
      */
-    protected function getUpdatedJdx($jdx, $idx)
+    protected function setStartEndOfSequence()
     {
-        while (($jdx < $this->numrunseq)
-            && ($this->chardata[$this->runseq[$jdx]['start']]['char'] != UniConstant::PDI)
-        ) {
-            ++$jdx;
+        foreach ($this->ilrs as $key => $seq) {
+
+            // For sos, compare the level of the first character in the sequence with the level of the character
+            // preceding it in the paragraph (not counting characters removed by X9), and if there is none,
+            // with the paragraph embedding level.
+            $lev = $seq['item'][0]['level'];
+            if ($seq['start'] == 0) {
+                $prev = $this->pel;
+            } else {
+                $lastchr = $this->chardata[($seq['start'] - 1)];
+                $prev = $lastchr['level'];
+            }
+            $this->ilrs[$key]['sos'] = $this->getEmbeddedDirection(($prev > $lev) ? $prev : $lev);
+
+            // For eos, compare the level of the last character in the sequence with the level of the character
+            // following it in the paragraph (not counting characters removed by X9), and if there is none or the
+            // last character of the sequence is an isolate initiator (lacking a matching PDI), with the paragraph
+            // embedding level.
+            $lastchr = end($seq['item']);
+            $lev = $lastchr['level'];
+            if (!isset($this->chardata[($seq['end'] + 1)]['level']) || $this->isIsolateInitiator($lastchr['char'])) {
+                $next = $this->pel;
+            } else {
+                $next = $this->chardata[($seq['end'] + 1)]['level'];
+            }
+            $this->ilrs[$key]['eos'] = $this->getEmbeddedDirection(($next > $lev) ? $next : $lev);
+            
+            // If the higher level is odd, the sos or eos is R; otherwise, it is L.
         }
-        if (($jdx < $this->numrunseq) && ($this->runseq[$idx]['e'] != $this->runseq[$jdx]['e'])) {
-            $jdx = $this->getUpdatedJdx(++$jdx, $idx);
-        }
-        return $jdx;
     }
 }

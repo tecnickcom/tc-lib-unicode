@@ -272,7 +272,9 @@ class StepX
         }
         $unitype = (isset(UniType::$uni[$ord]) ? UniType::$uni[$ord] : $edss['dos']);
         // stores string characters and other information
+$this->obj = new \Com\Tecnick\Unicode\Convert(); // DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~
         $this->chardata[] = array(
+'chr' => $this->obj->chr($ord), // DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~
             'char'    => $ord,
             'level'   => $edss['cel'],
             'type'    => (($edss['dos'] !== 'NI') ? $edss['dos'] : $unitype),

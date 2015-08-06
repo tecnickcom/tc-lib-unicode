@@ -39,6 +39,13 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
     protected $brackets= array();
 
     /**
+     * Stack used to store bracket positions
+     *
+     * @var array
+     */
+    protected $bstack= array();
+
+    /**
      * Process N steps
      * Resolving Neutral and Isolate Formatting Types
      *
@@ -68,26 +75,25 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
      */
     protected function getBracketPairs($idx)
     {
-        $stack = array();
         $char = $this->seq['item'][$idx]['char'];
         if (isset(UniBracket::$open[$char])) {
             // process open bracket
             if ($char == 0x3008) {
                 $char = 0x2329;
             }
-            $stack[] = array($idx, $char);
+            $this->bstack[] = array($idx, $char);
         } elseif (isset(UniBracket::$close[$char])) {
             // process closign bracket
             if ($char == 0x3009) {
                 $char = 0x232A;
             }
             // find matching opening bracket
-            $tmpstack = $stack;
+            $tmpstack = $this->bstack;
             while (!empty($tmpstack)) {
                 $item = array_pop($tmpstack);
-                if ($char == $item[1]) {
+                if ($char == UniBracket::$open[$item[1]]) {
                     $this->brackets[$item[0]] = $idx;
-                    $stack = $tmpstack;
+                    $this->bstack = $tmpstack;
                 }
             }
         }

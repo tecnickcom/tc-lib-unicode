@@ -255,26 +255,25 @@ class Bidi
         foreach ($paragraph as $par) {
             $pel = $this->getPel($par);
             $stepx = new StepX($par, $pel);
-            
             $stepx10 = new StepXten($stepx->getChrData(), $pel);
             $ilrs = $stepx10->getIsolatedLevelRunSequences();
-
             $chardata = array();
             foreach ($ilrs as $seq) {
                 $stepw = new StepW($seq);
                 $stepn = new StepN($stepw->getSequence());
                 $stepi = new StepI($stepn->getSequence());
                 $seq = $stepi->getSequence();
+var_export($seq);// DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~
                 if ($this->shaping) {
                     $shaping = new Shaping($seq);
                     $seq = $shaping->getSequence();
                 }
-                $chardata += $seq['item'];
+                $chardata = array_merge($chardata, $seq['item']);
             }
-
             $stepl = new StepL($chardata, $pel, $seq['maxlevel']);
             $chardata = $stepl->getChrData();
-
+//var_export($this->ordarr);var_export($chardata);// DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~
+exit;// DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~
             foreach ($chardata as $chd) {
                 $this->bidiordarr[] = $chd['char'];
             }

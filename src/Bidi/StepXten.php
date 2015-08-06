@@ -183,7 +183,7 @@ class StepXten
                 $start = $seq['start'];
                 $isorun = array(
                     'e'      => $seq['e'],
-                    'edir'   => $this->getEmbeddedDirection($seq['e']),     // embedded direction
+                    'edir'   => $this->getEmbeddedDirection($seq['e']), // embedded direction
                     'length' => ($seq['end'] - $seq['start'] + 1),
                     'item'   => array()
                 );

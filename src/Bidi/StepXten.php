@@ -274,7 +274,7 @@ class StepXten
             ++$jdx;
         }
         if (($jdx < $this->numrunseq) && ($this->runseq[$idx]['e'] != $this->runseq[$jdx]['e'])) {
-            $jdx = $this->updateJdx(++$jdx, $idx);
+            $jdx = $this->getUpdatedJdx(++$jdx, $idx);
         }
         return $jdx;
     }

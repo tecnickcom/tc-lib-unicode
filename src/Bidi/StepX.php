@@ -172,29 +172,29 @@ class StepX
         switch ($ord) {
             case UniConstant::RLE:
                 // X2
-                $this->setDss($this->getLOdd($edss['cel']), UniConstant::RLE, 'NI', false, 'oec');
+                $this->setDss($this->getLOdd($edss['cel']), UniConstant::RLE, 'NI');
                 break;
             case UniConstant::LRE:
                 // X3
-                $this->setDss($this->getLEven($edss['cel']), UniConstant::LRE, 'NI', false, 'oec');
+                $this->setDss($this->getLEven($edss['cel']), UniConstant::LRE, 'NI');
                 break;
             case UniConstant::RLO:
                 // X4
-                $this->setDss($this->getLOdd($edss['cel']), UniConstant::RLO, 'R', false, 'oec');
+                $this->setDss($this->getLOdd($edss['cel']), UniConstant::RLO, 'R');
                 break;
             case UniConstant::LRO:
                 // X5
-                $this->setDss($this->getLEven($edss['cel']), UniConstant::LRO, 'L', false, 'oic');
+                $this->setDss($this->getLEven($edss['cel']), UniConstant::LRO, 'L');
                 break;
             case UniConstant::RLI:
                 // X5a
                 $this->processChar($ord, $edss);
-                $this->setDss($this->getLOdd($edss['cel']), UniConstant::RLI, 'NI', true, 'oic', 1);
+                $this->setDss($this->getLOdd($edss['cel']), UniConstant::RLI, 'NI', true, true, 1);
                 break;
             case UniConstant::LRI:
                 // X5b
                 $this->processChar($ord, $edss);
-                $this->setDss($this->getLEven($edss['cel']), UniConstant::LRI, 'NI', true, 'oic', 1);
+                $this->setDss($this->getLEven($edss['cel']), UniConstant::LRI, 'NI', true, true, 1);
                 break;
             case UniConstant::FSI:
                 // X5c
@@ -203,8 +203,7 @@ class StepX
                 break;
             case UniConstant::PDI:
                 // X6a
-                $this->processChar($ord, $edss);
-                $this->processPdiCase($edss);
+                $this->processPdiCase($ord, $edss);
                 break;
             case UniConstant::PDF:
                 // X7
@@ -220,14 +219,14 @@ class StepX
     /**
      * Set temporary data (X2 to X5)
      *
-     * @param int    $cel    Embedding Level
-     * @param int    $ord    Char code
-     * @param string $dos    Directional override status
-     * @param bool   $dis    Directional isolate status
-     * @param string $incr   Index to increment ('oic' or 'oec')
-     * @param int    $ivic   increment for the valid isolate count
+     * @param int    $cel     Embedding Level
+     * @param int    $ord     Char code
+     * @param string $dos     Directional override status
+     * @param bool   $dis     Directional isolate status
+     * @param string $isolate True if Isolate initiator
+     * @param int    $ivic    increment for the valid isolate count
      */
-    protected function setDss($cel, $ord, $dos, $dis, $incr, $ivic = 0)
+    protected function setDss($cel, $ord, $dos, $dis = false, $isolate = false, $ivic = 0)
     {
         // X2 to X5
         //     - Compute the least odd|even embedding level greater than the embedding level of the last entry
@@ -239,8 +238,10 @@ class StepX
         //     - Otherwise, this is an overflow RLE. If the overflow isolate count is zero, increment the
         //       overflow embedding|isolate count by one. Leave all other variables unchanged.
         if (($cel >= self::MAX_DEPTH) || ($this->oic != 0) || ($this->oec != 0)) {
-            if ($this->oic == 0) {
-                ++$this->$incr;
+            if ($isolate) {
+                ++$this->oic;
+            } elseif ($this->oic == 0) {
+                ++$this->oec;
             }
             return;
         }
@@ -256,7 +257,7 @@ class StepX
     /**
      * Process normal char (X6)
      *
-     * @param int    $ord     Char code
+     * @param int    $ord  Char code
      * @param array  $edss Last entry in the Directional Status Stack
      */
     protected function processChar($ord, $edss)
@@ -272,13 +273,11 @@ class StepX
         }
         $unitype = (isset(UniType::$uni[$ord]) ? UniType::$uni[$ord] : $edss['dos']);
         // stores string characters and other information
-$this->obj = new \Com\Tecnick\Unicode\Convert(); // DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~
         $this->chardata[] = array(
-'chr' => $this->obj->chr($ord), // DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~
-            'char'    => $ord,
-            'level'   => $edss['cel'],
-            'type'    => (($edss['dos'] !== 'NI') ? $edss['dos'] : $unitype),
-            'otype'   => $unitype // original type
+            'char'  => $ord,
+            'level' => $edss['cel'],
+            'type'  => (($edss['dos'] !== 'NI') ? $edss['dos'] : $unitype),
+            'otype' => $unitype // original type
         );
     }
 
@@ -318,9 +317,10 @@ $this->obj = new \Com\Tecnick\Unicode\Convert(); // DEBUG ~ DEBUG ~ DEBUG ~ DEBU
     /**
      * Process the PDI type character
      *
+     * @param int    $ord  Char code
      * @param array  $edss Last entry in the Directional Status Stack
      */
-    protected function processPdiCase($edss)
+    protected function processPdiCase($ord, $edss)
     {
         // X6a. With each PDI, perform the following steps:
         //      - If the overflow isolate count is greater than zero, this PDI matches an overflow isolate
@@ -358,6 +358,7 @@ $this->obj = new \Com\Tecnick\Unicode\Convert(); // DEBUG ~ DEBUG ~ DEBUG ~ DEBU
         //          preceding step left the stack with at least two entries, this pop does not leave the
         //          stack empty.)
         array_pop($this->dss);
+        $edss = end($this->dss);
         --$this->vic;
         //      - In all cases, look up the last entry on the directional status stack left after the
         //        steps above and:
@@ -365,6 +366,13 @@ $this->obj = new \Com\Tecnick\Unicode\Convert(); // DEBUG ~ DEBUG ~ DEBUG ~ DEBU
         //        - If the entry's directional override status is not neutral, reset the current character type
         //          from PDI to L if the override status is left-to-right, and to R if the override status is
         //          right-to-left.
+        $unitype = (isset(UniType::$uni[$ord]) ? UniType::$uni[$ord] : $edss['dos']);
+        $this->chardata[] = array(
+            'char'    => $ord,
+            'level'   => $edss['cel'],
+            'type'    => (($edss['dos'] !== 'NI') ? $edss['dos'] : $unitype),
+            'otype'   => $unitype // original type
+        );
     }
 
     /**
@@ -381,9 +389,9 @@ $this->obj = new \Com\Tecnick\Unicode\Convert(); // DEBUG ~ DEBUG ~ DEBUG ~ DEBU
         //      the FSI as an RLI in rule X5a. Otherwise, treat it as an LRI in rule X5b.
         $stepp = new StepP(array_slice($this->ordarr, $key));
         if ($stepp->getPel() == 0) {
-            $this->setDss($this->getLEven($edss['cel']), UniConstant::LRI, 'N', true, 'oic', 1);
+            $this->setDss($this->getLEven($edss['cel']), UniConstant::LRI, 'NI', true, true, 1);
         } else {
-            $this->setDss($this->getLOdd($edss['cel']), UniConstant::RLI, 'N', true, 'oic', 1);
+            $this->setDss($this->getLOdd($edss['cel']), UniConstant::RLI, 'NI', true, true, 1);
         }
     }
 }

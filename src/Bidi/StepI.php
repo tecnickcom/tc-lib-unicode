@@ -41,7 +41,7 @@ class StepI extends \Com\Tecnick\Unicode\Bidi\StepBase
      * I1. For all characters with an even (left-to-right) embedding level, those of type R go up one level and those
      *     of type AN or EN go up two levels.
      * I2. For all characters with an odd (right-to-left) embedding level, those of type L, EN or AN go up one level.
-     * 
+     *
      * @param int $idx Current character position
      */
     protected function processI($idx)

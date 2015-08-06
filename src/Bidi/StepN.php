@@ -15,7 +15,6 @@
 
 namespace Com\Tecnick\Unicode\Bidi;
 
-
 use \Com\Tecnick\Unicode\Data\Bracket as UniBracket;
 
 /**
@@ -105,9 +104,9 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
     /**
      * Return the normalized chat type for the N0 step
      * Within this scope, bidirectional types EN and AN are treated as R.
-     * 
+     *
      * @param string $type Char type
-     * 
+     *
      * @return string
      */
     protected function getN0Type($type)
@@ -206,8 +205,7 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
                 || ($this->seq['item'][$jdx]['type'] == 'EN')
             ) {
                 $next = 'R';
-            }
-            elseif ($this->seq['item'][$jdx]['type'] == 'L') {
+            } elseif ($this->seq['item'][$jdx]['type'] == 'L') {
                 $next = 'L';
             } else {
                 return;

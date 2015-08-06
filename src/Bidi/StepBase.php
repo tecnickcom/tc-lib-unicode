@@ -77,7 +77,7 @@ abstract class StepBase
      * Gent Next Valid Char
      *
      * @param int $idx Current char index
-     * 
+     *
      * @return int
      */
     protected function getNextValidChar($idx)
@@ -99,7 +99,7 @@ abstract class StepBase
      * Gent Previous Valid Char
      *
      * @param int $idx Current char index
-     * 
+     *
      * @return int
      */
     protected function getPreviousValidChar($idx)

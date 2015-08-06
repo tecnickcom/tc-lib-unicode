@@ -234,13 +234,14 @@ class Bidi
     }
 
     /**
-     * Process the string
+     * P1. Split the text into separate paragraphs.
+     *     A paragraph separator is kept with the previous paragraph.
+     *
+     * @return array
      */
-    protected function process()
+    protected function getParagraphs()
     {
-        // process data
-        // P1. Split the text into separate paragraphs.
-        // A paragraph separator is kept with the previous paragraph.
+        
         $paragraph = array(0 => array());
         $pdx = 0; // paragraphs index
         foreach ($this->ordarr as $ord) {
@@ -250,6 +251,16 @@ class Bidi
                 $paragraph[$pdx] = array();
             }
         }
+        return $paragraph;
+    }
+
+    /**
+     * Process the string
+     */
+    protected function process()
+    {
+        // split the text into separate paragraphs.
+        $paragraph = $this->getParagraphs();
 
         // Within each paragraph, apply all the other rules of this algorithm.
         foreach ($paragraph as $par) {
@@ -257,13 +268,13 @@ class Bidi
             $stepx = new StepX($par, $pel);
             $stepx10 = new StepXten($stepx->getChrData(), $pel);
             $ilrs = $stepx10->getIsolatedLevelRunSequences();
+
             $chardata = array();
             foreach ($ilrs as $seq) {
                 $stepw = new StepW($seq);
                 $stepn = new StepN($stepw->getSequence());
                 $stepi = new StepI($stepn->getSequence());
                 $seq = $stepi->getSequence();
-var_export($seq);// DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~
                 if ($this->shaping) {
                     $shaping = new Shaping($seq);
                     $seq = $shaping->getSequence();
@@ -272,8 +283,6 @@ var_export($seq);// DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBU
             }
             $stepl = new StepL($chardata, $pel, $seq['maxlevel']);
             $chardata = $stepl->getChrData();
-//var_export($this->ordarr);var_export($chardata);// DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~
-exit;// DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~ DEBUG ~
             foreach ($chardata as $chd) {
                 $this->bidiordarr[] = $chd['char'];
             }

@@ -190,7 +190,6 @@ class StepXten
         $this->setLevelRunSequences();
         $numiso = 0;
         foreach ($this->runseq as $idx => $seq) {
-
             // Create a new level run sequence, and initialize it to contain just that level run
             $isorun = array(
                 'e'      => $seq['e'],
@@ -249,7 +248,6 @@ class StepXten
     protected function setStartEndOfSequence()
     {
         foreach ($this->ilrs as $key => $seq) {
-
             // For sos, compare the level of the first character in the sequence with the level of the character
             // preceding it in the paragraph (not counting characters removed by X9), and if there is none,
             // with the paragraph embedding level.

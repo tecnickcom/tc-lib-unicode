@@ -38,12 +38,15 @@ abstract class StepBase
     /**
      * Initialize Sequence to process
      *
-     * @param array $seq isolated Sequence array
+     * @param array $seq     Isolated Sequence array
+     * @param bool  $process If false disable automatic processing (this is a testing flag)
      */
-    public function __construct($seq)
+    public function __construct($seq, $process = true)
     {
         $this->seq = $seq;
-        $this->process();
+        if ($process) {
+            $this->process();
+        }
     }
 
     /**
@@ -66,7 +69,7 @@ abstract class StepBase
      *
      * @param string $method Processing methos
      */
-    protected function processStep($method)
+    public function processStep($method)
     {
         for ($idx = 0; $idx < $this->seq['length']; ++$idx) {
             $this->$method($idx);

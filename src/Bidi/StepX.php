@@ -255,6 +255,23 @@ class StepX
     }
 
     /**
+     * Push a char on the stack
+     *
+     * @param int    $ord  Char code
+     * @param array  $edss Last entry in the Directional Status Stack
+     */
+    protected function pushChar($ord, $edss)
+    {
+        $unitype = (isset(UniType::$uni[$ord]) ? UniType::$uni[$ord] : $edss['dos']);
+        $this->chardata[] = array(
+            'char'  => $ord,
+            'level' => $edss['cel'],
+            'type'  => (($edss['dos'] !== 'NI') ? $edss['dos'] : $unitype),
+            'otype' => $unitype // original type
+        );
+    }
+
+    /**
      * Process normal char (X6)
      *
      * @param int    $ord  Char code
@@ -271,14 +288,7 @@ class StepX
         if (isset(UniType::$uni[$ord]) && ((UniType::$uni[$ord] == 'B') || (UniType::$uni[$ord] == 'BN'))) {
             return;
         }
-        $unitype = (isset(UniType::$uni[$ord]) ? UniType::$uni[$ord] : $edss['dos']);
-        // stores string characters and other information
-        $this->chardata[] = array(
-            'char'  => $ord,
-            'level' => $edss['cel'],
-            'type'  => (($edss['dos'] !== 'NI') ? $edss['dos'] : $unitype),
-            'otype' => $unitype // original type
-        );
+        $this->pushChar($ord, $edss);
     }
 
     /**
@@ -366,13 +376,7 @@ class StepX
         //        - If the entry's directional override status is not neutral, reset the current character type
         //          from PDI to L if the override status is left-to-right, and to R if the override status is
         //          right-to-left.
-        $unitype = (isset(UniType::$uni[$ord]) ? UniType::$uni[$ord] : $edss['dos']);
-        $this->chardata[] = array(
-            'char'    => $ord,
-            'level'   => $edss['cel'],
-            'type'    => (($edss['dos'] !== 'NI') ? $edss['dos'] : $unitype),
-            'otype'   => $unitype // original type
-        );
+        $this->pushChar($ord, $edss);
     }
 
     /**

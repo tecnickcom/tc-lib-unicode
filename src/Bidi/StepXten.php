@@ -179,6 +179,7 @@ class StepXten
     {
         $this->setLevelRunSequences();
         foreach ($this->runseq as $idx => $seq) {
+            
             if ($seq['start'] >= 0) {
                 $start = $seq['start'];
                 $isorun = array(
@@ -198,7 +199,9 @@ class StepXten
 
             $kdx = $idx;
             $endchar = $this->chardata[$end]['char'];
-            
+
+
+
             while (($end < $this->numchars)
                 && (($endchar == UniConstant::RLI) || ($endchar == UniConstant::LRI) || ($endchar == UniConstant::FSI))
             ) {
@@ -222,6 +225,9 @@ class StepXten
                 }
             }
 
+
+
+
             $fence = $this->getPreviousValidChar($start, -1);
             $start_level = $this->chardata[$start]['level'];
             if ($fence == -1) {
@@ -232,6 +238,9 @@ class StepXten
             }
 
             $isorun['sos'] = $this->getEmbeddedDirection($isorun['sos']);
+
+
+
 
             if ($end == $this->numchars) {
                 $isorun['eos'] = $isorun['sos'];
@@ -256,6 +265,8 @@ class StepXten
                 }
                 $isorun['eos'] = $this->getEmbeddedDirection($isorun['eos']);
             }
+
+            
 
             $this->ilrs[] = $isorun;
         }

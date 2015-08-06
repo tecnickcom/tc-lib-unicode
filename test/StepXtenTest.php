@@ -39,7 +39,6 @@ class StepXtenTest extends \PHPUnit_Framework_TestCase
     public function testStepX($chardata, $expected)
     {
         $stepxten = new \Com\Tecnick\Unicode\Bidi\StepXten($chardata, 0);
-        var_export($stepxten->getIsolatedLevelRunSequences());echo "\n\n";//DEBUG
         $this->assertEquals($expected, $stepxten->getIsolatedLevelRunSequences());
     }
 
@@ -54,7 +53,24 @@ class StepXtenTest extends \PHPUnit_Framework_TestCase
                     array('char' => 38,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
                     array('char' => 39,   'level' => 0, 'type' => 'ON', 'otype' => 'ON')
                 ),
-                array()
+                array(
+                    array('e' => 0, 'edir' => 'L', 'length' => 1,
+                        'item' => array(
+                            array('char' => 33, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
+                        ),
+                    ),
+                    array('e' => 1, 'edir' => 'R', 'length' => 2,
+                        'item' => array(
+                            array('char' => 34, 'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
+                            array('char' => 38, 'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
+                        ),
+                    ),
+                    array('e' => 0, 'edir' => 'L', 'length' => 1,
+                        'item' => array(
+                            array('char' => 39, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
+                        ),
+                    ),
+                )
             ),
             array(
                 // BD13 Example 2: text1·RLI·text2·PDI·RLI·text3·PDI·text4
@@ -68,7 +84,28 @@ class StepXtenTest extends \PHPUnit_Framework_TestCase
                     array('char' => 8297, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
                     array('char' => 39,   'level' => 0, 'type' => 'ON', 'otype' => 'ON')
                 ),
-                array()
+                array(
+                    array('e' => 0, 'edir' => 'L', 'length' => 6,
+                        'item' => array(
+                            array('char' => 33, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
+                            array('char' => 8295, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                            array('char' => 8297, 'level' => 0, 'type' => 'NI', 'otype' => 'NI', 'pdimatch' => 0),
+                            array('char' => 8295, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                            array('char' => 8297, 'level' => 0, 'type' => 'NI', 'otype' => 'NI', 'pdimatch' => 0),
+                            array('char' => 39, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
+                        ),
+                    ),
+                    array('e' => 1, 'edir' => 'R', 'length' => 1,
+                        'item' => array(
+                            array('char' => 34, 'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
+                        ),
+                    ),
+                    array('e' => 1, 'edir' => 'R', 'length' => 1,
+                        'item' => array(
+                            array('char' => 38, 'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
+                        ),
+                    ),
+                )
             ),
             array(
                 // BD13 Example 3: text1·RLI·text2·LRI·text3·RLE·text4·PDF·text5·PDI·text6·PDI·text7
@@ -85,7 +122,39 @@ class StepXtenTest extends \PHPUnit_Framework_TestCase
                     array('char' => 8297, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
                     array('char' => 42,   'level' => 0, 'type' => 'ON', 'otype' => 'ON')
                 ),
-                array()
+                array(
+                    array('e' => 0, 'edir' => 'L', 'length' => 4,
+                        'item' => array(
+                            array('char' => 33, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
+                            array('char' => 8295, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                            array('char' => 8297, 'level' => 0, 'type' => 'NI', 'otype' => 'NI', 'pdimatch' => 0),
+                            array('char' => 42, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
+                        ),
+                    ),
+                    array('e' => 1, 'edir' => 'R', 'length' => 4,
+                        'item' => array(
+                            array('char' => 34, 'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
+                            array('char' => 8294, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
+                            array('char' => 8297, 'level' => 1, 'type' => 'NI', 'otype' => 'NI', 'pdimatch' => 1),
+                            array('char' => 41, 'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
+                        ),
+                    ),
+                    array('e' => 2, 'edir' => 'L', 'length' => 1,
+                        'item' => array(
+                            array('char' => 38, 'level' => 2, 'type' => 'ON', 'otype' => 'ON'),
+                        ),
+                    ),
+                    array('e' => 3, 'edir' => 'R', 'length' => 1,
+                        'item' => array(
+                            array('char' => 39, 'level' => 3, 'type' => 'ON', 'otype' => 'ON'),
+                        ),
+                    ),
+                    array('e' => 2, 'edir' => 'L', 'length' => 1,
+                        'item' => array(
+                            array('char' => 40, 'level' => 2, 'type' => 'ON', 'otype' => 'ON'),
+                        ),
+                    ),
+                )
             ),
             array(
                 // X10 Example 1: text1·RLE·text2·LRE·text3·PDF·text4·PDF·RLE·text5·PDF·text6
@@ -97,7 +166,34 @@ class StepXtenTest extends \PHPUnit_Framework_TestCase
                     array('char' => 40,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
                     array('char' => 41,   'level' => 0, 'type' => 'ON', 'otype' => 'ON')
                 ),
-                array()
+                array(
+                    array('e' => 0, 'edir' => 'L', 'length' => 1,
+                        'item' => array(
+                            array('char' => 33, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
+                        ),
+                    ),
+                    array('e' => 1, 'edir' => 'R', 'length' => 1,
+                        'item' => array(
+                            array('char' => 34, 'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
+                        ),
+                    ),
+                    array('e' => 2, 'edir' => 'L', 'length' => 1,
+                        'item' => array(
+                            array('char' => 38, 'level' => 2, 'type' => 'ON', 'otype' => 'ON'),
+                        ),
+                    ),
+                    array('e' => 1, 'edir' => 'R', 'length' => 2,
+                        'item' => array(
+                            array('char' => 39, 'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
+                            array('char' => 40, 'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
+                        ),
+                    ),
+                    array('e' => 0, 'edir' => 'L', 'length' => 1,
+                        'item' => array(
+                            array('char' => 41, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
+                        ),
+                    ),
+                )
             ),
             array(
                 // X10 Example 2: text1·RLI·text2·LRI·text3·PDI·text4·PDI·RLI·text5·PDI·text6
@@ -115,7 +211,36 @@ class StepXtenTest extends \PHPUnit_Framework_TestCase
                     array('char' => 8297, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
                     array('char' => 41,   'level' => 0, 'type' => 'ON', 'otype' => 'ON')
                 ),
-                array()
+                array(
+                    array('e' => 0, 'edir' => 'L', 'length' => 6,
+                        'item' => array(
+                            array('char' => 33, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
+                            array('char' => 8295, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                            array('char' => 8297, 'level' => 0, 'type' => 'NI', 'otype' => 'NI', 'pdimatch' => 0),
+                            array('char' => 8295, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                            array('char' => 8297, 'level' => 0, 'type' => 'NI', 'otype' => 'NI', 'pdimatch' => 0),
+                            array('char' => 41, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
+                        ),
+                    ),
+                    array('e' => 1, 'edir' => 'R', 'length' => 4,
+                        'item' => array(
+                            array('char' => 34, 'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
+                            array('char' => 8294, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
+                            array('char' => 8297, 'level' => 1, 'type' => 'NI', 'otype' => 'NI', 'pdimatch' => 1),
+                            array('char' => 39, 'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
+                        ),
+                    ),
+                    array('e' => 2, 'edir' => 'L', 'length' => 1,
+                        'item' => array(
+                            array('char' => 38, 'level' => 2, 'type' => 'ON', 'otype' => 'ON'),
+                        ),
+                    ),
+                    array('e' => 1, 'edir' => 'R', 'length' => 1,
+                        'item' => array(
+                            array('char' => 40, 'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
+                        ),
+                    ),
+                )
             ),
             array(
                 // X10 Example 3: text1·RLE·text2·LRI·text3·RLE·text4·PDI·text5·PDF·text6
@@ -129,7 +254,36 @@ class StepXtenTest extends \PHPUnit_Framework_TestCase
                     array('char' => 40,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
                     array('char' => 41,   'level' => 0, 'type' => 'ON', 'otype' => 'ON')
                 ),
-                array()
+                array(
+                    array('e' => 0, 'edir' => 'L', 'length' => 1,
+                        'item' => array(
+                            array('char' => 33, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
+                        ),
+                    ),
+                    array('e' => 1, 'edir' => 'R', 'length' => 4,
+                        'item' => array(
+                            array('char' => 34, 'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
+                            array('char' => 8294, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
+                            array('char' => 8297, 'level' => 1, 'type' => 'NI', 'otype' => 'NI', 'pdimatch' => 1),
+                            array('char' => 40, 'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
+                        ),
+                    ),
+                    array('e' => 2, 'edir' => 'L', 'length' => 1,
+                        'item' => array(
+                            array('char' => 38, 'level' => 2, 'type' => 'ON', 'otype' => 'ON'),
+                        ),
+                    ),
+                    array('e' => 3, 'edir' => 'R', 'length' => 1,
+                        'item' => array(
+                            array('char' => 39, 'level' => 3, 'type' => 'ON', 'otype' => 'ON'),
+                        ),
+                    ),
+                    array('e' => 0, 'edir' => 'L', 'length' => 1,
+                        'item' => array(
+                            array('char' => 41, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
+                        ),
+                    ),
+                )
             ),
         );
     }

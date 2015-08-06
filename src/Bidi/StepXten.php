@@ -171,6 +171,16 @@ class StepXten
     }
 
     /**
+     * returns true if the input char is an Isolate Initiator
+     *
+     * @return bool
+     */
+    protected function isIsolateInitiator($ord)
+    {
+        return (($ord == UniConstant::RLI) || ($ord == UniConstant::LRI) || ($ord == UniConstant::FSI));
+    }
+
+    /**
      * Set level Isolated Level Run Sequences
      *
      * @return array
@@ -191,16 +201,13 @@ class StepXten
             for ($jdx = 0; $jdx < $isorun['length']; ++$jdx) {
                 $isorun['item'][$jdx] = $this->chardata[($seq['start'] + $jdx)];
             }
-            $endchar = $isorun['item'][($jdx - 1)];
-            
+            $endchar = $isorun['item'][($jdx - 1)]['char'];
+
             // While the level run currently last in the sequence ends with an isolate initiator that has a
             // matching PDI, append the level run containing the matching PDI to the sequence.
             // (Note that this matching PDI must be the first character of its level run.)
             $pdimatch = -1;
-            if (($endchar == UniConstant::RLI)
-                || ($endchar == UniConstant::LRI)
-                || ($endchar == UniConstant::FSI)
-            ) {
+            if ($this->isIsolateInitiator($endchar)) {
                 // find the next sequence with the same level that starts with a PDI
                 for ($kdx = ($idx + 1); $kdx < $this->numrunseq; ++$kdx) {
                     if (($this->runseq[$kdx]['e'] == $isorun['e'])
@@ -228,104 +235,6 @@ class StepXten
             }
         }
     }
-
-    /**
-     * Set level Isolated Level Run Sequences
-     *
-     * @return array
-     */
-/*    protected function setIsolatedLevelRunSequences()
-    {
-        $this->setLevelRunSequences();
-        foreach ($this->runseq as $idx => $seq) {
-            
-            if ($seq['start'] >= 0) {
-                $start = $seq['start'];
-                $isorun = array(
-                    'e'      => $seq['e'],
-                    'edir'   => $this->getEmbeddedDirection($seq['e']), // embedded direction
-                    'length' => ($seq['end'] - $seq['start'] + 1),
-                    'item'   => array()
-                );
-                for ($jdx = 0; $jdx < $isorun['length']; ++$jdx) {
-                    $isorun['item'][$jdx] = $this->chardata[($start + $jdx)];
-                }
-                $end = $seq['end'];
-                if ($this->chardata[$end]['type'] == 'BN') {
-                    $end = $this->getPreviousValidChar($end, $start);
-                }
-            }
-
-            $kdx = $idx;
-            $endchar = $this->chardata[$end]['char'];
-
-            while (($end < $this->numchars)
-                && (($endchar == UniConstant::RLI) || ($endchar == UniConstant::LRI) || ($endchar == UniConstant::FSI))
-            ) {
-                $jdx = $this->getUpdatedJdx(($kdx + 1), $idx);
-                if ($jdx != $this->numrunseq) {
-                    $len = $isorun['length'];
-                    $isorun['length'] += ($this->runseq[$jdx]['end'] - $this->runseq[$jdx]['start'] + 1);
-                    for ($mdx = 0; $len < $isorun['length']; ++$len, ++$mdx) {
-                        $isorun['item'][$len] = $this->chardata[($this->runseq[$jdx]['start'] + $mdx)];
-                    }
-
-                    $end = $this->runseq[$jdx]['end'];
-                    if ($this->chardata[$end]['type'] == 'BN') {
-                        $end = $this->getPreviousValidChar($end, $this->runseq[$idx]['start']);
-                    }
-                    $this->runseq[$jdx]['start'] = -1;
-                    $kdx = $jdx;
-                } else {
-                    $end = $this->numchars;
-                    break;
-                }
-            }
-
-
-
-
-            $fence = $this->getPreviousValidChar($start, -1);
-            $start_level = $this->chardata[$start]['level'];
-            if ($fence == -1) {
-                $isorun['sos'] = ($this->pel > $start_level) ? $this->pel : $start_level;
-            } else {
-                $fence_level = $this->chardata[$fence]['level'];
-                $isorun['sos'] = ($fence_level > $start_level) ? $fence_level : $start_level;
-            }
-
-            $isorun['sos'] = $this->getEmbeddedDirection($isorun['sos']);
-
-            if ($end == $this->numchars) {
-                $isorun['eos'] = $isorun['sos'];
-            } else {
-                // eos could be an BN
-                if ($this->chardata[$end]['type'] == 'BN') {
-                    $real_end = $this->getPreviousValidChar($end, ($start - 1));
-                    if ($real_end < $start) {
-                        $real_end = $start;
-                    }
-                } else {
-                    $real_end = $end;
-                }
-
-                $fence = $this->getNextValidChar($end, $this->numchars);
-                $end_level = $this->chardata[$real_end]['level'];
-                if ($fence == $this->numchars) {
-                    $isorun['eos'] = ($this->pel > $end_level) ? $this->pel : $end_level;
-                } else {
-                    $fence_level = $this->chardata[$fence]['level'];
-                    $isorun['eos'] = ($fence_level > $end_level) ? $fence_level : $end_level;
-                }
-                $isorun['eos'] = $this->getEmbeddedDirection($isorun['eos']);
-            }
-
-
-
-            $this->ilrs[] = $isorun;
-        }
-    }
-*/
 
     /**
      * Get updated $jdx index

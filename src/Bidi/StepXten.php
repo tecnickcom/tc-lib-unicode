@@ -191,7 +191,7 @@ class StepXten
             for ($jdx = 0; $jdx < $isorun['length']; ++$jdx) {
                 $isorun['item'][$jdx] = $this->chardata[($seq['start'] + $jdx)];
             }
-            $endchar = $isorun['item'][$jdx];
+            $endchar = $isorun['item'][($jdx - 1)];
             
             // While the level run currently last in the sequence ends with an isolate initiator that has a
             // matching PDI, append the level run containing the matching PDI to the sequence.

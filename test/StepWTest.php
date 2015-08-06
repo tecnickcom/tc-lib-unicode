@@ -36,9 +36,10 @@ class StepWTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider stepWDataProvider
      */
-    public function testStepX($seq, $expected)
+    public function testStepW($seq, $expected)
     {
         $stepw = new \Com\Tecnick\Unicode\Bidi\StepW($seq);
+        var_export($stepw->getSequence());
         $this->assertEquals($expected, $stepw->getSequence());
     }
 
@@ -59,7 +60,11 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                 array(
                     'e' => 0,
                     'edir' => 'L',
+                    'start' => 0,
+                    'end' => 2,
                     'length' => 3,
+                    'sos' => 'L',
+                    'eos' => 'L',
                     'item' => array(
                         array('char' => 34, 'level' => 0, 'type' => 'AL', 'otype' => 'AL'),
                         array('char' => 38, 'level' => 0, 'type' => 'NSM', 'otype' => 'NSM'),

@@ -178,6 +178,65 @@ class StepXten
     protected function setIsolatedLevelRunSequences()
     {
         $this->setLevelRunSequences();
+        $numiso = 0;
+        foreach ($this->runseq as $idx => $seq) {
+
+            // Create a new level run sequence, and initialize it to contain just that level run
+            $isorun = array(
+                'e'      => $seq['e'],
+                'edir'   => $this->getEmbeddedDirection($seq['e']), // embedded direction
+                'length' => ($seq['end'] - $seq['start'] + 1),
+                'item'   => array()
+            );
+            for ($jdx = 0; $jdx < $isorun['length']; ++$jdx) {
+                $isorun['item'][$jdx] = $this->chardata[($seq['start'] + $jdx)];
+            }
+            $endchar = $isorun['item'][$jdx];
+            
+            // While the level run currently last in the sequence ends with an isolate initiator that has a
+            // matching PDI, append the level run containing the matching PDI to the sequence.
+            // (Note that this matching PDI must be the first character of its level run.)
+            $pdimatch = -1;
+            if (($endchar == UniConstant::RLI)
+                || ($endchar == UniConstant::LRI)
+                || ($endchar == UniConstant::FSI)
+            ) {
+                // find the next sequence with the same level that starts with a PDI
+                for ($kdx = ($idx + 1); $kdx < $this->numrunseq; ++$kdx) {
+                    if (($this->runseq[$kdx]['e'] == $isorun['e'])
+                        && ($this->chardata[$this->runseq[$kdx]['start']]['char'] == UniConstant::PDI)
+                    ) {
+                        $pdimatch = $this->runseq[$kdx]['start'];
+                        $this->chardata[$pdimatch]['pdimatch'] = $numiso;
+                        break;
+                    }
+                }
+            }
+
+            // For each level run in the paragraph whose first character is not a PDI,
+            // or is a PDI that does not match any isolate initiator
+            if (isset($this->chardata[$seq['start']]['pdimatch'])) {
+                $parent = $this->chardata[$seq['start']]['pdimatch'];
+                $this->ilrs[$parent]['item'] = array_merge($this->ilrs[$parent]['item'], $isorun['item']);
+                $this->ilrs[$parent]['length'] += $isorun['length'];
+                if ($pdimatch >= 0) {
+                    $this->chardata[$pdimatch]['pdimatch'] = $parent;
+                }
+            } else {
+                $this->ilrs[$numiso] = $isorun;
+                ++$numiso;
+            }
+        }
+    }
+
+    /**
+     * Set level Isolated Level Run Sequences
+     *
+     * @return array
+     */
+/*    protected function setIsolatedLevelRunSequences()
+    {
+        $this->setLevelRunSequences();
         foreach ($this->runseq as $idx => $seq) {
             
             if ($seq['start'] >= 0) {
@@ -199,8 +258,6 @@ class StepXten
 
             $kdx = $idx;
             $endchar = $this->chardata[$end]['char'];
-
-
 
             while (($end < $this->numchars)
                 && (($endchar == UniConstant::RLI) || ($endchar == UniConstant::LRI) || ($endchar == UniConstant::FSI))
@@ -239,9 +296,6 @@ class StepXten
 
             $isorun['sos'] = $this->getEmbeddedDirection($isorun['sos']);
 
-
-
-
             if ($end == $this->numchars) {
                 $isorun['eos'] = $isorun['sos'];
             } else {
@@ -266,11 +320,12 @@ class StepXten
                 $isorun['eos'] = $this->getEmbeddedDirection($isorun['eos']);
             }
 
-            
+
 
             $this->ilrs[] = $isorun;
         }
     }
+*/
 
     /**
      * Get updated $jdx index

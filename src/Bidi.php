@@ -268,7 +268,6 @@ class Bidi
             $stepx = new StepX($par, $pel);
             $stepx10 = new StepXten($stepx->getChrData(), $pel);
             $ilrs = $stepx10->getIsolatedLevelRunSequences();
-
             $chardata = array();
             foreach ($ilrs as $seq) {
                 $stepw = new StepW($seq);

@@ -39,7 +39,7 @@ class StepXtenTest extends \PHPUnit_Framework_TestCase
     public function testStepX($chardata, $expected)
     {
         $stepxten = new \Com\Tecnick\Unicode\Bidi\StepXten($chardata, 0);
-        //var_export($stepxten->getIsolatedLevelRunSequences());echo "\n\n";//DEBUG
+        var_export($stepxten->getIsolatedLevelRunSequences());echo "\n\n";//DEBUG
         $this->assertEquals($expected, $stepxten->getIsolatedLevelRunSequences());
     }
 

@@ -64,9 +64,8 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
     {
         $this->processStep('getBracketPairs');
         $this->processN0();
-        for ($step = 1; $step <= 2; ++$step) {
-            $this->processStep('processN'.$step);
-        }
+        $this->processStep('processN1');
+        $this->processStep('processN2');
     }
 
     /**

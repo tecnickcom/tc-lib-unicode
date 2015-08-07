@@ -97,46 +97,6 @@ class StepXten
     }
 
     /**
-     * Get the previous valid char
-     *
-     * @param int  $idx    Current char position
-     * @param int  $fence  First entry to process
-     *
-     * @return int
-     */
-    protected function getPreviousValidChar($idx, $fence)
-    {
-        if (($idx == -1) || ($idx == $fence)) {
-            return $idx;
-        }
-        --$idx;
-        while (($idx > $fence) && ($this->chardata[$idx]['type'] == 'BN')) {
-            --$idx;
-        }
-        return $idx;
-    }
-
-    /**
-     * Get the next valid char
-     *
-     * @param int  $idx    Current char position
-     * @param int  $fence  Last entry to process
-     *
-     * @return int
-     */
-    protected function getNextValidChar($idx, $fence)
-    {
-        if ($idx == $fence) {
-            return $idx;
-        }
-        ++$idx;
-        while (($idx < $fence) && ($this->chardata[$idx]['type'] == 'BN')) {
-            ++$idx;
-        }
-        return $idx;
-    }
-
-    /**
      * Get the embedded direction (L or R)
      *
      * @param int $level
@@ -155,9 +115,9 @@ class StepXten
     {
         $start = 0;
         while ($start < $this->numchars) {
-            $end = $this->getNextValidChar($start, $this->numchars);
+            $end = ($start + 1);
             while (($end < $this->numchars) && ($this->chardata[$end]['level'] == $this->chardata[$start]['level'])) {
-                $end = $this->getNextValidChar($end, $this->numchars);
+                ++$end;
             }
             --$end;
             $this->runseq[] = array(
@@ -166,7 +126,7 @@ class StepXten
                 'e'     => $this->chardata[$start]['level']
             );
             ++$this->numrunseq;
-            $start = $this->getNextValidChar($end, $this->numchars);
+            $start = ($end + 1);
         }
     }
 

@@ -88,9 +88,25 @@ class BidiTest extends \PHPUnit_Framework_TestCase
                 'CBA'
             ),
             array(
+                json_decode('"smith (fabrikam \u0600\u0601\u0602) \u05de\u05d6\u05dc"'),
+                json_decode('"\u05dc\u05d6\u05de (\u0602\u0601\u0600 fabrikam) smith"'),
+                'R'
+            ),
+            array(
+                json_decode('"\u0600\u0601\u0602 book(s)"'),
+                json_decode('"book(s) \u0602\u0601\u0600"'),
+                'R'
+            ),
+            array(
                 'تشكيل اختبار',
                 'ﺭﺎﺒﺘﺧﺍ ﻞﻴﻜﺸﺗ'
             ),
+            /* ERROR
+            array(
+                'AB(CD[&ef]!)gh',
+                'gh(![ef&]DC)BA',
+                'R'
+            ),*/
         );
     }
 

@@ -296,15 +296,7 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
     protected function processN2($idx)
     {
         if ($this->seq['item'][$idx]['type'] == 'NI') {
-            $bdx = ($idx - 1);
-            $fdx = ($idx + 1);
             $this->seq['item'][$idx]['type'] = $this->seq['edir'];
-            if (($bdx > -1) && ($this->seq['item'][$bdx]['type'] == 'BN')) {
-                $this->seq['item'][$bdx]['type'] = $this->seq['edir'];
-            }
-            if (($fdx < $this->seq['length']) && ($this->seq['item'][$fdx]['type'] == 'BN')) {
-                $this->seq['item'][$fdx]['type'] = $this->seq['edir'];
-            }
         }
     }
 }

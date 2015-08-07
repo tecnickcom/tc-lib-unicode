@@ -323,6 +323,74 @@ class StepNTest extends \PHPUnit_Framework_TestCase
             ),
             array(
                 array(
+                    'e' => 1,
+                    'edir' => 'R',
+                    'start' => 0,
+                    'end' => 4,
+                    'length' => 5,
+                    'sos' => 'R',
+                    'eos' => 'R',
+                    'item' => array(
+                        array('char' => 8207, 'level' => 1, 'type' => 'R',  'otype' => 'R'),
+                        array('char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
+                        array('char' => 91,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // [
+                        array('char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
+                        array('char' => 93,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // ]
+                    ),
+                ),
+                array(
+                    'e' => 1,
+                    'edir' => 'R',
+                    'start' => 0,
+                    'end' => 4,
+                    'length' => 5,
+                    'sos' => 'R',
+                    'eos' => 'R',
+                    'item' => array(
+                        array('char' => 8207, 'level' => 1, 'type' => 'R',  'otype' => 'R'),
+                        array('char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
+                        array('char' => 91,   'level' => 1, 'type' => 'R',  'otype' => 'ON'),
+                        array('char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
+                        array('char' => 93,   'level' => 1, 'type' => 'R',  'otype' => 'ON'),
+                    ),
+                )
+            ),
+            array(
+                array(
+                    'e' => 1,
+                    'edir' => 'R',
+                    'start' => 0,
+                    'end' => 4,
+                    'length' => 5,
+                    'sos' => 'R',
+                    'eos' => 'R',
+                    'item' => array(
+                        array('char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
+                        array('char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
+                        array('char' => 91,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // [
+                        array('char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
+                        array('char' => 93,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // ]
+                    ),
+                ),
+                array(
+                    'e' => 1,
+                    'edir' => 'R',
+                    'start' => 0,
+                    'end' => 4,
+                    'length' => 5,
+                    'sos' => 'R',
+                    'eos' => 'R',
+                    'item' => array(
+                        array('char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
+                        array('char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
+                        array('char' => 91,   'level' => 1, 'type' => 'R',  'otype' => 'ON'),
+                        array('char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
+                        array('char' => 93,   'level' => 1, 'type' => 'R',  'otype' => 'ON'),
+                    ),
+                )
+            ),
+            array(
+                array(
                     'e' => 0,
                     'edir' => 'L',
                     'start' => 0,

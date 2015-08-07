@@ -190,7 +190,7 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
     protected function processN1($idx)
     {
         if ($this->seq['item'][$idx]['type'] == 'NI') {
-            $bdx = $this->getPreviousValidChar($idx);
+            $bdx = ($idx - 1);
             $prev = $this->processN1prev($bdx);
             if (empty($prev)) {
                 return;
@@ -261,9 +261,9 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
      */
     protected function getNextN1Char($idx)
     {
-        $jdx = $this->getNextValidChar($idx);
-        while (($jdx > -1) && ($this->seq['item'][$jdx]['type'] == 'NI')) {
-            $jdx = $this->getNextValidChar($jdx);
+        $jdx = ($idx + 1);
+        while (($jdx < $this->seq['length']) && ($this->seq['item'][$jdx]['type'] == 'NI')) {
+            ++$jdx;
         }
         return $jdx;
     }

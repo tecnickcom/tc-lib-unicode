@@ -58,8 +58,8 @@ class StepW extends \Com\Tecnick\Unicode\Bidi\StepBase
     protected function processW1($idx)
     {
         if ($this->seq['item'][$idx]['type'] == 'NSM') {
-            $jdx = $this->getPreviousValidChar($idx);
-            if ($jdx == -1) {
+            $jdx = ($idx - 1);
+            if ($jdx < 0) {
                 $this->seq['item'][$idx]['type'] = $this->seq['sos'];
             } elseif (($this->seq['item'][$jdx]['char'] >= UniConstant::LRI)
                 && ($this->seq['item'][$jdx]['char'] <= UniConstant::PDI)
@@ -80,15 +80,15 @@ class StepW extends \Com\Tecnick\Unicode\Bidi\StepBase
     protected function processW2($idx)
     {
         if ($this->seq['item'][$idx]['type'] == 'EN') {
-            $jdx = $this->getPreviousValidChar($idx);
-            while ($jdx > -1) {
+            $jdx = ($idx - 1);
+            while ($jdx >= 0) {
                 if ($this->seq['item'][$jdx]['type'] == 'AL') {
                     $this->seq['item'][$idx]['type'] = 'AN';
                     break;
                 } elseif (in_array($this->seq['item'][$jdx]['type'], array('R','L'))) {
                     break;
                 }
-                $jdx = $this->getPreviousValidChar($jdx);
+                --$jdx;
             }
         }
     }
@@ -114,9 +114,12 @@ class StepW extends \Com\Tecnick\Unicode\Bidi\StepBase
     protected function processW4($idx)
     {
         if (in_array($this->seq['item'][$idx]['type'], array('ES','CS'))) {
-            $bdx = $this->getPreviousValidChar($idx);
-            $fdx = $this->getNextValidChar($idx);
-            if (($bdx >= 0) && ($fdx >= 0) && ($this->seq['item'][$bdx]['type'] == $this->seq['item'][$fdx]['type'])) {
+            $bdx = ($idx - 1);
+            $fdx = ($idx + 1);
+            if (($bdx >= 0)
+                && ($fdx < $this->seq['length'])
+                && ($this->seq['item'][$bdx]['type'] == $this->seq['item'][$fdx]['type'])
+            ) {
                 if (in_array($this->seq['item'][$bdx]['type'], array('EN','AN'))) {
                     $this->seq['item'][$idx]['type'] = $this->seq['item'][$bdx]['type'];
                 }
@@ -206,7 +209,7 @@ class StepW extends \Com\Tecnick\Unicode\Bidi\StepBase
     protected function processW7($idx)
     {
         if ($this->seq['item'][$idx]['type'] == 'EN') {
-            for ($jdx = $this->getPreviousValidChar($idx); $jdx > -1; $jdx = $this->getPreviousValidChar($jdx)) {
+            for ($jdx = ($idx - 1); $jdx >= 0; --$jdx) {
                 if ($this->seq['item'][$jdx]['type'] == 'L') {
                     $this->seq['item'][$idx]['type'] = 'L';
                     break;

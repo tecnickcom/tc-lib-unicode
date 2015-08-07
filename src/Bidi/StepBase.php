@@ -75,45 +75,4 @@ abstract class StepBase
             $this->$method($idx);
         }
     }
-
-    /**
-     * Gent Next Valid Char
-     *
-     * @param int $idx Current char index
-     *
-     * @return int
-     */
-    protected function getNextValidChar($idx)
-    {
-        if ($idx >= ($this->seq['length'] - 1)) {
-            return -1;
-        }
-        ++$idx;
-        while (($idx < $this->seq['length']) && ($this->seq['item'][$idx]['type'] == 'BN')) {
-            ++$idx;
-        }
-        if ($idx == $this->seq['length']) {
-            return -1;
-        }
-        return $idx;
-    }
-
-    /**
-     * Gent Previous Valid Char
-     *
-     * @param int $idx Current char index
-     *
-     * @return int
-     */
-    protected function getPreviousValidChar($idx)
-    {
-        if ($idx <= 0) {
-            return -1;
-        }
-        --$idx;
-        while (($idx > -1) && ($this->seq['item'][$idx]['type'] == 'BN')) {
-            --$idx;
-        }
-        return $idx;
-    }
 }

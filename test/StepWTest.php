@@ -205,6 +205,34 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     ),
                 )
             ),
+            array(
+                array(
+                    'e' => 0,
+                    'edir' => 'R',
+                    'start' => 0,
+                    'end' => 1,
+                    'length' => 2,
+                    'sos' => 'R',
+                    'eos' => 'R',
+                    'item' => array(
+                        array('char' => 768,  'level' => 0, 'type' => 'NSM', 'otype' => 'NSM'),
+                        array('char' => 768,  'level' => 0, 'type' => 'NSM', 'otype' => 'NSM'),
+                    ),
+                ),
+                array(
+                    'e' => 0,
+                    'edir' => 'R',
+                    'start' => 0,
+                    'end' => 1,
+                    'length' => 2,
+                    'sos' => 'R',
+                    'eos' => 'R',
+                    'item' => array(
+                        array('char' => 768,  'level' => 0, 'type' => 'R', 'otype' => 'NSM'),
+                        array('char' => 768,  'level' => 0, 'type' => 'R', 'otype' => 'NSM'),
+                    ),
+                )
+            ),
         );
     }
 
@@ -625,6 +653,40 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     ),
                 )
             ),
+            array(
+                array(
+                    'e' => 0,
+                    'edir' => 'R',
+                    'start' => 0,
+                    'end' => 4,
+                    'length' => 5,
+                    'sos' => 'R',
+                    'eos' => 'R',
+                    'item' => array(
+                        array('char' => 1642, 'level' => 0, 'type' => 'ET', 'otype' => 'ET'),
+                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('char' => 1642, 'level' => 0, 'type' => 'ET', 'otype' => 'ET'),
+                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('char' => 38,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
+                    ),
+                ),
+                array(
+                    'e' => 0,
+                    'edir' => 'R',
+                    'start' => 0,
+                    'end' => 4,
+                    'length' => 5,
+                    'sos' => 'R',
+                    'eos' => 'R',
+                    'item' => array(
+                        array('char' => 1642, 'level' => 0, 'type' => 'EN', 'otype' => 'ET'),
+                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('char' => 1642, 'level' => 0, 'type' => 'EN', 'otype' => 'ET'),
+                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('char' => 38,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
+                    ),
+                )
+            ),
         );
     }
 
@@ -797,9 +859,9 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 65, 'level' => 0, 'type' => 'L', 'otype' => 'L'),
+                        array('char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
                         array('char' => 8294, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'L', 'otype' => 'EN'),
+                        array('char' => 1776, 'level' => 0, 'type' => 'L',  'otype' => 'EN'),
                     ),
                 )
             ),
@@ -827,9 +889,39 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1470, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
+                        array('char' => 1470, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
                         array('char' => 8294, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
                         array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                    ),
+                )
+            ),
+            array(
+                array(
+                    'e' => 0,
+                    'edir' => 'L',
+                    'start' => 0,
+                    'end' => 2,
+                    'length' => 3,
+                    'sos' => 'L',
+                    'eos' => 'L',
+                    'item' => array(
+                        array('char' => 38,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
+                        array('char' => 38,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
+                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                    ),
+                ),
+                array(
+                    'e' => 0,
+                    'edir' => 'L',
+                    'start' => 0,
+                    'end' => 2,
+                    'length' => 3,
+                    'sos' => 'L',
+                    'eos' => 'L',
+                    'item' => array(
+                        array('char' => 38,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
+                        array('char' => 38,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
+                        array('char' => 1776, 'level' => 0, 'type' => 'L',  'otype' => 'EN'),
                     ),
                 )
             ),

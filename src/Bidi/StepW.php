@@ -147,10 +147,7 @@ class StepW extends \Com\Tecnick\Unicode\Bidi\StepBase
      */
     protected function processW5a($idx)
     {
-        for ($jdx = ($idx - 1); $jdx > -1; --$jdx) {
-            if (in_array($this->seq['item'][$jdx]['type'], array('BN','ET'))) {
-                continue;
-            }
+        for ($jdx = ($idx - 1); $jdx >= 0; --$jdx) {
             if ($this->seq['item'][$jdx]['type'] == 'EN') {
                 $this->seq['item'][$idx]['type'] = 'EN';
             } else {
@@ -168,12 +165,9 @@ class StepW extends \Com\Tecnick\Unicode\Bidi\StepBase
     {
         if ($this->seq['item'][$idx]['type'] == 'ET') {
             for ($jdx = ($idx + 1); $jdx < $this->seq['length']; ++$jdx) {
-                if (in_array($this->seq['item'][$jdx]['type'], array('BN','ET'))) {
-                    continue;
-                }
                 if ($this->seq['item'][$jdx]['type'] == 'EN') {
                     $this->seq['item'][$idx]['type'] = 'EN';
-                } else {
+                } elseif ($this->seq['item'][$jdx]['type'] != 'ET') {
                     break;
                 }
             }
@@ -188,14 +182,6 @@ class StepW extends \Com\Tecnick\Unicode\Bidi\StepBase
     protected function processW6($idx)
     {
         if (in_array($this->seq['item'][$idx]['type'], array('ET','ES','CS','ON'))) {
-            $bdx = ($idx - 1);
-            $fdx = ($idx + 1);
-            if (($bdx > -1) && ($this->seq['item'][$bdx]['type'] == 'BN')) {
-                $this->seq['item'][$bdx]['type'] = 'ON';
-            }
-            if (($fdx < $this->seq['length']) && ($this->seq['item'][$fdx]['type'] == 'BN')) {
-                $this->seq['item'][$fdx]['type'] = 'ON';
-            }
             $this->seq['item'][$idx]['type'] = 'ON';
         }
     }
@@ -217,7 +203,7 @@ class StepW extends \Com\Tecnick\Unicode\Bidi\StepBase
                     break;
                 }
             }
-            if (($this->seq['sos'] == 'L') && ($jdx == -1)) {
+            if (($this->seq['sos'] == 'L') && ($jdx < 0)) {
                 $this->seq['item'][$idx]['type'] = 'L';
             }
         }

@@ -241,13 +241,11 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
             $bdx = 0;
             return $this->seq['sos'];
         }
-        if ($bdx < $this->seq['length']) {
-            if (in_array($this->seq['item'][$bdx]['type'], array('R','AN','EN'))) {
-                return 'R';
-            }
-            if ($this->seq['item'][$bdx]['type'] == 'L') {
-                return 'L';
-            }
+        if (in_array($this->seq['item'][$bdx]['type'], array('R','AN','EN'))) {
+            return 'R';
+        }
+        if ($this->seq['item'][$bdx]['type'] == 'L') {
+            return 'L';
         }
         return '';
     }
@@ -261,17 +259,15 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
      */
     protected function processN1next(&$jdx)
     {
-        if ($jdx < 0) {
+        if ($jdx >= $this->seq['length']) {
             $jdx = $this->seq['length'];
             return $this->seq['eos'];
         }
-        if ($jdx < $this->seq['length']) {
-            if (in_array($this->seq['item'][$jdx]['type'], array('R','AN','EN'))) {
-                return 'R';
-            }
-            if ($this->seq['item'][$jdx]['type'] == 'L') {
-                return 'L';
-            }
+        if (in_array($this->seq['item'][$jdx]['type'], array('R','AN','EN'))) {
+            return 'R';
+        }
+        if ($this->seq['item'][$jdx]['type'] == 'L') {
+            return 'L';
         }
         return '';
     }

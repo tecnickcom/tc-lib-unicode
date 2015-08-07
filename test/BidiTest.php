@@ -98,33 +98,13 @@ class BidiTest extends \PHPUnit_Framework_TestCase
                 'R'
             ),
             array(
-                'تشكيل اختبار',
-                'ﺭﺎﺒﺘﺧﺍ ﻞﻴﻜﺸﺗ'
-            ),
-            array(
                 json_decode('"\u0600\u0601(\u0602\u0603[&ef]!)gh"'),
                 json_decode('"gh(![ef&]\u0603\u0602)\u0601\u0600"'),
                 'R'
             ),
-        );
-    }
-
-    /**
-     * @dataProvider bidiOrdDataProvider
-     */
-    public function testBidiOrd($ordarr, $expected, $forcertl = false)
-    {
-        $bidi = new \Com\Tecnick\Unicode\Bidi(null, null, $ordarr, $forcertl);
-        $this->assertEquals($expected, $bidi->getOrdArray());
-        
-    }
-
-    public function bidiOrdDataProvider()
-    {
-        return array(
             array(
-                array(65),
-                array(65),
+                'تشكيل اختبار',
+                'ﺭﺎﺒﺘﺧﺍ ﻞﻴﻜﺸﺗ'
             ),
         );
     }

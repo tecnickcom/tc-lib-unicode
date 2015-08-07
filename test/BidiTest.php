@@ -79,8 +79,17 @@ class BidiTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(
+                "ABC\nEFG\n",
+                "ABC\nEFG\n",
+                true
+            ),
+            array(
                 json_decode('"\u202EABC\u202C"'),
                 'CBA'
+            ),
+            array(
+                'تشكيل اختبار',
+                'ﺭﺎﺒﺘﺧﺍ ﻞﻴﻜﺸﺗ'
             ),
         );
     }

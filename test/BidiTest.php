@@ -106,6 +106,14 @@ class BidiTest extends \PHPUnit_Framework_TestCase
                 'تشكيل اختبار',
                 'ﺭﺎﺒﺘﺧﺍ ﻞﻴﻜﺸﺗ'
             ),
+            array( // RLE + PDF ??? ERROR ???
+                json_decode('"it is called \"\u202bAN INTRODUCTION TO java\u202c\" - $19.95 in hardcover."'),
+                'it is called "java TO INTRODUCTION AN" - $19.95 in hardcover.',
+            ),
+            array( // RLI + PDI ??? ERROR ???
+                json_decode('"it is called \"\u2067AN INTRODUCTION TO java\u2069\" - $19.95 in hardcover."'),
+                'it is called "⁧⁩" - $19.95 in hardcover.java TO INTRODUCTION AN',
+            ),
         );
     }
 }

@@ -136,7 +136,7 @@ class StepL
         for ($level = $this->maxlevel; $level > 0; --$level) {
             $ordered = array();
             $reversed = array();
-            foreach ($this->chardata as $key => $char) {
+            foreach ($this->chardata as $char) {
                 if ($char['level'] >= $level) {
                     if (($char['type'] == 'R') && (isset(UniMirror::$uni[$char['char']]))) {
                         // L4. A character is depicted by a mirrored glyph if and only if

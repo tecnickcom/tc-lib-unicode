@@ -129,6 +129,7 @@ class StepL
      * L2. From the highest level found in the text to the lowest odd level on each line,
      *     including intermediate levels not actually present in the text,
      *     reverse any contiguous sequence of characters that are at that level or higher.
+     *     This rule reverses a progressively larger series of substrings.
      */
     protected function processL2()
     {

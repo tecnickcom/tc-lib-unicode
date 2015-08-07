@@ -110,6 +110,10 @@ class BidiTest extends \PHPUnit_Framework_TestCase
                 json_decode('"\u05de\u05d6\u05dc \u05d8\u05d5\u05d1"'),
                 json_decode('"\u05d1\u05d5\u05d8 \u05dc\u05d6\u05de"'),
             ),
+            array(
+                json_decode('"\u0600\u0601\u0602 \u0651\u064c\u0651\u064d\u0651\u064e\u0651\u064f\u0651\u0650"'),
+                json_decode('"\ufc62\ufc61\ufc60\ufc5f\ufc5e \u0602\u0601\u0600"'),
+            ),
             array( // RLE + PDF ??? ERROR ???
                 json_decode('"it is called \"\u202bAN INTRODUCTION TO java\u202c\" - $19.95 in hardcover."'),
                 'it is called "java TO INTRODUCTION AN" - $19.95 in hardcover.',

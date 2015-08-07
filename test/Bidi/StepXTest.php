@@ -13,7 +13,7 @@
  * This file is part of tc-lib-unicode software library.
  */
 
-namespace Test;
+namespace Test\Bidi;
 
 /**
  * Bidi Test

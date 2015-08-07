@@ -101,12 +101,11 @@ class BidiTest extends \PHPUnit_Framework_TestCase
                 'تشكيل اختبار',
                 'ﺭﺎﺒﺘﺧﺍ ﻞﻴﻜﺸﺗ'
             ),
-            /* ERROR
             array(
-                'AB(CD[&ef]!)gh',
-                'gh(![ef&]DC)BA',
+                json_decode('"\u0600\u0601(\u0602\u0603[&ef]!)gh"'),
+                json_decode('"gh(![ef&]\u0603\u0602)\u0601\u0600"'),
                 'R'
-            ),*/
+            ),
         );
     }
 

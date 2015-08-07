@@ -741,6 +741,38 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     ),
                 )
             ),
+            array(
+                array(
+                    'e' => 0,
+                    'edir' => 'L',
+                    'start' => 0,
+                    'end' => 3,
+                    'length' => 4,
+                    'sos' => 'L',
+                    'eos' => 'L',
+                    'item' => array(
+                        array('char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
+                        array('char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
+                    ),
+                ),
+                array(
+                    'e' => 0,
+                    'edir' => 'L',
+                    'start' => 0,
+                    'end' => 3,
+                    'length' => 4,
+                    'sos' => 'L',
+                    'eos' => 'L',
+                    'item' => array(
+                        array('char' => 65,   'level' => 0, 'type' => 'L', 'otype' => 'L'),
+                        array('char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
+                        array('char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
+                        array('char' => 65,   'level' => 0, 'type' => 'L', 'otype' => 'L'),
+                    ),
+                )
+            ),
         );
     }
 
@@ -915,6 +947,66 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                         array('char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
                         array('char' => 5760, 'level' => 0, 'type' => 'R', 'otype' => 'NI'),
                         array('char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
+                    ),
+                )
+            ),
+            array(
+                array(
+                    'e' => 0,
+                    'edir' => 'L',
+                    'start' => 0,
+                    'end' => 2,
+                    'length' => 3,
+                    'sos' => 'R',
+                    'eos' => 'L',
+                    'item' => array(
+                        array('char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('char' => 91,   'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
+                        array('char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                    ),
+                ),
+                array(
+                    'e' => 0,
+                    'edir' => 'L',
+                    'start' => 0,
+                    'end' => 2,
+                    'length' => 3,
+                    'sos' => 'R',
+                    'eos' => 'L',
+                    'item' => array(
+                        array('char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
+                        array('char' => 91,   'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
+                        array('char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
+                    ),
+                )
+            ),
+            array(
+                array(
+                    'e' => 0,
+                    'edir' => 'L',
+                    'start' => 0,
+                    'end' => 2,
+                    'length' => 3,
+                    'sos' => 'R',
+                    'eos' => 'L',
+                    'item' => array(
+                        array('char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
+                        array('char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                    ),
+                ),
+                array(
+                    'e' => 0,
+                    'edir' => 'L',
+                    'start' => 0,
+                    'end' => 2,
+                    'length' => 3,
+                    'sos' => 'R',
+                    'eos' => 'L',
+                    'item' => array(
+                        array('char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
+                        array('char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
+                        array('char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
                     ),
                 )
             ),

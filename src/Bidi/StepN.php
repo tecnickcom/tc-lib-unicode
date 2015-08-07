@@ -128,19 +128,16 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
                     if ($btype == $odir) {
                         // 1. If the preceding strong type is also opposite the embedding direction,
                         //    context is established, so set the type for both brackets in the pair to that direction.
-                        $this->seq['item'][$open]['type'] = $odir;
-                        $this->seq['item'][$close]['type'] = $odir;
+                        $this->setBracketsType($open, $close, $odir);
                         break;
                     } elseif ($btype == $this->seq['edir']) {
                         // 2. Otherwise set the type for both brackets in the pair to the embedding direction.
-                        $this->seq['item'][$open]['type'] = $this->seq['edir'];
-                        $this->seq['item'][$close]['type'] = $this->seq['edir'];
+                        $this->setBracketsType($open, $close, $this->seq['edir']);
                         break;
                     }
                 }
                 if ($jdx < 0) {
-                    $this->seq['item'][$open]['type'] = $this->seq['sos'];
-                    $this->seq['item'][$close]['type'] = $this->seq['sos'];
+                    $this->setBracketsType($open, $close, $this->seq['sos']);
                 }
             }
             // d. Otherwise, there are no strong types within the bracket pair. Therefore, do not set the type for that
@@ -167,8 +164,7 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
             // b. If any strong type (either L or R) matching the embedding direction is found,
             // set the type for both brackets in the pair to match the embedding direction.
             if ($btype == $this->seq['edir']) {
-                $this->seq['item'][$open]['type'] = $this->seq['edir'];
-                $this->seq['item'][$close]['type'] = $this->seq['edir'];
+                $this->setBracketsType($open, $close, $this->seq['edir']);
                 break;
             } elseif ($btype == $odir) {
                 // c. Otherwise, if there is a strong type it must be opposite the embedding direction.
@@ -178,6 +174,30 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
         // Therefore, test for an established context with a preceding strong type by checking backwards before
         // the opening paired bracket until the first strong type (L, R, or sos) is found.
         return (($jdx == $close) && $opposite);
+    }
+
+    /**
+     * Set the brackets type
+     *
+     * @param int    $open  Open bracket entry
+     * @param int    $close Close bracket entry
+     * @param string $type  Type
+     *
+     * @return bool True if type has not been found
+     */
+    protected function setBracketsType($open, $close, $type)
+    {
+        $this->seq['item'][$open]['type'] = $type;
+        $this->seq['item'][$close]['type'] = $type;
+
+        // Any number of characters that had original bidirectional character type NSM
+        // prior to the application of W1 that immediately follow a paired bracket which
+        // changed to L or R under N0 should change to match the type of their preceding bracket.
+        $next = ($close + 1);
+        while (isset($this->seq['item'][$next]['otype']) && ($this->seq['item'][$next]['otype'] == 'NSM')) {
+            $this->seq['item'][$next]['type'] = $type;
+            ++$next;
+        }
     }
 
     /**

@@ -57,11 +57,11 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
-                        array('char' => 91,   'level' => 0, 'type' => 'ON', 'otype' => 'ON'), // [
-                        array('char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
-                        array('char' => 93,   'level' => 0, 'type' => 'ON', 'otype' => 'ON'), // ]
-                        array('char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
+                        array('char' => 8207,   'level' => 0, 'type' => 'R',  'otype' => 'R'),
+                        array('char' => 0x3008, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
+                        array('char' => 65,     'level' => 0, 'type' => 'L',  'otype' => 'L'),
+                        array('char' => 0x3009, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
+                        array('char' => 8207,   'level' => 0, 'type' => 'R',  'otype' => 'R'),
                     ),
                 ),
                 array(
@@ -73,11 +73,11 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
-                        array('char' => 91, 'level' => 0, 'type' => 'L', 'otype' => 'ON'),
-                        array('char' => 65, 'level' => 0, 'type' => 'L', 'otype' => 'L'),
-                        array('char' => 93, 'level' => 0, 'type' => 'L', 'otype' => 'ON'),
-                        array('char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
+                        array('char' => 8207,   'level' => 0, 'type' => 'R', 'otype' => 'R'),
+                        array('char' => 0x3008, 'level' => 0, 'type' => 'L', 'otype' => 'ON'),
+                        array('char' => 65,     'level' => 0, 'type' => 'L', 'otype' => 'L'),
+                        array('char' => 0x3009, 'level' => 0, 'type' => 'L', 'otype' => 'ON'),
+                        array('char' => 8207,   'level' => 0, 'type' => 'R', 'otype' => 'R'),
                     ),
                 )
             ),
@@ -318,6 +318,42 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                         array('char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
                         array('char' => 93, 'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
                         array('char' => 65, 'level' => 1, 'type' => 'L', 'otype' => 'L'),
+                    ),
+                )
+            ),
+            array(
+                array(
+                    'e' => 0,
+                    'edir' => 'L',
+                    'start' => 0,
+                    'end' => 5,
+                    'length' => 6,
+                    'sos' => 'L',
+                    'eos' => 'L',
+                    'item' => array(
+                        array('char' => 8207,   'level' => 0, 'type' => 'R',  'otype' => 'R'),
+                        array('char' => 0x3008, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
+                        array('char' => 65,     'level' => 0, 'type' => 'L',  'otype' => 'L'),
+                        array('char' => 0x3009, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
+                        array('char' => 1809,   'level' => 0, 'type' => 'NSM',  'otype' => 'NSM'),
+                        array('char' => 1809,   'level' => 0, 'type' => 'NSM',  'otype' => 'NSM'),
+                    ),
+                ),
+                array(
+                    'e' => 0,
+                    'edir' => 'L',
+                    'start' => 0,
+                    'end' => 5,
+                    'length' => 6,
+                    'sos' => 'L',
+                    'eos' => 'L',
+                    'item' => array(
+                        array('char' => 8207,   'level' => 0, 'type' => 'R', 'otype' => 'R'),
+                        array('char' => 0x3008, 'level' => 0, 'type' => 'L', 'otype' => 'ON'),
+                        array('char' => 65,     'level' => 0, 'type' => 'L', 'otype' => 'L'),
+                        array('char' => 0x3009, 'level' => 0, 'type' => 'L', 'otype' => 'ON'),
+                        array('char' => 1809,   'level' => 0, 'type' => 'L', 'otype' => 'NSM'),
+                        array('char' => 1809,   'level' => 0, 'type' => 'L', 'otype' => 'NSM'),
                     ),
                 )
             ),

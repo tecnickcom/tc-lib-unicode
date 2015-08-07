@@ -336,6 +336,30 @@ class StepLTest extends \PHPUnit_Framework_TestCase
                     array('char' => 68,  'level' => 1, 'type' => 'L', 'otype' => 'L'),
                 )
             ),
+            array(
+                array(
+                    array('char' => 11032, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
+                    array('char' => 99,  'level' => 0, 'type' => 'L', 'otype' => 'L'),
+                    array('char' => 12,  'level' => 0, 'type' => 'WS', 'otype' => 'WS'),
+                    array('char' => 10,  'level' => 0, 'type' => 'B', 'otype' => 'B'),
+                    array('char' => 97,  'level' => 0, 'type' => 'L', 'otype' => 'L'),
+                    array('char' => 11032, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
+                    array('char' => 12288,  'level' => 0, 'type' => 'WS', 'otype' => 'WS'),
+                    array('char' => 10,  'level' => 0, 'type' => 'B', 'otype' => 'B'),
+                ),
+                0,
+                1,
+                array(
+                    array('char' => 11032, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
+                    array('char' => 99,  'level' => 0, 'type' => 'L', 'otype' => 'L'),
+                    array('char' => 12,  'level' => 0, 'type' => 'WS', 'otype' => 'WS'),
+                    array('char' => 10,  'level' => 0, 'type' => 'B', 'otype' => 'B'),
+                    array('char' => 97,  'level' => 0, 'type' => 'L', 'otype' => 'L'),
+                    array('char' => 11032, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
+                    array('char' => 12288,  'level' => 0, 'type' => 'WS', 'otype' => 'WS'),
+                    array('char' => 10,  'level' => 0, 'type' => 'B', 'otype' => 'B'),
+                )
+            ),
         );
     }
 }

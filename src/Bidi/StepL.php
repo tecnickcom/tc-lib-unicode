@@ -97,14 +97,7 @@ class StepL
     protected function processL1()
     {
         for ($idx = 0; $idx < $this->numchars; ++$idx) {
-            if (($this->chardata[$idx]['otype'] == 'S') || ($this->chardata[$idx]['otype'] == 'B')) {
-                $this->chardata[$idx]['level'] = $this->pel;
-            } elseif (($this->chardata[$idx]['otype'] == 'WS')
-                || (($this->chardata[$idx]['char'] >= UniConstant::LRI)
-                && ($this->chardata[$idx]['char'] <= UniConstant::PDI))
-            ) {
-                $this->processL1b($idx);
-            }
+            $this->processL1b($idx, $idx);
         }
     }
 
@@ -112,23 +105,23 @@ class StepL
      * Internal L1 step
      *
      * @param int $idx Main character index
+     * @param int $jdx Current index
      */
-    protected function processL1b($idx)
+    protected function processL1b($idx, $jdx)
     {
-        $jdx = ($idx + 1);
-        while ($jdx < $this->numchars) {
-            if ((($this->chardata[$jdx]['otype'] == 'S') || ($this->chardata[$jdx]['otype'] == 'B'))
-                || (($jdx == ($this->numchars - 1)) && ($this->chardata[$jdx]['otype'] == 'WS'))
-            ) {
-                $this->chardata[$idx]['level'] = $this->pel;
-                break;
-            } elseif (($this->chardata[$jdx]['otype'] != 'WS')
-                && (($this->chardata[$idx]['char'] < UniConstant::LRI)
-                || ($this->chardata[$idx]['char'] > UniConstant::PDI))
-            ) {
-                break;
-            }
-            ++$jdx;
+        if ($jdx >= $this->numchars) {
+            return;
+        }
+        if ((($this->chardata[$jdx]['otype'] == 'S') || ($this->chardata[$jdx]['otype'] == 'B'))
+            || (($jdx == ($this->numchars - 1)) && ($this->chardata[$jdx]['otype'] == 'WS'))
+        ) {
+            $this->chardata[$idx]['level'] = $this->pel;
+            return;
+        } elseif (($this->chardata[$jdx]['otype'] != 'WS')
+            && (($this->chardata[$idx]['char'] < UniConstant::LRI)
+            || ($this->chardata[$idx]['char'] > UniConstant::PDI))
+        ) {
+            return $this->processL1b($idx, ($jdx + 1));
         }
     }
 

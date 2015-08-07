@@ -133,35 +133,31 @@ class StepL
      */
     protected function processL2()
     {
-        for ($jdx = $this->maxlevel; $jdx > 0; --$jdx) {
-            $ordarray = array();
-            $revarr = array();
-            $onlevel = false;
-            for ($idx = 0; $idx < $this->numchars; ++$idx) {
-                if ($this->chardata[$idx]['level'] >= $jdx) {
-                    $onlevel = true;
-                    if (isset(UniMirror::$uni[$this->chardata[$idx]['char']])) {
+        for ($level = $this->maxlevel; $level > 0; --$level) {
+            $ordered = array();
+            $reversed = array();
+            foreach ($this->chardata as $key => $char) {
+                if ($char['level'] >= $level) {
+                    if (($char['type'] == 'R') && (isset(UniMirror::$uni[$char['char']]))) {
                         // L4. A character is depicted by a mirrored glyph if and only if
                         //     (a) the resolved directionality of that character is R, and
                         //     (b) the Bidi_Mirrored property value of that character is true.
-                        $this->chardata[$idx]['char'] = UniMirror::$uni[$this->chardata[$idx]['char']];
+                        $char['char'] = UniMirror::$uni[$char['char']];
                     }
-                    $revarr[] = $this->chardata[$idx];
+                    $reversed[] = $char;
                 } else {
-                    if ($onlevel) {
-                        $revarr = array_reverse($revarr);
-                        $ordarray = array_merge($ordarray, $revarr);
-                        $revarr = array();
-                        $onlevel = false;
+                    if (!empty($reversed)) {
+                        $ordered = array_merge($ordered, array_reverse($reversed));
+                        $reversed = array();
                     }
-                    $ordarray[] = $this->chardata[$idx];
+                    $ordered[] = $char;
                 }
             }
-            if ($onlevel) {
-                $revarr = array_reverse($revarr);
-                $ordarray = array_merge($ordarray, $revarr);
+            if (!empty($reversed)) {
+                $ordered = array_merge($ordered, array_reverse($reversed));
+                $reversed = array();
             }
-            $this->chardata = $ordarray;
+            $this->chardata = $ordered;
         }
     }
 }

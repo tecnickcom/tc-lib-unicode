@@ -347,7 +347,7 @@ class StepLTest extends \PHPUnit_Framework_TestCase
                     array('char' => 10,    'level' => 0, 'type' => 'B',  'otype' => 'B'),
                 ),
                 0,
-                1,
+                0,
                 array(
                     array('char' => 11032, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
                     array('char' => 99,    'level' => 0, 'type' => 'L',  'otype' => 'L'),

@@ -55,9 +55,9 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1536, 'level' => 0, 'type' => 'AL', 'otype' => 'AL'),
-                        array('char' => 768,  'level' => 0, 'type' => 'NSM', 'otype' => 'NSM'),
-                        array('char' => 768,  'level' => 0, 'type' => 'NSM', 'otype' => 'NSM'),
+                        array('pos' => 0, 'char' => 1536, 'level' => 0, 'type' => 'AL', 'otype' => 'AL'),
+                        array('pos' => 1, 'char' => 768,  'level' => 0, 'type' => 'NSM', 'otype' => 'NSM'),
+                        array('pos' => 2, 'char' => 768,  'level' => 0, 'type' => 'NSM', 'otype' => 'NSM'),
                     ),
                 ),
                 array(
@@ -69,9 +69,9 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1536, 'level' => 0, 'type' => 'R', 'otype' => 'AL'),
-                        array('char' => 768,  'level' => 0, 'type' => 'R', 'otype' => 'NSM'),
-                        array('char' => 768,  'level' => 0, 'type' => 'R', 'otype' => 'NSM'),
+                        array('pos' => 0, 'char' => 1536, 'level' => 0, 'type' => 'R', 'otype' => 'AL'),
+                        array('pos' => 1, 'char' => 768,  'level' => 0, 'type' => 'R', 'otype' => 'NSM'),
+                        array('pos' => 2, 'char' => 768,  'level' => 0, 'type' => 'R', 'otype' => 'NSM'),
                     ),
                 )
             ),
@@ -101,9 +101,9 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1536, 'level' => 0, 'type' => 'AL', 'otype' => 'AL'),
-                        array('char' => 768,  'level' => 0, 'type' => 'NSM', 'otype' => 'NSM'),
-                        array('char' => 768,  'level' => 0, 'type' => 'NSM', 'otype' => 'NSM'),
+                        array('pos' => 0, 'char' => 1536, 'level' => 0, 'type' => 'AL', 'otype' => 'AL'),
+                        array('pos' => 1, 'char' => 768,  'level' => 0, 'type' => 'NSM', 'otype' => 'NSM'),
+                        array('pos' => 2, 'char' => 768,  'level' => 0, 'type' => 'NSM', 'otype' => 'NSM'),
                     ),
                 ),
                 array(
@@ -115,9 +115,9 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1536, 'level' => 0, 'type' => 'AL', 'otype' => 'AL'),
-                        array('char' => 768,  'level' => 0, 'type' => 'AL', 'otype' => 'NSM'),
-                        array('char' => 768,  'level' => 0, 'type' => 'AL', 'otype' => 'NSM'),
+                        array('pos' => 0, 'char' => 1536, 'level' => 0, 'type' => 'AL', 'otype' => 'AL'),
+                        array('pos' => 1, 'char' => 768,  'level' => 0, 'type' => 'AL', 'otype' => 'NSM'),
+                        array('pos' => 2, 'char' => 768,  'level' => 0, 'type' => 'AL', 'otype' => 'NSM'),
                     ),
                 )
             ),
@@ -131,8 +131,8 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1470, 'level' => 0, 'type' => 'R',   'otype' => 'R'),
-                        array('char' => 768,  'level' => 0, 'type' => 'NSM', 'otype' => 'NSM'),
+                        array('pos' => 0, 'char' => 1470, 'level' => 0, 'type' => 'R',   'otype' => 'R'),
+                        array('pos' => 1, 'char' => 768,  'level' => 0, 'type' => 'NSM', 'otype' => 'NSM'),
                     ),
                 ),
                 array(
@@ -144,8 +144,8 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1470, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
-                        array('char' => 768,  'level' => 0, 'type' => 'R', 'otype' => 'NSM'),
+                        array('pos' => 0, 'char' => 1470, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
+                        array('pos' => 1, 'char' => 768,  'level' => 0, 'type' => 'R', 'otype' => 'NSM'),
                     ),
                 )
             ),
@@ -159,8 +159,8 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 8294, 'level' => 0, 'type' => 'NI',  'otype' => 'NI'),
-                        array('char' => 768,  'level' => 0, 'type' => 'NSM', 'otype' => 'NSM'),
+                        array('pos' => 0, 'char' => 8294, 'level' => 0, 'type' => 'NI',  'otype' => 'NI'),
+                        array('pos' => 1, 'char' => 768,  'level' => 0, 'type' => 'NSM', 'otype' => 'NSM'),
                     ),
                 ),
                 array(
@@ -172,8 +172,8 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 8294, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 768,  'level' => 0, 'type' => 'ON', 'otype' => 'NSM'),
+                        array('pos' => 0, 'char' => 8294, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 1, 'char' => 768,  'level' => 0, 'type' => 'ON', 'otype' => 'NSM'),
                     ),
                 )
             ),
@@ -187,8 +187,8 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 8297, 'level' => 0, 'type' => 'NI',  'otype' => 'NI'),
-                        array('char' => 768,  'level' => 0, 'type' => 'NSM', 'otype' => 'NSM'),
+                        array('pos' => 0, 'char' => 8297, 'level' => 0, 'type' => 'NI',  'otype' => 'NI'),
+                        array('pos' => 1, 'char' => 768,  'level' => 0, 'type' => 'NSM', 'otype' => 'NSM'),
                     ),
                 ),
                 array(
@@ -200,8 +200,8 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 8297, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 768,  'level' => 0, 'type' => 'ON', 'otype' => 'NSM'),
+                        array('pos' => 0, 'char' => 8297, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 1, 'char' => 768,  'level' => 0, 'type' => 'ON', 'otype' => 'NSM'),
                     ),
                 )
             ),
@@ -215,8 +215,8 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 768,  'level' => 0, 'type' => 'NSM', 'otype' => 'NSM'),
-                        array('char' => 768,  'level' => 0, 'type' => 'NSM', 'otype' => 'NSM'),
+                        array('pos' => 0, 'char' => 768,  'level' => 0, 'type' => 'NSM', 'otype' => 'NSM'),
+                        array('pos' => 1, 'char' => 768,  'level' => 0, 'type' => 'NSM', 'otype' => 'NSM'),
                     ),
                 ),
                 array(
@@ -228,8 +228,8 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 768,  'level' => 0, 'type' => 'R', 'otype' => 'NSM'),
-                        array('char' => 768,  'level' => 0, 'type' => 'R', 'otype' => 'NSM'),
+                        array('pos' => 0, 'char' => 768,  'level' => 0, 'type' => 'R', 'otype' => 'NSM'),
+                        array('pos' => 1, 'char' => 768,  'level' => 0, 'type' => 'R', 'otype' => 'NSM'),
                     ),
                 )
             ),
@@ -259,8 +259,8 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1536, 'level' => 0, 'type' => 'AL', 'otype' => 'AL'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 1536, 'level' => 0, 'type' => 'AL', 'otype' => 'AL'),
+                        array('pos' => 1, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
                     ),
                 ),
                 array(
@@ -272,8 +272,8 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1536, 'level' => 0, 'type' => 'AL', 'otype' => 'AL'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'AN', 'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 1536, 'level' => 0, 'type' => 'AL', 'otype' => 'AL'),
+                        array('pos' => 1, 'char' => 1776, 'level' => 0, 'type' => 'AN', 'otype' => 'EN'),
                     ),
                 )
             ),
@@ -287,9 +287,9 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1536, 'level' => 0, 'type' => 'AL', 'otype' => 'AL'),
-                        array('char' => 1769, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 1536, 'level' => 0, 'type' => 'AL', 'otype' => 'AL'),
+                        array('pos' => 1, 'char' => 1769, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
                     ),
                 ),
                 array(
@@ -301,9 +301,9 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1536, 'level' => 0, 'type' => 'AL', 'otype' => 'AL'),
-                        array('char' => 1769, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'AN', 'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 1536, 'level' => 0, 'type' => 'AL', 'otype' => 'AL'),
+                        array('pos' => 1, 'char' => 1769, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 1776, 'level' => 0, 'type' => 'AN', 'otype' => 'EN'),
                     ),
                 )
             ),
@@ -317,9 +317,9 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1470, 'level' => 0, 'type' => 'L',  'otype' => 'L'),
-                        array('char' => 1769, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 1470, 'level' => 0, 'type' => 'L',  'otype' => 'L'),
+                        array('pos' => 1, 'char' => 1769, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
                     ),
                 ),
                 array(
@@ -331,9 +331,9 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1470, 'level' => 0, 'type' => 'L', 'otype' => 'L'),
-                        array('char' => 1769, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 1470, 'level' => 0, 'type' => 'L', 'otype' => 'L'),
+                        array('pos' => 1, 'char' => 1769, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
                     ),
                 )
             ),
@@ -347,9 +347,9 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
-                        array('char' => 1769, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
+                        array('pos' => 1, 'char' => 1769, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
                     ),
                 ),
                 array(
@@ -361,9 +361,9 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 65, 'level' => 0, 'type' => 'L', 'otype' => 'L'),
-                        array('char' => 1769, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 65, 'level' => 0, 'type' => 'L', 'otype' => 'L'),
+                        array('pos' => 1, 'char' => 1769, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
                     ),
                 )
             ),
@@ -377,9 +377,9 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1470, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
-                        array('char' => 1769, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 1470, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
+                        array('pos' => 1, 'char' => 1769, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
                     ),
                 ),
                 array(
@@ -391,9 +391,9 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1470, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
-                        array('char' => 1769, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 1470, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
+                        array('pos' => 1, 'char' => 1769, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
                     ),
                 )
             ),
@@ -423,8 +423,8 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1536, 'level' => 0, 'type' => 'AL', 'otype' => 'AL'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 1536, 'level' => 0, 'type' => 'AL', 'otype' => 'AL'),
+                        array('pos' => 1, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
                     ),
                 ),
                 array(
@@ -436,8 +436,8 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1536, 'level' => 0, 'type' => 'R', 'otype' => 'AL'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 1536, 'level' => 0, 'type' => 'R', 'otype' => 'AL'),
+                        array('pos' => 1, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
                     ),
                 )
             ),
@@ -467,9 +467,9 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
-                        array('char' => 43,   'level' => 0, 'type' => 'ES', 'otype' => 'ES'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 1, 'char' => 43,   'level' => 0, 'type' => 'ES', 'otype' => 'ES'),
+                        array('pos' => 2, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
                     ),
                 ),
                 array(
@@ -481,9 +481,9 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
-                        array('char' => 43, 'level' => 0, 'type' => 'EN', 'otype' => 'ES'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 1, 'char' => 43, 'level' => 0, 'type' => 'EN', 'otype' => 'ES'),
+                        array('pos' => 2, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
                     ),
                 )
             ),
@@ -497,9 +497,9 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
-                        array('char' => 44,   'level' => 0, 'type' => 'CS', 'otype' => 'CS'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 1, 'char' => 44,   'level' => 0, 'type' => 'CS', 'otype' => 'CS'),
+                        array('pos' => 2, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
                     ),
                 ),
                 array(
@@ -511,9 +511,9 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
-                        array('char' => 44, 'level' => 0, 'type' => 'EN', 'otype' => 'CS'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 1, 'char' => 44, 'level' => 0, 'type' => 'EN', 'otype' => 'CS'),
+                        array('pos' => 2, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
                     ),
                 )
             ),
@@ -527,9 +527,9 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
-                        array('char' => 44,   'level' => 0, 'type' => 'CS', 'otype' => 'CS'),
-                        array('char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
+                        array('pos' => 0, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
+                        array('pos' => 1, 'char' => 44,   'level' => 0, 'type' => 'CS', 'otype' => 'CS'),
+                        array('pos' => 2, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
                     ),
                 ),
                 array(
@@ -541,9 +541,9 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
-                        array('char' => 44, 'level' => 0, 'type' => 'AN', 'otype' => 'CS'),
-                        array('char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
+                        array('pos' => 0, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
+                        array('pos' => 1, 'char' => 44, 'level' => 0, 'type' => 'AN', 'otype' => 'CS'),
+                        array('pos' => 2, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
                     ),
                 )
             ),
@@ -573,9 +573,9 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1642, 'level' => 0, 'type' => 'ET', 'otype' => 'ET'),
-                        array('char' => 1642, 'level' => 0, 'type' => 'ET', 'otype' => 'ET'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 1642, 'level' => 0, 'type' => 'ET', 'otype' => 'ET'),
+                        array('pos' => 1, 'char' => 1642, 'level' => 0, 'type' => 'ET', 'otype' => 'ET'),
+                        array('pos' => 2, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
                     ),
                 ),
                 array(
@@ -587,9 +587,9 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1642, 'level' => 0, 'type' => 'EN', 'otype' => 'ET'),
-                        array('char' => 1642, 'level' => 0, 'type' => 'EN', 'otype' => 'ET'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 1642, 'level' => 0, 'type' => 'EN', 'otype' => 'ET'),
+                        array('pos' => 1, 'char' => 1642, 'level' => 0, 'type' => 'EN', 'otype' => 'ET'),
+                        array('pos' => 2, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
                     ),
                 )
             ),
@@ -603,9 +603,9 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
-                        array('char' => 1642, 'level' => 0, 'type' => 'ET', 'otype' => 'ET'),
-                        array('char' => 1642, 'level' => 0, 'type' => 'ET', 'otype' => 'ET'),
+                        array('pos' => 0, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 1, 'char' => 1642, 'level' => 0, 'type' => 'ET', 'otype' => 'ET'),
+                        array('pos' => 2, 'char' => 1642, 'level' => 0, 'type' => 'ET', 'otype' => 'ET'),
                     ),
                 ),
                 array(
@@ -617,9 +617,9 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
-                        array('char' => 1642, 'level' => 0, 'type' => 'EN', 'otype' => 'ET'),
-                        array('char' => 1642, 'level' => 0, 'type' => 'EN', 'otype' => 'ET'),
+                        array('pos' => 0, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 1, 'char' => 1642, 'level' => 0, 'type' => 'EN', 'otype' => 'ET'),
+                        array('pos' => 2, 'char' => 1642, 'level' => 0, 'type' => 'EN', 'otype' => 'ET'),
                     ),
                 )
             ),
@@ -633,9 +633,9 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
-                        array('char' => 1642, 'level' => 0, 'type' => 'ET', 'otype' => 'ET'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
+                        array('pos' => 1, 'char' => 1642, 'level' => 0, 'type' => 'ET', 'otype' => 'ET'),
+                        array('pos' => 2, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
                     ),
                 ),
                 array(
@@ -647,9 +647,9 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
-                        array('char' => 1642, 'level' => 0, 'type' => 'EN', 'otype' => 'ET'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
+                        array('pos' => 1, 'char' => 1642, 'level' => 0, 'type' => 'EN', 'otype' => 'ET'),
+                        array('pos' => 2, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
                     ),
                 )
             ),
@@ -663,11 +663,11 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1642, 'level' => 0, 'type' => 'ET', 'otype' => 'ET'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
-                        array('char' => 1642, 'level' => 0, 'type' => 'ET', 'otype' => 'ET'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
-                        array('char' => 38,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
+                        array('pos' => 0, 'char' => 1642, 'level' => 0, 'type' => 'ET', 'otype' => 'ET'),
+                        array('pos' => 1, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 2, 'char' => 1642, 'level' => 0, 'type' => 'ET', 'otype' => 'ET'),
+                        array('pos' => 3, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 4, 'char' => 38,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
                     ),
                 ),
                 array(
@@ -679,11 +679,11 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1642, 'level' => 0, 'type' => 'EN', 'otype' => 'ET'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
-                        array('char' => 1642, 'level' => 0, 'type' => 'EN', 'otype' => 'ET'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
-                        array('char' => 38,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
+                        array('pos' => 0, 'char' => 1642, 'level' => 0, 'type' => 'EN', 'otype' => 'ET'),
+                        array('pos' => 1, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 2, 'char' => 1642, 'level' => 0, 'type' => 'EN', 'otype' => 'ET'),
+                        array('pos' => 3, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 4, 'char' => 38,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
                     ),
                 )
             ),
@@ -713,8 +713,8 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
-                        array('char' => 1642, 'level' => 0, 'type' => 'ET', 'otype' => 'ET'),
+                        array('pos' => 0, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
+                        array('pos' => 1, 'char' => 1642, 'level' => 0, 'type' => 'ET', 'otype' => 'ET'),
                     ),
                 ),
                 array(
@@ -726,8 +726,8 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
-                        array('char' => 1642, 'level' => 0, 'type' => 'ON', 'otype' => 'ET'),
+                        array('pos' => 0, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
+                        array('pos' => 1, 'char' => 1642, 'level' => 0, 'type' => 'ON', 'otype' => 'ET'),
                     ),
                 )
             ),
@@ -741,9 +741,9 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
-                        array('char' => 43,   'level' => 0, 'type' => 'ES', 'otype' => 'ES'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
+                        array('pos' => 1, 'char' => 43,   'level' => 0, 'type' => 'ES', 'otype' => 'ES'),
+                        array('pos' => 2, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
                     ),
                 ),
                 array(
@@ -755,9 +755,9 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 65, 'level' => 0, 'type' => 'L', 'otype' => 'L'),
-                        array('char' => 43, 'level' => 0, 'type' => 'ON', 'otype' => 'ES'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 65, 'level' => 0, 'type' => 'L', 'otype' => 'L'),
+                        array('pos' => 1, 'char' => 43, 'level' => 0, 'type' => 'ON', 'otype' => 'ES'),
+                        array('pos' => 2, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
                     ),
                 )
             ),
@@ -771,9 +771,9 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
-                        array('char' => 44,   'level' => 0, 'type' => 'CS', 'otype' => 'CS'),
-                        array('char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
+                        array('pos' => 0, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 1, 'char' => 44,   'level' => 0, 'type' => 'CS', 'otype' => 'CS'),
+                        array('pos' => 2, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
                     ),
                 ),
                 array(
@@ -785,9 +785,9 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
-                        array('char' => 44, 'level' => 0, 'type' => 'ON', 'otype' => 'CS'),
-                        array('char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
+                        array('pos' => 0, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 1, 'char' => 44, 'level' => 0, 'type' => 'ON', 'otype' => 'CS'),
+                        array('pos' => 2, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
                     ),
                 )
             ),
@@ -801,8 +801,8 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1642, 'level' => 0, 'type' => 'ET', 'otype' => 'ET'),
-                        array('char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
+                        array('pos' => 0, 'char' => 1642, 'level' => 0, 'type' => 'ET', 'otype' => 'ET'),
+                        array('pos' => 1, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
                     ),
                 ),
                 array(
@@ -814,8 +814,8 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1642, 'level' => 0, 'type' => 'ON', 'otype' => 'ET'),
-                        array('char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
+                        array('pos' => 0, 'char' => 1642, 'level' => 0, 'type' => 'ON', 'otype' => 'ET'),
+                        array('pos' => 1, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
                     ),
                 )
             ),
@@ -845,9 +845,9 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
-                        array('char' => 8294, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
+                        array('pos' => 1, 'char' => 8294, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
                     ),
                 ),
                 array(
@@ -859,9 +859,9 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
-                        array('char' => 8294, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'L',  'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
+                        array('pos' => 1, 'char' => 8294, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 1776, 'level' => 0, 'type' => 'L',  'otype' => 'EN'),
                     ),
                 )
             ),
@@ -875,9 +875,9 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1470, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
-                        array('char' => 8294, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 1470, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
+                        array('pos' => 1, 'char' => 8294, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
                     ),
                 ),
                 array(
@@ -889,9 +889,9 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 1470, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
-                        array('char' => 8294, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 1470, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
+                        array('pos' => 1, 'char' => 8294, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
                     ),
                 )
             ),
@@ -905,9 +905,9 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 38,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
-                        array('char' => 38,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 38,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
+                        array('pos' => 1, 'char' => 38,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
+                        array('pos' => 2, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
                     ),
                 ),
                 array(
@@ -919,9 +919,9 @@ class StepWTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 38,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
-                        array('char' => 38,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'L',  'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 38,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
+                        array('pos' => 1, 'char' => 38,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
+                        array('pos' => 2, 'char' => 1776, 'level' => 0, 'type' => 'L',  'otype' => 'EN'),
                     ),
                 )
             ),

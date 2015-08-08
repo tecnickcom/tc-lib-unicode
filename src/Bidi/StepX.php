@@ -161,12 +161,12 @@ class StepX
     /**
      * Process X1 case
      *
-     * @param int $key Char position
+     * @param int    $pos  Original character position in the input string
      * @param int $ord Char code
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function processXcase($key, $ord)
+    protected function processXcase($pos, $ord)
     {
         $edss = end($this->dss);
         switch ($ord) {
@@ -188,22 +188,22 @@ class StepX
                 break;
             case UniConstant::RLI:
                 // X5a
-                $this->processChar($ord, $edss);
+                $this->processChar($pos, $ord, $edss);
                 $this->setDss($this->getLOdd($edss['cel']), UniConstant::RLI, 'NI', true, true, 1);
                 break;
             case UniConstant::LRI:
                 // X5b
-                $this->processChar($ord, $edss);
+                $this->processChar($pos, $ord, $edss);
                 $this->setDss($this->getLEven($edss['cel']), UniConstant::LRI, 'NI', true, true, 1);
                 break;
             case UniConstant::FSI:
                 // X5c
-                $this->processChar($ord, $edss);
-                $this->processFsiCase($key, $edss);
+                $this->processChar($pos, $ord, $edss);
+                $this->processFsiCase($pos, $edss);
                 break;
             case UniConstant::PDI:
                 // X6a
-                $this->processPdiCase($ord, $edss);
+                $this->processPdiCase($pos, $ord, $edss);
                 break;
             case UniConstant::PDF:
                 // X7
@@ -211,7 +211,7 @@ class StepX
                 break;
             default:
                 // X6
-                $this->processChar($ord, $edss);
+                $this->processChar($pos, $ord, $edss);
                 break;
         }
     }
@@ -257,13 +257,15 @@ class StepX
     /**
      * Push a char on the stack
      *
+     * @param int    $pos  Original character position in the input string
      * @param int    $ord  Char code
      * @param array  $edss Last entry in the Directional Status Stack
      */
-    protected function pushChar($ord, $edss)
+    protected function pushChar($pos, $ord, $edss)
     {
         $unitype = (isset(UniType::$uni[$ord]) ? UniType::$uni[$ord] : $edss['dos']);
         $this->chardata[] = array(
+            'pos'   => $pos,
             'char'  => $ord,
             'level' => $edss['cel'],
             'type'  => (($edss['dos'] !== 'NI') ? $edss['dos'] : $unitype),
@@ -274,10 +276,11 @@ class StepX
     /**
      * Process normal char (X6)
      *
+     * @param int    $pos  Original character position in the input string
      * @param int    $ord  Char code
      * @param array  $edss Last entry in the Directional Status Stack
      */
-    protected function processChar($ord, $edss)
+    protected function processChar($pos, $ord, $edss)
     {
         // X6. For all types besides B, BN, RLE, LRE, RLO, LRO, PDF, RLI, LRI, FSI, and PDI:
         //     - Set the current character’s embedding level to the embedding level
@@ -288,7 +291,7 @@ class StepX
         if (isset(UniType::$uni[$ord]) && ((UniType::$uni[$ord] == 'B') || (UniType::$uni[$ord] == 'BN'))) {
             return;
         }
-        $this->pushChar($ord, $edss);
+        $this->pushChar($pos, $ord, $edss);
     }
 
     /**
@@ -327,10 +330,11 @@ class StepX
     /**
      * Process the PDI type character
      *
+     * @param int    $pos  Original character position in the input string
      * @param int    $ord  Char code
      * @param array  $edss Last entry in the Directional Status Stack
      */
-    protected function processPdiCase($ord, $edss)
+    protected function processPdiCase($pos, $ord, $edss)
     {
         // X6a. With each PDI, perform the following steps:
         //      - If the overflow isolate count is greater than zero, this PDI matches an overflow isolate
@@ -376,22 +380,22 @@ class StepX
         //        - If the entry's directional override status is not neutral, reset the current character type
         //          from PDI to L if the override status is left-to-right, and to R if the override status is
         //          right-to-left.
-        $this->pushChar($ord, $edss);
+        $this->pushChar($pos, $ord, $edss);
     }
 
     /**
      * Process the PDF type character
      *
-     * @param int    $key     Current char position
+     * @param int    $pos  Original character position in the input string
      * @param array  $edss Last entry in the Directional Status Stack
      */
-    protected function processFsiCase($key, $edss)
+    protected function processFsiCase($pos, $edss)
     {
         // X5c. With each FSI, apply rules P2 and P3 to the sequence of characters between the FSI and its
         //      matching PDI, or if there is no matching PDI, the end of the paragraph, as if this sequence
         //      of characters were a paragraph. If these rules decide on paragraph embedding level 1, treat
         //      the FSI as an RLI in rule X5a. Otherwise, treat it as an LRI in rule X5b.
-        $stepp = new StepP(array_slice($this->ordarr, $key));
+        $stepp = new StepP(array_slice($this->ordarr, $pos));
         if ($stepp->getPel() == 0) {
             $this->setDss($this->getLEven($edss['cel']), UniConstant::LRI, 'NI', true, true, 1);
         } else {

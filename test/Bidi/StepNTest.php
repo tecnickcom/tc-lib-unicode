@@ -57,11 +57,11 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 8207,   'level' => 0, 'type' => 'R',  'otype' => 'R'),
-                        array('char' => 0x3008, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
-                        array('char' => 65,     'level' => 0, 'type' => 'L',  'otype' => 'L'),
-                        array('char' => 0x3009, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
-                        array('char' => 8207,   'level' => 0, 'type' => 'R',  'otype' => 'R'),
+                        array('pos' => 0, 'char' => 8207,   'level' => 0, 'type' => 'R',  'otype' => 'R'),
+                        array('pos' => 1, 'char' => 0x3008, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
+                        array('pos' => 2, 'char' => 65,     'level' => 0, 'type' => 'L',  'otype' => 'L'),
+                        array('pos' => 3, 'char' => 0x3009, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
+                        array('pos' => 4, 'char' => 8207,   'level' => 0, 'type' => 'R',  'otype' => 'R'),
                     ),
                 ),
                 array(
@@ -73,11 +73,11 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 8207,   'level' => 0, 'type' => 'R', 'otype' => 'R'),
-                        array('char' => 0x3008, 'level' => 0, 'type' => 'L', 'otype' => 'ON'),
-                        array('char' => 65,     'level' => 0, 'type' => 'L', 'otype' => 'L'),
-                        array('char' => 0x3009, 'level' => 0, 'type' => 'L', 'otype' => 'ON'),
-                        array('char' => 8207,   'level' => 0, 'type' => 'R', 'otype' => 'R'),
+                        array('pos' => 0, 'char' => 8207,   'level' => 0, 'type' => 'R', 'otype' => 'R'),
+                        array('pos' => 1, 'char' => 0x3008, 'level' => 0, 'type' => 'L', 'otype' => 'ON'),
+                        array('pos' => 2, 'char' => 65,     'level' => 0, 'type' => 'L', 'otype' => 'L'),
+                        array('pos' => 3, 'char' => 0x3009, 'level' => 0, 'type' => 'L', 'otype' => 'ON'),
+                        array('pos' => 4, 'char' => 8207,   'level' => 0, 'type' => 'R', 'otype' => 'R'),
                     ),
                 )
             ),
@@ -91,11 +91,11 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
-                        array('char' => 91,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // [
-                        array('char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
-                        array('char' => 8207, 'level' => 1, 'type' => 'R',  'otype' => 'R'),
-                        array('char' => 93,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // ]
+                        array('pos' => 0, 'char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
+                        array('pos' => 1, 'char' => 91,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // [
+                        array('pos' => 2, 'char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
+                        array('pos' => 3, 'char' => 8207, 'level' => 1, 'type' => 'R',  'otype' => 'R'),
+                        array('pos' => 4, 'char' => 93,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // ]
                     ),
                 ),
                 array(
@@ -107,11 +107,11 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 65, 'level' => 1, 'type' => 'L', 'otype' => 'L'),
-                        array('char' => 91, 'level' => 1, 'type' => 'R', 'otype' => 'ON'),
-                        array('char' => 65, 'level' => 1, 'type' => 'L', 'otype' => 'L'),
-                        array('char' => 8207, 'level' => 1, 'type' => 'R', 'otype' => 'R'),
-                        array('char' => 93, 'level' => 1, 'type' => 'R', 'otype' => 'ON'),
+                        array('pos' => 0, 'char' => 65, 'level' => 1, 'type' => 'L', 'otype' => 'L'),
+                        array('pos' => 1, 'char' => 91, 'level' => 1, 'type' => 'R', 'otype' => 'ON'),
+                        array('pos' => 2, 'char' => 65, 'level' => 1, 'type' => 'L', 'otype' => 'L'),
+                        array('pos' => 3, 'char' => 8207, 'level' => 1, 'type' => 'R', 'otype' => 'R'),
+                        array('pos' => 4, 'char' => 93, 'level' => 1, 'type' => 'R', 'otype' => 'ON'),
                     ),
                 )
             ),
@@ -125,11 +125,11 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
-                        array('char' => 91,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // [
-                        array('char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 8207, 'level' => 1, 'type' => 'R',  'otype' => 'R'),
-                        array('char' => 93,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // ]
+                        array('pos' => 0, 'char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
+                        array('pos' => 1, 'char' => 91,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // [
+                        array('pos' => 2, 'char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 3, 'char' => 8207, 'level' => 1, 'type' => 'R',  'otype' => 'R'),
+                        array('pos' => 4, 'char' => 93,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // ]
                     ),
                 ),
                 array(
@@ -141,11 +141,11 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 65, 'level' => 1, 'type' => 'L', 'otype' => 'L'),
-                        array('char' => 91, 'level' => 1, 'type' => 'R', 'otype' => 'ON'),
-                        array('char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 8207, 'level' => 1, 'type' => 'R', 'otype' => 'R'),
-                        array('char' => 93, 'level' => 1, 'type' => 'R', 'otype' => 'ON'),
+                        array('pos' => 0, 'char' => 65, 'level' => 1, 'type' => 'L', 'otype' => 'L'),
+                        array('pos' => 1, 'char' => 91, 'level' => 1, 'type' => 'R', 'otype' => 'ON'),
+                        array('pos' => 2, 'char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 3, 'char' => 8207, 'level' => 1, 'type' => 'R', 'otype' => 'R'),
+                        array('pos' => 4, 'char' => 93, 'level' => 1, 'type' => 'R', 'otype' => 'ON'),
                     ),
                 )
             ),
@@ -159,11 +159,11 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
-                        array('char' => 91,   'level' => 0, 'type' => 'ON', 'otype' => 'ON'), // [
-                        array('char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
-                        array('char' => 93,   'level' => 0, 'type' => 'ON', 'otype' => 'ON'), // ]
-                        array('char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
+                        array('pos' => 0, 'char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
+                        array('pos' => 1, 'char' => 91,   'level' => 0, 'type' => 'ON', 'otype' => 'ON'), // [
+                        array('pos' => 2, 'char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
+                        array('pos' => 3, 'char' => 93,   'level' => 0, 'type' => 'ON', 'otype' => 'ON'), // ]
+                        array('pos' => 4, 'char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
                     ),
                 ),
                 array(
@@ -175,11 +175,11 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
-                        array('char' => 91, 'level' => 0, 'type' => 'R', 'otype' => 'ON'),
-                        array('char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
-                        array('char' => 93, 'level' => 0, 'type' => 'R', 'otype' => 'ON'),
-                        array('char' => 65, 'level' => 0, 'type' => 'L', 'otype' => 'L'),
+                        array('pos' => 0, 'char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
+                        array('pos' => 1, 'char' => 91, 'level' => 0, 'type' => 'R', 'otype' => 'ON'),
+                        array('pos' => 2, 'char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
+                        array('pos' => 3, 'char' => 93, 'level' => 0, 'type' => 'R', 'otype' => 'ON'),
+                        array('pos' => 4, 'char' => 65, 'level' => 0, 'type' => 'L', 'otype' => 'L'),
                     ),
                 )
             ),
@@ -193,12 +193,12 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
-                        array('char' => 91,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // [
-                        array('char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
-                        array('char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 93,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // ]
-                        array('char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
+                        array('pos' => 0, 'char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
+                        array('pos' => 1, 'char' => 91,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // [
+                        array('pos' => 2, 'char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
+                        array('pos' => 3, 'char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 4, 'char' => 93,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // ]
+                        array('pos' => 5, 'char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
                     ),
                 ),
                 array(
@@ -210,12 +210,12 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 65, 'level' => 1, 'type' => 'L', 'otype' => 'L'),
-                        array('char' => 91, 'level' => 1, 'type' => 'L', 'otype' => 'ON'),
-                        array('char' => 65, 'level' => 1, 'type' => 'L', 'otype' => 'L'),
-                        array('char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 93, 'level' => 1, 'type' => 'L', 'otype' => 'ON'),
-                        array('char' => 65, 'level' => 1, 'type' => 'L', 'otype' => 'L'),
+                        array('pos' => 0, 'char' => 65, 'level' => 1, 'type' => 'L', 'otype' => 'L'),
+                        array('pos' => 1, 'char' => 91, 'level' => 1, 'type' => 'L', 'otype' => 'ON'),
+                        array('pos' => 2, 'char' => 65, 'level' => 1, 'type' => 'L', 'otype' => 'L'),
+                        array('pos' => 3, 'char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 4, 'char' => 93, 'level' => 1, 'type' => 'L', 'otype' => 'ON'),
+                        array('pos' => 5, 'char' => 65, 'level' => 1, 'type' => 'L', 'otype' => 'L'),
                     ),
                 )
             ),
@@ -229,11 +229,11 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 8207, 'level' => 1, 'type' => 'R',  'otype' => 'R'),
-                        array('char' => 91,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // [
-                        array('char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
-                        array('char' => 93,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // ]
-                        array('char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
+                        array('pos' => 0, 'char' => 8207, 'level' => 1, 'type' => 'R',  'otype' => 'R'),
+                        array('pos' => 1, 'char' => 91,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // [
+                        array('pos' => 2, 'char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
+                        array('pos' => 3, 'char' => 93,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // ]
+                        array('pos' => 4, 'char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
                     ),
                 ),
                 array(
@@ -245,11 +245,11 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 8207, 'level' => 1, 'type' => 'R', 'otype' => 'R'),
-                        array('char' => 91, 'level' => 1, 'type' => 'R', 'otype' => 'ON'),
-                        array('char' => 65, 'level' => 1, 'type' => 'L', 'otype' => 'L'),
-                        array('char' => 93, 'level' => 1, 'type' => 'R', 'otype' => 'ON'),
-                        array('char' => 65, 'level' => 1, 'type' => 'L', 'otype' => 'L'),
+                        array('pos' => 0, 'char' => 8207, 'level' => 1, 'type' => 'R', 'otype' => 'R'),
+                        array('pos' => 1, 'char' => 91, 'level' => 1, 'type' => 'R', 'otype' => 'ON'),
+                        array('pos' => 2, 'char' => 65, 'level' => 1, 'type' => 'L', 'otype' => 'L'),
+                        array('pos' => 3, 'char' => 93, 'level' => 1, 'type' => 'R', 'otype' => 'ON'),
+                        array('pos' => 4, 'char' => 65, 'level' => 1, 'type' => 'L', 'otype' => 'L'),
                     ),
                 )
             ),
@@ -263,11 +263,11 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 8207, 'level' => 1, 'type' => 'R',  'otype' => 'R'),
-                        array('char' => 91,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // [
-                        array('char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
-                        array('char' => 93,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // ]
-                        array('char' => 8207, 'level' => 1, 'type' => 'R',  'otype' => 'R'),
+                        array('pos' => 0, 'char' => 8207, 'level' => 1, 'type' => 'R',  'otype' => 'R'),
+                        array('pos' => 1, 'char' => 91,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // [
+                        array('pos' => 2, 'char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
+                        array('pos' => 3, 'char' => 93,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // ]
+                        array('pos' => 4, 'char' => 8207, 'level' => 1, 'type' => 'R',  'otype' => 'R'),
                     ),
                 ),
                 array(
@@ -279,11 +279,11 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 8207, 'level' => 1, 'type' => 'R', 'otype' => 'R'),
-                        array('char' => 91, 'level' => 1, 'type' => 'R', 'otype' => 'ON'),
-                        array('char' => 65, 'level' => 1, 'type' => 'L', 'otype' => 'L'),
-                        array('char' => 93, 'level' => 1, 'type' => 'R', 'otype' => 'ON'),
-                        array('char' => 8207, 'level' => 1, 'type' => 'R', 'otype' => 'R'),
+                        array('pos' => 0, 'char' => 8207, 'level' => 1, 'type' => 'R', 'otype' => 'R'),
+                        array('pos' => 1, 'char' => 91, 'level' => 1, 'type' => 'R', 'otype' => 'ON'),
+                        array('pos' => 2, 'char' => 65, 'level' => 1, 'type' => 'L', 'otype' => 'L'),
+                        array('pos' => 3, 'char' => 93, 'level' => 1, 'type' => 'R', 'otype' => 'ON'),
+                        array('pos' => 4, 'char' => 8207, 'level' => 1, 'type' => 'R', 'otype' => 'R'),
                     ),
                 )
             ),
@@ -297,11 +297,11 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 8207, 'level' => 1, 'type' => 'R',  'otype' => 'R'),
-                        array('char' => 91,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // [
-                        array('char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 93,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // ]
-                        array('char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
+                        array('pos' => 0, 'char' => 8207, 'level' => 1, 'type' => 'R',  'otype' => 'R'),
+                        array('pos' => 1, 'char' => 91,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // [
+                        array('pos' => 2, 'char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 3, 'char' => 93,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // ]
+                        array('pos' => 4, 'char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
                     ),
                 ),
                 array(
@@ -313,11 +313,11 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 8207, 'level' => 1, 'type' => 'R', 'otype' => 'R'),
-                        array('char' => 91, 'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
-                        array('char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 93, 'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
-                        array('char' => 65, 'level' => 1, 'type' => 'L', 'otype' => 'L'),
+                        array('pos' => 0, 'char' => 8207, 'level' => 1, 'type' => 'R', 'otype' => 'R'),
+                        array('pos' => 1, 'char' => 91, 'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
+                        array('pos' => 2, 'char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 3, 'char' => 93, 'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
+                        array('pos' => 4, 'char' => 65, 'level' => 1, 'type' => 'L', 'otype' => 'L'),
                     ),
                 )
             ),
@@ -331,11 +331,11 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 8207, 'level' => 1, 'type' => 'R',  'otype' => 'R'),
-                        array('char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 91,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // [
-                        array('char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
-                        array('char' => 93,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // ]
+                        array('pos' => 0, 'char' => 8207, 'level' => 1, 'type' => 'R',  'otype' => 'R'),
+                        array('pos' => 1, 'char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 91,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // [
+                        array('pos' => 3, 'char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
+                        array('pos' => 4, 'char' => 93,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // ]
                     ),
                 ),
                 array(
@@ -347,11 +347,11 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 8207, 'level' => 1, 'type' => 'R',  'otype' => 'R'),
-                        array('char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 91,   'level' => 1, 'type' => 'R',  'otype' => 'ON'),
-                        array('char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
-                        array('char' => 93,   'level' => 1, 'type' => 'R',  'otype' => 'ON'),
+                        array('pos' => 0, 'char' => 8207, 'level' => 1, 'type' => 'R',  'otype' => 'R'),
+                        array('pos' => 1, 'char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 91,   'level' => 1, 'type' => 'R',  'otype' => 'ON'),
+                        array('pos' => 3, 'char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
+                        array('pos' => 4, 'char' => 93,   'level' => 1, 'type' => 'R',  'otype' => 'ON'),
                     ),
                 )
             ),
@@ -365,11 +365,11 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 91,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // [
-                        array('char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
-                        array('char' => 93,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // ]
+                        array('pos' => 0, 'char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 1, 'char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 91,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // [
+                        array('pos' => 3, 'char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
+                        array('pos' => 4, 'char' => 93,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // ]
                     ),
                 ),
                 array(
@@ -381,11 +381,11 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 91,   'level' => 1, 'type' => 'R',  'otype' => 'ON'),
-                        array('char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
-                        array('char' => 93,   'level' => 1, 'type' => 'R',  'otype' => 'ON'),
+                        array('pos' => 0, 'char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 1, 'char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 91,   'level' => 1, 'type' => 'R',  'otype' => 'ON'),
+                        array('pos' => 3, 'char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
+                        array('pos' => 4, 'char' => 93,   'level' => 1, 'type' => 'R',  'otype' => 'ON'),
                     ),
                 )
             ),
@@ -399,12 +399,12 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 8207,   'level' => 0, 'type' => 'R',  'otype' => 'R'),
-                        array('char' => 0x3008, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
-                        array('char' => 65,     'level' => 0, 'type' => 'L',  'otype' => 'L'),
-                        array('char' => 0x3009, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
-                        array('char' => 1809,   'level' => 0, 'type' => 'NSM',  'otype' => 'NSM'),
-                        array('char' => 1809,   'level' => 0, 'type' => 'NSM',  'otype' => 'NSM'),
+                        array('pos' => 0, 'char' => 8207,   'level' => 0, 'type' => 'R',  'otype' => 'R'),
+                        array('pos' => 1, 'char' => 0x3008, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
+                        array('pos' => 2, 'char' => 65,     'level' => 0, 'type' => 'L',  'otype' => 'L'),
+                        array('pos' => 3, 'char' => 0x3009, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
+                        array('pos' => 4, 'char' => 1809,   'level' => 0, 'type' => 'NSM',  'otype' => 'NSM'),
+                        array('pos' => 5, 'char' => 1809,   'level' => 0, 'type' => 'NSM',  'otype' => 'NSM'),
                     ),
                 ),
                 array(
@@ -416,12 +416,12 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 8207,   'level' => 0, 'type' => 'R', 'otype' => 'R'),
-                        array('char' => 0x3008, 'level' => 0, 'type' => 'L', 'otype' => 'ON'),
-                        array('char' => 65,     'level' => 0, 'type' => 'L', 'otype' => 'L'),
-                        array('char' => 0x3009, 'level' => 0, 'type' => 'L', 'otype' => 'ON'),
-                        array('char' => 1809,   'level' => 0, 'type' => 'L', 'otype' => 'NSM'),
-                        array('char' => 1809,   'level' => 0, 'type' => 'L', 'otype' => 'NSM'),
+                        array('pos' => 0, 'char' => 8207,   'level' => 0, 'type' => 'R', 'otype' => 'R'),
+                        array('pos' => 1, 'char' => 0x3008, 'level' => 0, 'type' => 'L', 'otype' => 'ON'),
+                        array('pos' => 2, 'char' => 65,     'level' => 0, 'type' => 'L', 'otype' => 'L'),
+                        array('pos' => 3, 'char' => 0x3009, 'level' => 0, 'type' => 'L', 'otype' => 'ON'),
+                        array('pos' => 4, 'char' => 1809,   'level' => 0, 'type' => 'L', 'otype' => 'NSM'),
+                        array('pos' => 5, 'char' => 1809,   'level' => 0, 'type' => 'L', 'otype' => 'NSM'),
                     ),
                 )
             ),
@@ -451,9 +451,9 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
+                        array('pos' => 0, 'char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
+                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
                     ),
                 ),
                 array(
@@ -465,9 +465,9 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 65, 'level' => 0, 'type' => 'L', 'otype' => 'L'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
-                        array('char' => 65, 'level' => 0, 'type' => 'L', 'otype' => 'L'),
+                        array('pos' => 0, 'char' => 65, 'level' => 0, 'type' => 'L', 'otype' => 'L'),
+                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 65, 'level' => 0, 'type' => 'L', 'otype' => 'L'),
                     ),
                 )
             ),
@@ -481,9 +481,9 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
+                        array('pos' => 0, 'char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
+                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
                     ),
                 ),
                 array(
@@ -495,9 +495,9 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'R', 'otype' => 'NI'),
-                        array('char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
+                        array('pos' => 0, 'char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
+                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'R', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
                     ),
                 )
             ),
@@ -511,9 +511,9 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
+                        array('pos' => 0, 'char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
+                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
                     ),
                 ),
                 array(
@@ -525,9 +525,9 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'R', 'otype' => 'NI'),
-                        array('char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
+                        array('pos' => 0, 'char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
+                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'R', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
                     ),
                 )
             ),
@@ -541,9 +541,9 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
+                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
                     ),
                 ),
                 array(
@@ -555,9 +555,9 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'R', 'otype' => 'NI'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
+                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'R', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
                     ),
                 )
             ),
@@ -571,9 +571,9 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
+                        array('pos' => 0, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
+                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
                     ),
                 ),
                 array(
@@ -585,9 +585,9 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'R', 'otype' => 'NI'),
-                        array('char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
+                        array('pos' => 0, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
+                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'R', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
                     ),
                 )
             ),
@@ -601,9 +601,9 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
+                        array('pos' => 0, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
+                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
                     ),
                 ),
                 array(
@@ -615,9 +615,9 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'R', 'otype' => 'NI'),
-                        array('char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
+                        array('pos' => 0, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
+                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'R', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
                     ),
                 )
             ),
@@ -631,9 +631,9 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
+                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
                     ),
                 ),
                 array(
@@ -645,9 +645,9 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'R', 'otype' => 'NI'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
+                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'R', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
                     ),
                 )
             ),
@@ -661,9 +661,9 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
+                        array('pos' => 0, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
                     ),
                 ),
                 array(
@@ -675,9 +675,9 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'R', 'otype' => 'NI'),
-                        array('char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
+                        array('pos' => 0, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'R', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
                     ),
                 )
             ),
@@ -691,9 +691,9 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
+                        array('pos' => 0, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
                     ),
                 ),
                 array(
@@ -705,9 +705,9 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'R', 'otype' => 'NI'),
-                        array('char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
+                        array('pos' => 0, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'R', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
                     ),
                 )
             ),
@@ -721,9 +721,9 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
                     ),
                 ),
                 array(
@@ -735,9 +735,9 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'R', 'otype' => 'NI'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'R', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
                     ),
                 )
             ),
@@ -751,10 +751,10 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
+                        array('pos' => 0, 'char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
+                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 3, 'char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
                     ),
                 ),
                 array(
@@ -766,10 +766,10 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 65,   'level' => 0, 'type' => 'L', 'otype' => 'L'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
-                        array('char' => 65,   'level' => 0, 'type' => 'L', 'otype' => 'L'),
+                        array('pos' => 0, 'char' => 65,   'level' => 0, 'type' => 'L', 'otype' => 'L'),
+                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
+                        array('pos' => 3, 'char' => 65,   'level' => 0, 'type' => 'L', 'otype' => 'L'),
                     ),
                 )
             ),
@@ -799,7 +799,7 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 0, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
                     ),
                 ),
                 array(
@@ -811,7 +811,7 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
+                        array('pos' => 0, 'char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
                     ),
                 )
             ),
@@ -840,9 +840,9 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
+                        array('pos' => 0, 'char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
+                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
                     ),
                 ),
                 array(
@@ -854,9 +854,9 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 65, 'level' => 0, 'type' => 'L', 'otype' => 'L'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
-                        array('char' => 65, 'level' => 0, 'type' => 'L', 'otype' => 'L'),
+                        array('pos' => 0, 'char' => 65, 'level' => 0, 'type' => 'L', 'otype' => 'L'),
+                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 65, 'level' => 0, 'type' => 'L', 'otype' => 'L'),
                     ),
                 )
             ),
@@ -870,9 +870,9 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
+                        array('pos' => 0, 'char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
+                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
                     ),
                 ),
                 array(
@@ -884,9 +884,9 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
-                        array('char' => 65, 'level' => 0, 'type' => 'L', 'otype' => 'L'),
+                        array('pos' => 0, 'char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
+                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 65, 'level' => 0, 'type' => 'L', 'otype' => 'L'),
                     ),
                 )
             ),
@@ -900,9 +900,9 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
+                        array('pos' => 0, 'char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
+                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
                     ),
                 ),
                 array(
@@ -914,9 +914,9 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 65, 'level' => 0, 'type' => 'L', 'otype' => 'L'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
-                        array('char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
+                        array('pos' => 0, 'char' => 65, 'level' => 0, 'type' => 'L', 'otype' => 'L'),
+                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
                     ),
                 )
             ),
@@ -930,9 +930,9 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
+                        array('pos' => 0, 'char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
+                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
                     ),
                 ),
                 array(
@@ -944,9 +944,9 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'R', 'otype' => 'NI'),
-                        array('char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
+                        array('pos' => 0, 'char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
+                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'R', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
                     ),
                 )
             ),
@@ -960,9 +960,9 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 91,   'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 0, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 1, 'char' => 91,   'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
+                        array('pos' => 2, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
                     ),
                 ),
                 array(
@@ -974,9 +974,9 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
-                        array('char' => 91,   'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
+                        array('pos' => 0, 'char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
+                        array('pos' => 1, 'char' => 91,   'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
+                        array('pos' => 2, 'char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
                     ),
                 )
             ),
@@ -990,9 +990,9 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 0, 'char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
+                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
                     ),
                 ),
                 array(
@@ -1004,9 +1004,9 @@ class StepNTest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
-                        array('char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
+                        array('pos' => 0, 'char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
+                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
+                        array('pos' => 2, 'char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
                     ),
                 )
             ),

@@ -118,13 +118,25 @@ class BidiTest extends \PHPUnit_Framework_TestCase
                 ),
                 json_decode('"\ufef5 \ufc62\ufc61\ufc60\ufc5f\ufc5e \ufb50 \u0602\u0601\u0600 \ufdf2"'),
             ),
-            array( // RLE + PDF ??? ERROR ???
+            array(
+                json_decode('"A\u2067\u05d8\u2069B"'),
+                json_decode('"A\u2067\u05d8\u2069B"'),
+            ),
+            array( // RLI + PDI
+                json_decode(
+                    '"The words '
+                    .'\"\u2067\u05de\u05d6\u05dc [mazel] \u05d8\u05d5\u05d1 [tov]\u2069\"'
+                    .' mean \"Congratulations!\""'
+                ),
+                'The words "⁧[tov] בוט [mazel] לזמ⁩" mean "Congratulations!"',
+            ),
+            array( // RLE + PDF
                 json_decode('"it is called \"\u202bAN INTRODUCTION TO java\u202c\" - $19.95 in hardcover."'),
                 'it is called "java TO INTRODUCTION AN" - $19.95 in hardcover.',
             ),
-            array( // RLI + PDI ??? ERROR ???
+            array( // RLI + PDI
                 json_decode('"it is called \"\u2067AN INTRODUCTION TO java\u2069\" - $19.95 in hardcover."'),
-                'it is called "⁧⁩" - $19.95 in hardcover.java TO INTRODUCTION AN',
+                'it is called "⁧java TO INTRODUCTION AN⁩" - $19.95 in hardcover.',
             ),
         );
     }

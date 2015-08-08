@@ -55,10 +55,10 @@ class StepITest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
-                        array('char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
-                        array('char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
-                        array('char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
+                        array('pos' => 1, 'char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
+                        array('pos' => 2, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
+                        array('pos' => 3, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
                     ),
                 ),
                 array(
@@ -70,10 +70,10 @@ class StepITest extends \PHPUnit_Framework_TestCase
                     'sos' => 'L',
                     'eos' => 'L',
                     'item' => array(
-                        array('char' => 65, 'level' => 0, 'type' => 'L', 'otype' => 'L'),
-                        array('char' => 8207, 'level' => 1, 'type' => 'R', 'otype' => 'R'),
-                        array('char' => 1632, 'level' => 2, 'type' => 'AN', 'otype' => 'AN'),
-                        array('char' => 1776, 'level' => 2, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 65, 'level' => 0, 'type' => 'L', 'otype' => 'L'),
+                        array('pos' => 1, 'char' => 8207, 'level' => 1, 'type' => 'R', 'otype' => 'R'),
+                        array('pos' => 2, 'char' => 1632, 'level' => 2, 'type' => 'AN', 'otype' => 'AN'),
+                        array('pos' => 3, 'char' => 1776, 'level' => 2, 'type' => 'EN', 'otype' => 'EN'),
                     ),
                     'maxlevel' => 2,
                 )
@@ -88,10 +88,10 @@ class StepITest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
-                        array('char' => 8207, 'level' => 1, 'type' => 'R',  'otype' => 'R'),
-                        array('char' => 1632, 'level' => 1, 'type' => 'AN', 'otype' => 'AN'),
-                        array('char' => 1776, 'level' => 1, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
+                        array('pos' => 1, 'char' => 8207, 'level' => 1, 'type' => 'R',  'otype' => 'R'),
+                        array('pos' => 2, 'char' => 1632, 'level' => 1, 'type' => 'AN', 'otype' => 'AN'),
+                        array('pos' => 3, 'char' => 1776, 'level' => 1, 'type' => 'EN', 'otype' => 'EN'),
                     ),
                 ),
                 array(
@@ -103,10 +103,10 @@ class StepITest extends \PHPUnit_Framework_TestCase
                     'sos' => 'R',
                     'eos' => 'R',
                     'item' => array(
-                        array('char' => 65, 'level' => 2, 'type' => 'L', 'otype' => 'L'),
-                        array('char' => 8207, 'level' => 1, 'type' => 'R', 'otype' => 'R'),
-                        array('char' => 1632, 'level' => 2, 'type' => 'AN', 'otype' => 'AN'),
-                        array('char' => 1776, 'level' => 2, 'type' => 'EN', 'otype' => 'EN'),
+                        array('pos' => 0, 'char' => 65, 'level' => 2, 'type' => 'L', 'otype' => 'L'),
+                        array('pos' => 1, 'char' => 8207, 'level' => 1, 'type' => 'R', 'otype' => 'R'),
+                        array('pos' => 2, 'char' => 1632, 'level' => 2, 'type' => 'AN', 'otype' => 'AN'),
+                        array('pos' => 3, 'char' => 1776, 'level' => 2, 'type' => 'EN', 'otype' => 'EN'),
                     ),
                     'maxlevel' => 2,
                 )

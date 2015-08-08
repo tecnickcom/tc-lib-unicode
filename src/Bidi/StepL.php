@@ -67,6 +67,10 @@ class StepL
      */
     public function __construct($chardata, $pel, $maxlevel)
     {
+        // reorder chars by their original position
+        usort($chardata, function ($apos, $bpos) {
+            return ($apos['pos'] - $bpos['pos']);
+        });
         $this->chardata = $chardata;
         $this->numchars = count($this->chardata);
         $this->pel = $pel;

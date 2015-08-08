@@ -79,8 +79,8 @@ class BidiTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                "ABC\nEFG\n",
-                "ABC\nEFG\n",
+                "\n\nABC\nEFG\n\nHIJ\n\n",
+                "\n\nABC\nEFG\n\nHIJ\n\n",
                 true
             ),
             array(

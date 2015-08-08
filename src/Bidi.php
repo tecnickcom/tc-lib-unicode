@@ -280,7 +280,7 @@ class Bidi
                 }
                 $chardata = array_merge($chardata, $seq['item']);
             }
-            $stepl = new StepL($chardata, $pel, $seq['maxlevel']);
+            $stepl = new StepL($chardata, $pel, (isset($seq['maxlevel']) ? $seq['maxlevel'] : 0));
             $chardata = $stepl->getChrData();
             foreach ($chardata as $chd) {
                 $this->bidiordarr[] = $chd['char'];

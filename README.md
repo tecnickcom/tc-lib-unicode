@@ -11,7 +11,7 @@
 
 ## Description
 
-PHP library containing UTF-8 font methods
+PHP library containing Unicode and UTF-8 methods, including the Unicode Bidirectional Algorithm.
 
 The initial source code has been extracted from TCPDF (<http://www.tcpdf.org>).
 

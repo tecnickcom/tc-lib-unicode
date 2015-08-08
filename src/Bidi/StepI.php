@@ -15,9 +15,6 @@
 
 namespace Com\Tecnick\Unicode\Bidi;
 
-use \Com\Tecnick\Unicode\Data\Type;
-use \Com\Tecnick\Unicode\Data\Constant;
-
 /**
  * Com\Tecnick\Unicode\Bidi\StepI
  *
@@ -32,50 +29,41 @@ use \Com\Tecnick\Unicode\Data\Constant;
 class StepI extends \Com\Tecnick\Unicode\Bidi\StepBase
 {
     /**
-     * Max level
-     *
-     * @var int
-     */
-    protected $maxlevel = 0;
-
-    /**
      * Process I steps
      */
     protected function process()
     {
-        // I1. For all characters with an even (left-to-right) embedding direction,
-        //     those of type R go up one level and those of type AN or EN go up two levels.
-        // I2. For all characters with an odd (right-to-left) embedding direction,
-        //     those of type L, EN or AN go up one level.
-        for ($idx = 0; $idx < $this->numchars; ++$idx) {
-            $odd = ($this->chardata[$idx]['level'] % 2);
-            if ($odd) {
-                if (($this->chardata[$idx]['type'] == 'L')
-                    || ($this->chardata[$idx]['type'] == 'AN')
-                    || ($this->chardata[$idx]['type'] == 'EN')
-                ) {
-                    $this->chardata[$idx]['level'] += 1;
-                }
-            } else {
-                if ($this->chardata[$idx]['type'] == 'R') {
-                    $this->chardata[$idx]['level'] += 1;
-                } elseif (($this->chardata[$idx]['type'] == 'AN')
-                    || ($this->chardata[$idx]['type'] == 'EN')
-                ) {
-                    $this->chardata[$idx]['level'] += 2;
-                }
-            }
-            $this->maxlevel = max($this->chardata[$idx]['level'], $this->maxlevel);
-        }
+        $this->seq['maxlevel'] = 0;
+        $this->processStep('processI');
     }
 
     /**
-     * Returns the maximum level
+     * I1. For all characters with an even (left-to-right) embedding level, those of type R go up one level and those
+     *     of type AN or EN go up two levels.
+     * I2. For all characters with an odd (right-to-left) embedding level, those of type L, EN or AN go up one level.
      *
-     * @return int
+     * @param int $idx Current character position
      */
-    public function getMaxLevel()
+    protected function processI($idx)
     {
-        return $this->maxlevel;
+        $odd = ($this->seq['item'][$idx]['level'] % 2);
+        if ($odd) {
+            if (($this->seq['item'][$idx]['type'] == 'L')
+                || ($this->seq['item'][$idx]['type'] == 'EN')
+                || ($this->seq['item'][$idx]['type'] == 'AN')
+            ) {
+                $this->seq['item'][$idx]['level'] += 1;
+            }
+        } else {
+            if ($this->seq['item'][$idx]['type'] == 'R') {
+                $this->seq['item'][$idx]['level'] += 1;
+            } elseif (($this->seq['item'][$idx]['type'] == 'AN')
+                || ($this->seq['item'][$idx]['type'] == 'EN')
+            ) {
+                $this->seq['item'][$idx]['level'] += 2;
+            }
+        }
+        // update the maximum level
+        $this->seq['maxlevel'] = max($this->seq['maxlevel'], $this->seq['item'][$idx]['level']);
     }
 }

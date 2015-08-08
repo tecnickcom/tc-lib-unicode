@@ -17,6 +17,9 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-%(%{__id_u} -n)
 BuildArch: noarch
 
 Requires:  php(language) >= 5.3.3
+Requires:  php-composer(%{c_vendor}/tc-lib-unicode-data) >= 1.4.2
+Requires:  php-pcre
+Requires:  php-mbstring
 
 Provides:  php-composer(%{c_vendor}/%{gh_project}) = %{version}
 Provides:  php-%{gh_project} = %{version}

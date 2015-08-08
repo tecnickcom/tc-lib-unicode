@@ -15,9 +15,8 @@
 
 namespace Com\Tecnick\Unicode\Bidi;
 
-use \Com\Tecnick\Unicode\Data\Type;
-use \Com\Tecnick\Unicode\Data\Constant;
-use \Com\Tecnick\Unicode\Data\Mirror;
+use \Com\Tecnick\Unicode\Data\Mirror as UniMirror;
+use \Com\Tecnick\Unicode\Data\Constant as UniConstant;
 
 /**
  * Com\Tecnick\Unicode\Bidi\StepL
@@ -47,13 +46,6 @@ class StepL
     protected $numchars = 0;
 
     /**
-     * Max level
-     *
-     * @var int
-     */
-    protected $maxlevel = 0;
-
-    /**
      * Paragraph embedding level
      *
      * @var int
@@ -61,23 +53,29 @@ class StepL
     protected $pel = 0;
 
     /**
+     * Maximul level
+     *
+     * @var int
+     */
+    protected $maxlevel = 0;
+
+    /**
      * L steps
      *
      * @param array $chardata Array of characters data
-     * @param int   $maxlevel Maximum level
      * @param int   $pel      Paragraph embedding level
-     * @param bool  $shaping  If true process character shaping (i.e. Arabic)
      */
-    public function __construct($chardata, $maxlevel, $pel, $shaping = false)
+    public function __construct($chardata, $pel, $maxlevel)
     {
+        // reorder chars by their original position
+        usort($chardata, function ($apos, $bpos) {
+            return ($apos['pos'] - $bpos['pos']);
+        });
         $this->chardata = $chardata;
         $this->numchars = count($this->chardata);
-        $this->maxlevel = $maxlevel;
         $this->pel = $pel;
+        $this->maxlevel = $maxlevel;
         $this->processL1();
-        if ($shaping) {
-            $this->processShaping();
-        }
         $this->processL2();
     }
 
@@ -95,17 +93,15 @@ class StepL
      * L1. On each line, reset the embedding level of the following characters to the paragraph embedding level:
      *     1. Segment separators,
      *     2. Paragraph separators,
-     *     3. Any sequence of whitespace characters preceding a segment separator or paragraph separator, and
-     *     4. Any sequence of white space characters at the end of the line.
+     *     3. Any sequence of whitespace characters and/or isolate formatting characters (FSI, LRI, RLI, and PDI)
+     *        preceding a segment separator or paragraph separator, and
+     *     4. Any sequence of whitespace characters and/or isolate formatting characters (FSI, LRI, RLI, and PDI)
+     *        at the end of the line.
      */
     protected function processL1()
     {
         for ($idx = 0; $idx < $this->numchars; ++$idx) {
-            if (($this->chardata[$idx]['type'] == 'B') || ($this->chardata[$idx]['type'] == 'S')) {
-                $this->chardata[$idx]['level'] = $this->pel;
-            } elseif ($this->chardata[$idx]['type'] == 'WS') {
-                $this->processL1b($idx);
-            }
+            $this->processL1b($idx, $idx);
         }
     }
 
@@ -113,20 +109,23 @@ class StepL
      * Internal L1 step
      *
      * @param int $idx Main character index
+     * @param int $jdx Current index
      */
-    protected function processL1b($idx)
+    protected function processL1b($idx, $jdx)
     {
-        $jdx = ($idx + 1);
-        while ($jdx < $this->numchars) {
-            if ((($this->chardata[$jdx]['type'] == 'B') || ($this->chardata[$jdx]['type'] == 'S'))
-                || (($jdx == ($this->numchars - 1)) && ($this->chardata[$jdx]['type'] == 'WS'))
-            ) {
-                $this->chardata[$idx]['level'] = $this->pel;
-                break;
-            } elseif ($this->chardata[$jdx]['type'] != 'WS') {
-                break;
-            }
-            ++$jdx;
+        if ($jdx >= $this->numchars) {
+            return;
+        }
+        if ((($this->chardata[$jdx]['otype'] == 'S') || ($this->chardata[$jdx]['otype'] == 'B'))
+            || (($jdx == ($this->numchars - 1)) && ($this->chardata[$jdx]['otype'] == 'WS'))
+        ) {
+            $this->chardata[$idx]['level'] = $this->pel;
+            return;
+        } elseif (($this->chardata[$jdx]['otype'] != 'WS')
+            && (($this->chardata[$idx]['char'] < UniConstant::LRI)
+            || ($this->chardata[$idx]['char'] > UniConstant::PDI))
+        ) {
+            return $this->processL1b($idx, ($jdx + 1));
         }
     }
 
@@ -134,49 +133,35 @@ class StepL
      * L2. From the highest level found in the text to the lowest odd level on each line,
      *     including intermediate levels not actually present in the text,
      *     reverse any contiguous sequence of characters that are at that level or higher.
+     *     This rule reverses a progressively larger series of substrings.
      */
     protected function processL2()
     {
-        for ($jdx = $this->maxlevel; $jdx > 0; --$jdx) {
-            $ordarray = array();
-            $revarr = array();
-            $onlevel = false;
-            for ($idx = 0; $idx < $this->numchars; ++$idx) {
-                if ($this->chardata[$idx]['level'] >= $jdx) {
-                    $onlevel = true;
-                    if (isset(Mirror::$uni[$this->chardata[$idx]['char']])) {
+        for ($level = $this->maxlevel; $level > 0; --$level) {
+            $ordered = array();
+            $reversed = array();
+            foreach ($this->chardata as $char) {
+                if ($char['level'] >= $level) {
+                    if (($char['type'] == 'R') && (isset(UniMirror::$uni[$char['char']]))) {
                         // L4. A character is depicted by a mirrored glyph if and only if
                         //     (a) the resolved directionality of that character is R, and
                         //     (b) the Bidi_Mirrored property value of that character is true.
-                        $this->chardata[$idx]['char'] = Mirror::$uni[$this->chardata[$idx]['char']];
+                        $char['char'] = UniMirror::$uni[$char['char']];
                     }
-                    $revarr[] = $this->chardata[$idx];
+                    $reversed[] = $char;
                 } else {
-                    if ($onlevel) {
-                        $revarr = array_reverse($revarr);
-                        $ordarray = array_merge($ordarray, $revarr);
-                        $revarr = array();
-                        $onlevel = false;
+                    if (!empty($reversed)) {
+                        $ordered = array_merge($ordered, array_reverse($reversed));
+                        $reversed = array();
                     }
-                    $ordarray[] = $this->chardata[$idx];
+                    $ordered[] = $char;
                 }
             }
-            if ($onlevel) {
-                $revarr = array_reverse($revarr);
-                $ordarray = array_merge($ordarray, $revarr);
+            if (!empty($reversed)) {
+                $ordered = array_merge($ordered, array_reverse($reversed));
+                $reversed = array();
             }
-            $this->chardata = $ordarray;
+            $this->chardata = $ordered;
         }
-    }
-
-    /**
-     * Shaping
-     * Cursively connected scripts, such as Arabic or Syriac,
-     * require the selection of positional character shapes that depend on adjacent characters.
-     * Shaping is logically applied after the Bidirectional Algorithm is used and is limited to
-     * characters within the same directional run.
-     */
-    protected function processShaping()
-    {
     }
 }

@@ -15,9 +15,7 @@
 
 namespace Com\Tecnick\Unicode\Bidi\Shaping;
 
-use \Com\Tecnick\Unicode\Data\Type;
-use \Com\Tecnick\Unicode\Data\Constant;
-use \Com\Tecnick\Unicode\Data\Arabic;
+use \Com\Tecnick\Unicode\Data\Arabic as UniArabic;
 
 /**
  * Com\Tecnick\Unicode\Bidi\Shaping\Arabic
@@ -40,8 +38,8 @@ abstract class Arabic
     protected function isLaaLetter($prevchar, $thischar)
     {
         if (($prevchar !== false)
-            && ($prevchar['char'] == Arabic::LAM)
-            && (isset(Arabic::$laa[$thischar['char']]))
+            && ($prevchar['char'] == UniArabic::LAM)
+            && (isset(UniArabic::$laa[$thischar['char']]))
         ) {
             return true;
         }
@@ -59,9 +57,9 @@ abstract class Arabic
     protected function hasNextChar($thischar, $nextchar)
     {
         return (($nextchar !== false)
-            && ((Type::$uni[$nextchar['char']] == 'AL') || (Type::$uni[$nextchar['char']] == 'NSM'))
+            && (($nextchar['otype'] == 'AL') || ($nextchar['otype'] == 'NSM'))
             && ($nextchar['type'] == $thischar['type'])
-            && ($nextchar['char'] != Arabic::QUESTION_MARK)
+            && ($nextchar['char'] != UniArabic::QUESTION_MARK)
         );
     }
 
@@ -76,7 +74,7 @@ abstract class Arabic
     protected function hasPrevChar($prevchar, $thischar)
     {
         return ((($prevchar !== false)
-            && ((Type::$uni[$prevchar['char']] == 'AL') || (Type::$uni[$prevchar['char']] == 'NSM'))
+            && (($prevchar['otype'] == 'AL') || ($prevchar['otype'] == 'NSM'))
             && ($prevchar['type'] == $thischar['type']))
         );
     }
@@ -107,20 +105,21 @@ abstract class Arabic
     protected function isFinalChar($prevchar, $thischar, $nextchar)
     {
         return ($this->hasPrevChar($prevchar, $thischar)
-            || (($nextchar !== false) && ($nextchar['char'] == Arabic::QUESTION_MARK))
+            || (($nextchar !== false) && ($nextchar['char'] == UniArabic::QUESTION_MARK))
         );
     }
     
     /**
      * Set initial or middle char
      *
+     * @param int       $idx       Current index
      * @param int|false $prevchar Previous char
      * @param int       $thischar Current char
      * @param array     $arabicarr Substitution array
      */
-    protected function setMiddleChar($prevchar, $thischar, $arabicarr)
+    protected function setMiddleChar($idx, $prevchar, $thischar, $arabicarr)
     {
-        if (in_array($prevchar['char'], Arabic::$end)) {
+        if (in_array($prevchar['char'], UniArabic::$end)) {
             if (isset($arabicarr[$thischar['char']][2])) {
                 // initial
                 $this->newchardata[$idx]['char'] = $arabicarr[$thischar['char']][2];
@@ -136,12 +135,13 @@ abstract class Arabic
     /**
      * Set initial char
      *
+     * @param int       $idx       Current index
      * @param int       $thischar Current char
      * @param array     $arabicarr Substitution array
      */
-    protected function setInitialChar($thischar, $arabicarr)
+    protected function setInitialChar($idx, $thischar, $arabicarr)
     {
-        if (isset($arabicarr[$this->chardata[$idx]['char']][2])) {
+        if (isset($arabicarr[$this->seq['item'][$idx]['char']][2])) {
             $this->newchardata[$idx]['char'] = $arabicarr[$thischar['char']][2];
         }
     }
@@ -157,16 +157,16 @@ abstract class Arabic
     protected function setFinalChar($idx, $prevchar, $thischar, $arabicarr)
     {
         if (($idx > 1)
-            && ($thischar['char'] == Arabic::HEH)
-            && ($this->chardata[($idx - 1)]['char'] == Arabic::LAM)
-            && ($this->chardata[($idx - 2)]['char'] == Arabic::LAM)
+            && ($thischar['char'] == UniArabic::HEH)
+            && ($this->seq['item'][($idx - 1)]['char'] == UniArabic::LAM)
+            && ($this->seq['item'][($idx - 2)]['char'] == UniArabic::LAM)
         ) {
             // Allah Word
             $this->newchardata[($idx - 2)]['char'] = false;
             $this->newchardata[($idx - 1)]['char'] = false;
-            $this->newchardata[$idx]['char'] = Arabic::LIGATURE_ALLAH_ISOLATED_FORM;
+            $this->newchardata[$idx]['char'] = UniArabic::LIGATURE_ALLAH_ISOLATED_FORM;
         } else {
-            if (($prevchar !== false) && in_array($prevchar['char'], Arabic::$end)) {
+            if (($prevchar !== false) && in_array($prevchar['char'], UniArabic::$end)) {
                 if (isset($arabicarr[$thischar['char']][0])) {
                     // isolated
                     $this->newchardata[$idx]['char'] = $arabicarr[$thischar['char']][0];
@@ -193,16 +193,16 @@ abstract class Arabic
     {
         $laaletter = $this->isLaaLetter($prevchar, $thischar);
         if ($laaletter) {
-            $arabicarr = Arabic::$laa;
+            $arabicarr = UniArabic::$laa;
             $prevchar = (($pos > 1) ? $this->alchars[($pos - 2)] : false);
         } else {
-            $arabicarr = Arabic::$substitute;
+            $arabicarr = UniArabic::$substitute;
         }
 
         if ($this->isMiddleChar($prevchar, $thischar, $nextchar)) {
-            $this->setMiddleChar($prevchar, $thischar, $arabicarr);
+            $this->setMiddleChar($idx, $prevchar, $thischar, $arabicarr);
         } elseif ($this->hasNextChar($thischar, $nextchar)) {
-            $this->setInitialChar($thischar, $arabicarr);
+            $this->setInitialChar($idx, $thischar, $arabicarr);
         } elseif ($this->isFinalChar($prevchar, $thischar, $nextchar)) {
             // final
             $this->setFinalChar($idx, $prevchar, $thischar, $arabicarr);

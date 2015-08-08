@@ -29,35 +29,24 @@ namespace Com\Tecnick\Unicode\Bidi;
 abstract class StepBase
 {
     /**
-     * Array of characters data to return
+     * Sequence to process and return
      *
      * @var array
      */
-    protected $chardata = array();
+    protected $seq = array();
 
     /**
-     * Number of characters in $this->chardata
+     * Initialize Sequence to process
      *
-     * @var int
+     * @param array $seq     Isolated Sequence array
+     * @param bool  $process If false disable automatic processing (this is a testing flag)
      */
-    protected $numchars = 0;
-
-    /**
-     * W Steps for Bidirectional algorithm
-     *
-     * 3.3.3 Resolving Weak Types
-     * Weak types are now resolved one level run at a time.
-     * At level run boundaries where the type of the character on the other side of the boundary is required,
-     * the type assigned to sor or eor is used.
-     * Nonspacing marks are now resolved based on the previous characters.
-     *
-     * @param array $chardata Array of characters data
-     */
-    public function __construct($chardata)
+    public function __construct($seq, $process = true)
     {
-        $this->chardata = $chardata;
-        $this->numchars = count($chardata);
-        $this->process();
+        $this->seq = $seq;
+        if ($process) {
+            $this->process();
+        }
     }
 
     /**
@@ -65,9 +54,9 @@ abstract class StepBase
      *
      * @return array
      */
-    public function getChrData()
+    public function getSequence()
     {
-        return $this->chardata;
+        return $this->seq;
     }
 
     /**
@@ -80,18 +69,10 @@ abstract class StepBase
      *
      * @param string $method Processing methos
      */
-    protected function processStep($method)
+    public function processStep($method)
     {
-        $prevlevel = -1; // track level changes
-        $levcount = 0; // counts consecutive chars at the same level
-        for ($idx = 0; $idx < $this->numchars; ++$idx) {
-            $this->$method($idx, $levcount, $prevlevel);
-            if ($this->chardata[$idx]['level'] != $prevlevel) {
-                $levcount = 0;
-            } else {
-                ++$levcount;
-            }
-            $prevlevel = $this->chardata[$idx]['level'];
+        for ($idx = 0; $idx < $this->seq['length']; ++$idx) {
+            $this->$method($idx);
         }
     }
 }

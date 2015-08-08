@@ -79,99 +79,64 @@ class BidiTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                json_decode('"The words \"\u202b\u05de\u05d6\u05dc [mazel] '
-                    .'\u05d8\u05d5\u05d1 [tov]\u202c\" mean \"Congratulations!\""'),
-                'The words "[tov] בוט [mazel] לזמ" mean "Congratulations!"'
-            ),
-            array(
-                'اختبار بسيط',
-                'طيسب رابتخا'
-            ),
-            array(
-                json_decode('"\u0671AB\u0679\u0683"'),
-                'ڃٹABٱ'
-            ),
-            array(
-                json_decode('"\u067137\u0679\u0683"'),
-                'ڃٹ37ٱ'
-            ),
-            array(
-                json_decode('"AB\u0683"'),
-                'ABڃ'
-            ),
-            array(
-                json_decode('"AB\u0683"'),
-                'ABڃ',
-                'L'
-            ),
-            array(
-                json_decode('"AB\u0683"'),
-                'ڃAB',
-                'R'
-            ),
-            array(
-                json_decode('"he said \"\u0671\u0679! \u0683\" to her"'),
-                'he said "ٹٱ! ڃ" to her'
-            ),
-            array(
-                json_decode('"he said \"\u0671\u0679!\" to her"'),
-                'he said "ٹٱ!" to her'
-            ),
-            array(
-                json_decode('"he said \"\u0671\u0679! \u200F\" to her"'),
-                'he said "ٹٱ! ‏" to her'
-            ),
-            array(
-                json_decode('"START CODES \u202bRLE\u202a LRE \u202eRLO\u202d LRO \u202cPDF\u202c END"'),
-                'START CODES RLE LRE FDP LRO OLR END'
+                "\n\nABC\nEFG\n\nHIJ\n\n",
+                "\n\nABC\nEFG\n\nHIJ\n\n",
+                true
             ),
             array(
                 json_decode('"\u202EABC\u202C"'),
                 'CBA'
             ),
             array(
-                json_decode('"\u202D\u0671\u0679\u0683\u202C"'),
-                'ٱٹڃ'
-            ),
-        );
-    }
-
-    /**
-     * @dataProvider bidiOrdDataProvider
-     */
-    public function testBidiOrd($ordarr, $expected, $forcertl = false)
-    {
-        $bidi = new \Com\Tecnick\Unicode\Bidi(null, null, $ordarr, $forcertl);
-        //var_export($bidi->getOrdArray());
-        //echo "\n\n".$bidi->getString()."\n\n";
-        $this->assertEquals($expected, $bidi->getOrdArray());
-        
-    }
-
-    public function bidiOrdDataProvider()
-    {
-        return array(
-            array(
-                array(1649,65,66,1657,1667),
-                array(1667,1657,65,66,1649)
-            ),
-            array(
-                array(1667,1657,65,66,1649),
-                array(1649,65,66,1657,1667)
-            ),
-            array(
-                array(65,66,1667),
-                array(65,66,1667)
-            ),
-            array(
-                array(65,66,1667),
-                array(65,66,1667),
-                'L'
-            ),
-            array(
-                array(65,66,1667),
-                array(1667,65,66),
+                json_decode('"smith (fabrikam \u0600\u0601\u0602) \u05de\u05d6\u05dc"'),
+                json_decode('"\u05dc\u05d6\u05de (\u0602\u0601\u0600 fabrikam) smith"'),
                 'R'
+            ),
+            array(
+                json_decode('"\u0600\u0601\u0602 book(s)"'),
+                json_decode('"book(s) \u0602\u0601\u0600"'),
+                'R'
+            ),
+            array(
+                json_decode('"\u0600\u0601(\u0602\u0603[&ef]!)gh"'),
+                json_decode('"gh(![ef&]\u0603\u0602)\u0601\u0600"'),
+                'R'
+            ),
+            array(
+                'تشكيل اختبار',
+                'ﺭﺎﺒﺘﺧﺍ ﻞﻴﻜﺸﺗ'
+            ),
+            array(
+                json_decode('"\u05de\u05d6\u05dc \u05d8\u05d5\u05d1"'),
+                json_decode('"\u05d1\u05d5\u05d8 \u05dc\u05d6\u05de"'),
+            ),
+            array(
+                json_decode(
+                    '"\u0644\u0644\u0647 \u0600\u0601\u0602 \uFB50'
+                    .' \u0651\u064c\u0651\u064d\u0651\u064e\u0651\u064f\u0651\u0650'
+                    .' \u0644\u0622"'
+                ),
+                json_decode('"\ufef5 \ufc62\ufc61\ufc60\ufc5f\ufc5e \ufb50 \u0602\u0601\u0600 \ufdf2"'),
+            ),
+            array(
+                json_decode('"A\u2067\u05d8\u2069B"'),
+                json_decode('"A\u2067\u05d8\u2069B"'),
+            ),
+            array( // RLI + PDI
+                json_decode(
+                    '"The words '
+                    .'\"\u2067\u05de\u05d6\u05dc [mazel] \u05d8\u05d5\u05d1 [tov]\u2069\"'
+                    .' mean \"Congratulations!\""'
+                ),
+                'The words "⁧[tov] בוט [mazel] לזמ⁩" mean "Congratulations!"',
+            ),
+            array( // RLE + PDF
+                json_decode('"it is called \"\u202bAN INTRODUCTION TO java\u202c\" - $19.95 in hardcover."'),
+                'it is called "java TO INTRODUCTION AN" - $19.95 in hardcover.',
+            ),
+            array( // RLI + PDI
+                json_decode('"it is called \"\u2067AN INTRODUCTION TO java\u2069\" - $19.95 in hardcover."'),
+                'it is called "⁧java TO INTRODUCTION AN⁩" - $19.95 in hardcover.',
             ),
         );
     }

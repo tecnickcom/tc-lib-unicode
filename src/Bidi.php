@@ -18,13 +18,17 @@ namespace Com\Tecnick\Unicode;
 use \Com\Tecnick\Unicode\Exception as UnicodeException;
 
 use \Com\Tecnick\Unicode\Convert;
+use \Com\Tecnick\Unicode\Bidi\StepP;
 use \Com\Tecnick\Unicode\Bidi\StepX;
+use \Com\Tecnick\Unicode\Bidi\StepXten;
 use \Com\Tecnick\Unicode\Bidi\StepW;
 use \Com\Tecnick\Unicode\Bidi\StepN;
 use \Com\Tecnick\Unicode\Bidi\StepI;
+use \Com\Tecnick\Unicode\Bidi\Shaping;
 use \Com\Tecnick\Unicode\Bidi\StepL;
-use \Com\Tecnick\Unicode\Data\Pattern;
-use \Com\Tecnick\Unicode\Data\Type;
+use \Com\Tecnick\Unicode\Data\Pattern as UniPattern;
+use \Com\Tecnick\Unicode\Data\Type as UniType;
+use \Com\Tecnick\Unicode\Data\Constant as UniConstant;
 
 /**
  * Com\Tecnick\Unicode\Bidi
@@ -89,6 +93,13 @@ class Bidi
     protected $forcertl = false;
 
     /**
+     * If true enable shaping
+     *
+     * @var bool
+     */
+    protected $shaping = true;
+
+    /**
      * True if the string contains arabic characters
      *
      * @var bool
@@ -101,13 +112,6 @@ class Bidi
      * @var int
      */
     protected $numchars = 0;
-
-    /**
-     * Paragraph embedding level
-     *
-     * @var int
-     */
-    protected $pel = 0;
 
     /**
      * Array of character data
@@ -131,14 +135,39 @@ class Bidi
      * @param array  $chrarr   Array of UTF-8 chars (if empty it will be generated from $str or $ordarr)
      * @param array  $ordarr   Array of UTF-8 codepoints (if empty it will be generated from $str or $chrarr)
      * @param mixed  $forcertl If 'R' forces RTL, if 'L' forces LTR
+     * @param bool   $shaping  If true enable the shaping algorithm
      */
-    public function __construct($str = null, $chrarr = null, $ordarr = null, $forcertl = false)
+    public function __construct($str = null, $chrarr = null, $ordarr = null, $forcertl = false, $shaping = true)
     {
         if (($str === null) && empty($chrarr) && empty($ordarr)) {
             throw new UnicodeException('empty input');
         }
-
         $this->conv = new Convert();
+        $this->setInput($str, $chrarr, $ordarr, $forcertl);
+
+        if (!$this->isRtlMode()) {
+            $this->bidistr = $this->str;
+            $this->bidichrarr = $this->chrarr;
+            $this->bidiordarr = $this->ordarr;
+            return;
+        }
+
+        $this->shaping = ($shaping && $this->arabic);
+
+        $this->process();
+    }
+    
+
+    /**
+     * Set Input data
+     *
+     * @param string $str      String to convert (if null it will be generated from $chrarr or $ordarr)
+     * @param array  $chrarr   Array of UTF-8 chars (if empty it will be generated from $str or $ordarr)
+     * @param array  $ordarr   Array of UTF-8 codepoints (if empty it will be generated from $str or $chrarr)
+     * @param mixed  $forcertl If 'R' forces RTL, if 'L' forces LTR
+     */
+    public function setInput($str = null, $chrarr = null, $ordarr = null, $forcertl = false)
+    {
         if ($str === null) {
             if (empty($chrarr)) {
                 $chrarr = $this->conv->ordArrToChrArr($ordarr);
@@ -156,8 +185,6 @@ class Bidi
         $this->ordarr = $ordarr;
         $this->forcertl = (($forcertl === false) ? false : strtoupper($forcertl[0]));
         $this->numchars = count($ordarr);
-
-        $this->process();
     }
 
     /**
@@ -207,28 +234,82 @@ class Bidi
     }
 
     /**
+     * P1. Split the text into separate paragraphs.
+     *     A paragraph separator is kept with the previous paragraph.
+     *
+     * @return array
+     */
+    protected function getParagraphs()
+    {
+        
+        $paragraph = array(0 => array());
+        $pdx = 0; // paragraphs index
+        foreach ($this->ordarr as $ord) {
+            $paragraph[$pdx][] = $ord;
+            if (isset(UniType::$uni[$ord]) && (UniType::$uni[$ord] == 'B')) {
+                ++$pdx;
+                $paragraph[$pdx] = array();
+            }
+        }
+        return $paragraph;
+    }
+
+    /**
      * Process the string
      */
     protected function process()
     {
-        if (!$this->isRtlMode()) {
-            $this->bidistr = $this->str;
-            $this->bidichrarr = $this->chrarr;
-            $this->bidiordarr = $this->ordarr;
-            return;
-        }
+        // split the text into separate paragraphs.
+        $paragraph = $this->getParagraphs();
 
-        // process data
-        $this->pel = $this->getPel();
-        $stepx = new StepX($this->ordarr, $this->pel);
-        $stepw = new StepW($stepx->getChrData());
-        $stepn = new StepN($stepw->getChrData());
-        $stepi = new StepI($stepn->getChrData());
-        $stepl = new StepL($stepi->getChrData(), $stepi->getMaxLevel(), $this->pel, $this->arabic);
-        $this->chardata = $stepl->getChrData();
-        foreach ($this->chardata as $chd) {
-            $this->bidiordarr[] = $chd['char'];
+        // Within each paragraph, apply all the other rules of this algorithm.
+        foreach ($paragraph as $par) {
+            $pel = $this->getPel($par);
+            $stepx = new StepX($par, $pel);
+            $stepx10 = new StepXten($stepx->getChrData(), $pel);
+            $ilrs = $stepx10->getIsolatedLevelRunSequences();
+            $chardata = array();
+            foreach ($ilrs as $seq) {
+                $stepw = new StepW($seq);
+                $stepn = new StepN($stepw->getSequence());
+                $stepi = new StepI($stepn->getSequence());
+                $seq = $stepi->getSequence();
+                if ($this->shaping) {
+                    $shaping = new Shaping($seq);
+                    $seq = $shaping->getSequence();
+                }
+                $chardata = array_merge($chardata, $seq['item']);
+            }
+            $stepl = new StepL($chardata, $pel, (isset($seq['maxlevel']) ? $seq['maxlevel'] : 0));
+            $chardata = $stepl->getChrData();
+            foreach ($chardata as $chd) {
+                $this->bidiordarr[] = $chd['char'];
+            }
+            // add back the paragraph separators
+            $lastchar = end($par);
+            if (isset(UniType::$uni[$lastchar]) && (UniType::$uni[$lastchar] == 'B')) {
+                $this->bidiordarr[] = $lastchar;
+            }
         }
+    }
+
+    /**
+     * Get the paragraph embedding level
+     *
+     * @param array $par Paragraph
+     *
+     * @return int
+     */
+    protected function getPel($par)
+    {
+        if ($this->forcertl === 'R') {
+            return 1;
+        }
+        if ($this->forcertl === 'L') {
+            return 0;
+        }
+        $stepp = new StepP($par);
+        return $stepp->getPel();
     }
 
     /**
@@ -238,35 +319,7 @@ class Bidi
      */
     protected function isRtlMode()
     {
-        $this->arabic = preg_match(Pattern::ARABIC, $this->str);
-        return (($this->forcertl !== false) || $this->arabic || preg_match(Pattern::RTL, $this->str));
-    }
-
-    /**
-     * Get the Paragraph embedding level
-     *
-     * @return int
-     */
-    protected function getPel()
-    {
-        if ($this->forcertl === 'R') {
-            return 1;
-        }
-        if ($this->forcertl === 'L') {
-            return 0;
-        }
-        // P2. In each paragraph, find the first character of type L, AL, or R.
-        // P3. If a character is found in P2 and it is of type AL or R,
-        //     then set the paragraph embedding level to one; otherwise, set it to zero.
-        foreach ($this->ordarr as $ord) {
-            $type = Type::$uni[$ord];
-            if ($type === 'L') {
-                return 0;
-            }
-            if (($type === 'R') || ($type === 'AL')) {
-                return 1;
-            }
-        }
-        return 0;
+        $this->arabic = preg_match(UniPattern::ARABIC, $this->str);
+        return (($this->forcertl !== false) || $this->arabic || preg_match(UniPattern::RTL, $this->str));
     }
 }

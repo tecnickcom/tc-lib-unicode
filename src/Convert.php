@@ -28,7 +28,7 @@ use \Com\Tecnick\Unicode\Data\Latin as Latin;
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-unicode
  */
-class Convert
+class Convert extends \Com\Tecnick\Unicode\Convert\Encoding
 {
     /**
      * Returns the unicode string containing the character specified by value
@@ -118,39 +118,5 @@ class Convert
             $end = count($uniarr);
         }
         return implode(array_slice($uniarr, $start, ($end - $start)));
-    }
-
-    /**
-     * Converts UTF-8 code array to Latin1 codes
-     *
-     * @param array $ordarr Array containing UTF-8 code points
-     *
-     * @return array
-     */
-    public function uniArrToLatinArr(array $ordarr)
-    {
-        $latarr = array();
-        foreach ($ordarr as $chr) {
-            if ($chr < 256) {
-                $latarr[] = $chr;
-            } elseif (array_key_exists($chr, Latin::$substitute)) {
-                $latarr[] = Latin::$substitute[$chr];
-            } elseif ($chr !== 0xFFFD) {
-                $latarr[] = 63; // '?' character
-            }
-        }
-        return $latarr;
-    }
-
-    /**
-     * Converts an array of Latin1 code points to a string
-     *
-     * @param array $latarr Array of Latin1 code points
-     *
-     * @return string
-     */
-    public function latinArrToStr(array $latarr)
-    {
-        return implode(array_map('chr', $latarr));
     }
 }

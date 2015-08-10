@@ -124,4 +124,69 @@ class ConvertTest extends \PHPUnit_Framework_TestCase
         $res = $this->obj->latinArrToStr(array(48, 57, 65, 90, 97, 122));
         $this->assertEquals('09AZaz', $res);
     }
+
+    /**
+     * @dataProvider strToHexDataProvider
+     */
+    public function testStrToHex($str, $hex)
+    {
+        $res = $this->obj->strToHex($str);
+        $this->assertEquals($hex, $res);
+    }
+
+    /**
+     * @dataProvider strToHexDataProvider
+     */
+    public function testHexToStr($str, $hex)
+    {
+        $res = $this->obj->hexToStr($hex);
+        $this->assertEquals($str, $res);
+    }
+
+    public function strToHexDataProvider()
+    {
+        return array(
+            array('', ''),
+            array('A', '41'),
+            array('AB', '4142'),
+            array('ABC', '414243'),
+            array("\n", '0a'),
+        );
+    }
+
+    /**
+     * @dataProvider toUTF16BEDataProvider
+     */
+    public function testToUTF16BE($str, $exp)
+    {
+        $res = $this->obj->toUTF16BE($str);
+        $this->assertEquals($exp, $this->obj->strToHex($res));
+    }
+
+    public function toUTF16BEDataProvider()
+    {
+        return array(
+            array('', ''),
+            array('ABC', '004100420043'),
+            array(json_decode('"\u0010\uffff\u00ff\uff00"'), '0010ffff00ffff00'),
+        );
+    }
+
+    /**
+     * @dataProvider toUTF8DataProvider
+     */
+    public function testToUTF8($str, $exp, $enc = null)
+    {
+        $res = $this->obj->toUTF8($str, $enc);
+        $this->assertEquals($exp, $res);
+    }
+
+    public function toUTF8DataProvider()
+    {
+        return array(
+            array('', ''),
+            array('òèìòù', 'òèìòù'),
+            array('òèìòù', 'Ã²Ã¨Ã¬Ã²Ã¹', 'ISO-8859-1'),
+        );
+    }
 }

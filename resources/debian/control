@@ -8,7 +8,7 @@ Homepage: https://github.com/tecnickcom/tc-lib-unicode
 Vcs-Git: https://github.com/tecnickcom/tc-lib-unicode.git
 
 Package: php-tecnickcom-tc-lib-unicode
-Provides: php-tc-lib-unicode-dependencies
+Provides: php-tc-lib-unicode
 Architecture: all
 Depends: php5 (>= 5.3.0), php5-cli (>= 5.3.0), php-tecnickcom-tc-lib-unicode-data (>=1.4.2)
 Description: PHP Unicode methods.

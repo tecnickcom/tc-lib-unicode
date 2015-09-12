@@ -1,5 +1,5 @@
 {
-    "name": "tecnick.com/tc-lib-unicode",
+    "name": "tecnickcom/tc-lib-unicode",
     "description": "PHP library containing Unicode methods",
     "type": "library",
     "homepage": "http://www.tecnick.com",
@@ -14,7 +14,7 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "tecnick.com/tc-lib-unicode-data": "dev-master"
+        "tecnickcom/tc-lib-unicode-data": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "4.7.*",

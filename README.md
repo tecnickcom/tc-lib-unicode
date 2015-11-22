@@ -9,6 +9,13 @@
 * **license**     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
 * **link**        https://github.com/tecnickcom/tc-lib-unicode
 
+## Status
+* **MASTER**: [![Build Status](https://secure.travis-ci.org/tecnickcom/tc-lib-unicode.png?branch=master)](https://travis-ci.org/tecnickcom/tc-lib-unicode?branch=master)
+[![Coverage Status](https://coveralls.io/repos/tecnickcom/tc-lib-unicode/badge.svg?branch=master&service=github)](https://coveralls.io/github/tecnickcom/tc-lib-unicode?branch=master)
+* **DEVELOP**: [![Build Status](https://secure.travis-ci.org/tecnickcom/tc-lib-unicode.png?branch=develop)](https://travis-ci.org/tecnickcom/tc-lib-unicode?branch=develop)
+[![Coverage Status](https://coveralls.io/repos/tecnickcom/tc-lib-unicode/badge.svg?branch=develop&service=github)](https://coveralls.io/github/tecnickcom/tc-lib-unicode?branch=develop)
+
+
 ## Description
 
 PHP library containing Unicode and UTF-8 methods, including the Unicode Bidirectional Algorithm.

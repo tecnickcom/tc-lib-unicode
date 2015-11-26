@@ -1,6 +1,18 @@
 # tc-lib-unicode
+*PHP library containing Unicode and UTF-8 methods, including the Unicode Bidirectional Algorithm*
 
-*Please consider supporting this project by making a donation to <paypal@tecnick.com>*
+[![Latest Stable Version](https://poser.pugx.org/tecnickcom/tc-lib-unicode/version)](https://packagist.org/packages/tecnickcom/tc-lib-unicode)
+[![Master Build Status](https://secure.travis-ci.org/tecnickcom/tc-lib-unicode.png?branch=master)](https://travis-ci.org/tecnickcom/tc-lib-unicode?branch=master)
+[![Master Coverage Status](https://coveralls.io/repos/tecnickcom/tc-lib-unicode/badge.svg?branch=master&service=github)](https://coveralls.io/github/tecnickcom/tc-lib-unicode?branch=master)
+[![License](https://poser.pugx.org/tecnickcom/tc-lib-unicode/license)](https://packagist.org/packages/tecnickcom/tc-lib-unicode)
+[![Total Downloads](https://poser.pugx.org/tecnickcom/tc-lib-unicode/downloads)](https://packagist.org/packages/tecnickcom/tc-lib-unicode)
+*
+[![Develop Branch](https://img.shields.io/badge/-develop:-gray.svg)](https://github.com/tecnickcom/tc-lib-unicode/tree/develop)
+[![Develop Build Status](https://secure.travis-ci.org/tecnickcom/tc-lib-unicode.png?branch=develop)](https://travis-ci.org/tecnickcom/tc-lib-unicode?branch=develop)
+[![Develop Coverage Status](https://coveralls.io/repos/tecnickcom/tc-lib-unicode/badge.svg?branch=develop&service=github)](https://coveralls.io/github/tecnickcom/tc-lib-unicode?branch=develop)
+
+[![Donate via PayPal](https://img.shields.io/badge/donate-paypal-87ceeb.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&currency_code=GBP&business=paypal@tecnick.com&item_name=donation%20for%20tc-lib-unicode%20project)
+*Please consider supporting this project by making a donation via [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&currency_code=GBP&business=paypal@tecnick.com&item_name=donation%20for%20tc-lib-unicode%20project)*
 
 * **category**    Library
 * **package**     \Com\Tecnick\Unicode
@@ -9,18 +21,11 @@
 * **license**     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
 * **link**        https://github.com/tecnickcom/tc-lib-unicode
 
-## Status
-* **MASTER**: [![Build Status](https://secure.travis-ci.org/tecnickcom/tc-lib-unicode.png?branch=master)](https://travis-ci.org/tecnickcom/tc-lib-unicode?branch=master)
-[![Coverage Status](https://coveralls.io/repos/tecnickcom/tc-lib-unicode/badge.svg?branch=master&service=github)](https://coveralls.io/github/tecnickcom/tc-lib-unicode?branch=master)
-* **DEVELOP**: [![Build Status](https://secure.travis-ci.org/tecnickcom/tc-lib-unicode.png?branch=develop)](https://travis-ci.org/tecnickcom/tc-lib-unicode?branch=develop)
-[![Coverage Status](https://coveralls.io/repos/tecnickcom/tc-lib-unicode/badge.svg?branch=develop&service=github)](https://coveralls.io/github/tecnickcom/tc-lib-unicode?branch=develop)
-
-
 ## Description
 
 PHP library containing Unicode and UTF-8 methods, including the Unicode Bidirectional Algorithm.
 
-The initial source code has been extracted from TCPDF (<http://www.tcpdf.org>).
+The initial source code has been derived from [TCPDF](<http://www.tcpdf.org>).
 
 
 ## Getting started
@@ -75,7 +80,7 @@ Please check all the available options using `make help`.
 
 Examples are located in the `example` directory.
 
-Start a development server (requires PHP 5.5) using the command:
+Start a development server (requires PHP 5.4) using the command:
 
 ```
 make server

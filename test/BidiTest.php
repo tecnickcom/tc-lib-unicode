@@ -49,6 +49,7 @@ class BidiTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array('t', 'e', 's', 't'), $bidi->getChrArray());
         $this->assertEquals(array(116, 101, 115, 116), $bidi->getOrdArray());
         $this->assertEquals(array(116 => true, 101 => true, 115 => true), $bidi->getCharKeys());
+        $this->assertEquals(4, $bidi->getNumChars());
     }
 
     public function inputDataProvider()

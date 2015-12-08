@@ -107,13 +107,6 @@ class Bidi
     protected $arabic = false;
 
     /**
-     * Number of characters
-     *
-     * @var int
-     */
-    protected $numchars = 0;
-
-    /**
      * Array of character data
      *
      * @var array
@@ -166,7 +159,7 @@ class Bidi
      * @param array  $ordarr   Array of UTF-8 codepoints (if empty it will be generated from $str or $chrarr)
      * @param mixed  $forcertl If 'R' forces RTL, if 'L' forces LTR
      */
-    public function setInput($str = null, $chrarr = null, $ordarr = null, $forcertl = false)
+    protected function setInput($str = null, $chrarr = null, $ordarr = null, $forcertl = false)
     {
         if ($str === null) {
             if (empty($chrarr)) {
@@ -184,7 +177,6 @@ class Bidi
         $this->chrarr = $chrarr;
         $this->ordarr = $ordarr;
         $this->forcertl = (($forcertl === false) ? false : strtoupper($forcertl[0]));
-        $this->numchars = count($ordarr);
     }
 
     /**
@@ -208,6 +200,16 @@ class Bidi
             $this->bidichrarr = $this->conv->ordArrToChrArr($this->bidiordarr);
         }
         return $this->bidichrarr;
+    }
+
+    /**
+     * Returns the number of characters in the processed string
+     *
+     * @return int
+     */
+    public function getNumChars()
+    {
+        return count($this->getChrArray());
     }
 
     /**

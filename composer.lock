@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "474e8dafa525849c0dd1aace682d1c00",
-    "content-hash": "5c3affa238239aab2a07d13102aa2095",
+    "hash": "45d7b832aae6ca3d662cf25b7ca93740",
+    "content-hash": "21e6262615e46c7b14ba96360c32b2de",
     "packages": [
         {
             "name": "tecnickcom/tc-lib-unicode-data",
@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/tecnickcom/tc-lib-unicode-data.git",
-                "reference": "1c85d70250829709efc35486f616816e8405fbf9"
+                "reference": "5451aced73ab361c2d874d69269444ec449583ca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tecnickcom/tc-lib-unicode-data/zipball/1c85d70250829709efc35486f616816e8405fbf9",
-                "reference": "1c85d70250829709efc35486f616816e8405fbf9",
+                "url": "https://api.github.com/repos/tecnickcom/tc-lib-unicode-data/zipball/5451aced73ab361c2d874d69269444ec449583ca",
+                "reference": "5451aced73ab361c2d874d69269444ec449583ca",
                 "shasum": ""
             },
             "require": {
@@ -30,7 +30,7 @@
                 "pdepend/pdepend": "2.2.*",
                 "phploc/phploc": "2.1.*",
                 "phpmd/phpmd": "2.3.*",
-                "phpunit/phpunit": "4.8.19|5.*",
+                "phpunit/phpunit": "4.8.19",
                 "sebastian/phpcpd": "2.0.*",
                 "squizlabs/php_codesniffer": "2.3.*"
             },
@@ -59,10 +59,10 @@
                 "tc-lib-unicode-data"
             ],
             "support": {
-                "source": "https://github.com/tecnickcom/tc-lib-unicode-data/tree/1.4.22",
+                "source": "https://github.com/tecnickcom/tc-lib-unicode-data/tree/1.4.23",
                 "issues": "https://github.com/tecnickcom/tc-lib-unicode-data/issues"
             },
-            "time": "2015-12-10 19:27:51"
+            "time": "2015-12-10 20:42:00"
         }
     ],
     "packages-dev": [

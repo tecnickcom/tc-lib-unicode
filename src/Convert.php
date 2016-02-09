@@ -64,6 +64,13 @@ class Convert extends \Com\Tecnick\Unicode\Convert\Encoding
      */
     public function strToChrArr($str)
     {
+        static $hasNormalizerSupport;
+        if (!isset($hasNormalizerSupport)) {
+            $hasNormalizerSupport = function_exists('normalizer_normalize') && ("\xC3\x85" === normalizer_normalize("A\xCC\x8A"));
+        }
+        if ($hasNormalizerSupport) {
+            $str = normalizer_normalize($str);
+        }
         return preg_split('//u', $str, -1, PREG_SPLIT_NO_EMPTY);
     }
 

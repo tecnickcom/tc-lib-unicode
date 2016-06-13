@@ -3,7 +3,7 @@
     "description": "PHP library containing Unicode methods",
     "type": "library",
     "homepage": "http://www.tecnick.com",
-    "license": "GNU-LGPL v3",
+    "license": "LGPL-3.0",
     "keywords": ["tc-lib-unicode", "PDF", "font", "UTF-8"],
     "authors": [
         {

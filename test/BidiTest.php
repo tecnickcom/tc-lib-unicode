@@ -15,6 +15,8 @@
 
 namespace Test;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Bidi Test
  *
@@ -26,16 +28,18 @@ namespace Test;
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-unicode
  */
-class BidiTest extends \PHPUnit_Framework_TestCase
+class BidiTest extends TestCase
 {
     public function setUp()
     {
         //$this->markTestSkipped(); // skip this test
     }
     
+    /**
+     * @expectedException \Com\Tecnick\Unicode\Exception
+     */
     public function testException()
     {
-        $this->setExpectedException('\Com\Tecnick\Unicode\Exception');
         new \Com\Tecnick\Unicode\Bidi(null, null, null, false);
     }
 

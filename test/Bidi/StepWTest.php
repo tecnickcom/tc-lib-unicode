@@ -15,6 +15,8 @@
 
 namespace Test\Bidi;
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Bidi Test
  *
@@ -26,7 +28,7 @@ namespace Test\Bidi;
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-unicode
  */
-class StepWTest extends \PHPUnit_Framework_TestCase
+class StepWTest extends TestCase
 {
     public function setUp()
     {

@@ -166,13 +166,13 @@ class Bidi
                 $chrarr = $this->conv->ordArrToChrArr($ordarr);
             }
             $str = implode($chrarr);
-        } elseif (empty($chrarr)) {
+        }
+        if (empty($chrarr)) {
             $chrarr = $this->conv->strToChrArr($str);
         }
         if (empty($ordarr)) {
             $ordarr = $this->conv->chrArrToOrdArr($chrarr);
         }
-
         $this->str = $str;
         $this->chrarr = $chrarr;
         $this->ordarr = $ordarr;

@@ -99,15 +99,15 @@ Create a composer.json in your projects root-directory:
 ```json
 {
     "require": {
-        "tecnickcom/tc-lib-unicode": "dev-master"
-    },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@github.com:tecnickcom/tc-lib-unicode.git"
-        }
-    ]
+        "tecnickcom/tc-lib-unicode": "^1.3"
+    }
 }
+```
+
+Or add to an existing project with: 
+
+```bash
+composer require tecnickcom/tc-lib-unicode ^1.3
 ```
 
 

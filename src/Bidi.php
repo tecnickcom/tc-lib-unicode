@@ -176,7 +176,7 @@ class Bidi
         $this->str = $str;
         $this->chrarr = $chrarr;
         $this->ordarr = $ordarr;
-        $this->forcertl = (($forcertl === false) ? false : strtoupper($forcertl[0]));
+        $this->forcertl = (is_string($forcertl) ? strtoupper($forcertl[0]) : false);
     }
 
     /**

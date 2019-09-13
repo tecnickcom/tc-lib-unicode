@@ -86,7 +86,7 @@ class BidiTest extends TestCase
             array(
                 "\n\nABC\nEFG\n\nHIJ\n\n",
                 "\n\nABC\nEFG\n\nHIJ\n\n",
-                true
+                'L'
             ),
             array(
                 json_decode('"\u202EABC\u202C"'),

@@ -363,9 +363,11 @@ class StepX
         //          status, i.e. represent the scope of the matched isolate initiator. This cannot be the
         //          stack's first entry, which always belongs to the paragraph level and has a false
         //          directional status, so there is at least one more entry below it on the stack.)
-        while (($edss['dis'] === false) && (count($this->dss) > 1)) {
+        $count_dss = count($this->dss);
+        while (($edss['dis'] === false) && ($count_dss > 1)) {
             array_pop($this->dss);
             $edss = end($this->dss);
+            --$count_dss;
         }
         //        - Pop the last entry from the directional status stack and decrement the valid isolate
         //          count by one. (This terminates the scope of the matched isolate initiator. Since the

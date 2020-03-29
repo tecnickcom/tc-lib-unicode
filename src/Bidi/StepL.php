@@ -75,7 +75,6 @@ class StepL
         $this->numchars = count($this->chardata);
         $this->pel = $pel;
         $this->processL1();
-        $this->maxlevel = $this->getMaxLevel();
         $this->processL2();
     }
 
@@ -102,6 +101,10 @@ class StepL
     {
         for ($idx = 0; $idx < $this->numchars; ++$idx) {
             $this->processL1b($idx, $idx);
+
+            if ($this->chardata[$idx]['level'] > $this->maxlevel) {
+                $this->maxlevel = $this->chardata[$idx]['level'];
+            }
         }
     }
 
@@ -160,19 +163,5 @@ class StepL
             }
             $this->chardata = $ordered;
         }
-    }
-
-    /**
-     * @return int
-     */
-    private function getMaxLevel()
-    {
-        $maxLevel = 0;
-        foreach ($this->chardata as $char) {
-            if ($char['level'] > $maxLevel) {
-                $maxlevel = $char['level'];
-            }
-        }
-        return $maxlevel;
     }
 }

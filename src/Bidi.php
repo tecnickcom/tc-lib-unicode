@@ -17,7 +17,6 @@ namespace Com\Tecnick\Unicode;
 
 use \Com\Tecnick\Unicode\Exception as UnicodeException;
 
-use \Com\Tecnick\Unicode\Convert;
 use \Com\Tecnick\Unicode\Bidi\StepP;
 use \Com\Tecnick\Unicode\Bidi\StepX;
 use \Com\Tecnick\Unicode\Bidi\StepXten;
@@ -28,7 +27,6 @@ use \Com\Tecnick\Unicode\Bidi\Shaping;
 use \Com\Tecnick\Unicode\Bidi\StepL;
 use \Com\Tecnick\Unicode\Data\Pattern as UniPattern;
 use \Com\Tecnick\Unicode\Data\Type as UniType;
-use \Com\Tecnick\Unicode\Data\Constant as UniConstant;
 
 /**
  * Com\Tecnick\Unicode\Bidi
@@ -149,7 +147,7 @@ class Bidi
 
         $this->process();
     }
-    
+
 
     /**
      * Set Input data
@@ -243,7 +241,7 @@ class Bidi
      */
     protected function getParagraphs()
     {
-        
+
         $paragraph = array(0 => array());
         $pdx = 0; // paragraphs index
         foreach ($this->ordarr as $ord) {
@@ -282,7 +280,7 @@ class Bidi
                 }
                 $chardata = array_merge($chardata, $seq['item']);
             }
-            $stepl = new StepL($chardata, $pel, (isset($seq['maxlevel']) ? $seq['maxlevel'] : 0));
+            $stepl = new StepL($chardata, $pel);
             $chardata = $stepl->getChrData();
             foreach ($chardata as $chd) {
                 $this->bidiordarr[] = $chd['char'];

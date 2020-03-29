@@ -65,7 +65,7 @@ class StepL
      * @param array $chardata Array of characters data
      * @param int   $pel      Paragraph embedding level
      */
-    public function __construct($chardata, $pel, $maxlevel)
+    public function __construct($chardata, $pel)
     {
         // reorder chars by their original position
         usort($chardata, function ($apos, $bpos) {
@@ -74,8 +74,8 @@ class StepL
         $this->chardata = $chardata;
         $this->numchars = count($this->chardata);
         $this->pel = $pel;
-        $this->maxlevel = $maxlevel;
         $this->processL1();
+        $this->maxlevel = $this->getMaxLevel();
         $this->processL2();
     }
 
@@ -113,19 +113,17 @@ class StepL
      */
     protected function processL1b($idx, $jdx)
     {
-        if ($jdx >= $this->numchars) {
-            return;
-        }
-        if ((($this->chardata[$jdx]['otype'] == 'S') || ($this->chardata[$jdx]['otype'] == 'B'))
-            || (($jdx == ($this->numchars - 1)) && ($this->chardata[$jdx]['otype'] == 'WS'))
-        ) {
-            $this->chardata[$idx]['level'] = $this->pel;
-            return;
-        } elseif (($this->chardata[$jdx]['otype'] != 'WS')
-            && (($this->chardata[$idx]['char'] < UniConstant::LRI)
-            || ($this->chardata[$idx]['char'] > UniConstant::PDI))
-        ) {
-            return $this->processL1b($idx, ($jdx + 1));
+        if ($jdx < $this->numchars) {
+            if ((($this->chardata[$jdx]['otype'] == 'S') || ($this->chardata[$jdx]['otype'] == 'B'))
+                || (($jdx == ($this->numchars - 1)) && ($this->chardata[$jdx]['otype'] == 'WS'))
+            ) {
+                $this->chardata[$idx]['level'] = $this->pel;
+            } elseif (($this->chardata[$jdx]['otype'] != 'WS')
+                && (($this->chardata[$idx]['char'] < UniConstant::LRI)
+                    || ($this->chardata[$idx]['char'] > UniConstant::PDI))
+            ) {
+                $this->processL1b($idx, ($jdx + 1));
+            }
         }
     }
 
@@ -159,9 +157,22 @@ class StepL
             }
             if (!empty($reversed)) {
                 $ordered = array_merge($ordered, array_reverse($reversed));
-                $reversed = array();
             }
             $this->chardata = $ordered;
         }
+    }
+
+    /**
+     * @return int
+     */
+    private function getMaxLevel()
+    {
+        $maxLevel = 0;
+        foreach ($this->chardata as $char) {
+            if ($char['level'] > $maxLevel) {
+                $maxlevel = $char['level'];
+            }
+        }
+        return $maxlevel;
     }
 }

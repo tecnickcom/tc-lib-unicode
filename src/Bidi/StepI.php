@@ -33,7 +33,6 @@ class StepI extends \Com\Tecnick\Unicode\Bidi\StepBase
      */
     protected function process()
     {
-        $this->seq['maxlevel'] = 0;
         $this->processStep('processI');
     }
 
@@ -63,7 +62,5 @@ class StepI extends \Com\Tecnick\Unicode\Bidi\StepBase
                 $this->seq['item'][$idx]['level'] += 2;
             }
         }
-        // update the maximum level
-        $this->seq['maxlevel'] = max($this->seq['maxlevel'], $this->seq['item'][$idx]['level']);
     }
 }

@@ -30,11 +30,6 @@ use PHPUnit\Framework\TestCase;
  */
 class StepXTest extends TestCase
 {
-    public function setUp()
-    {
-        //$this->markTestSkipped(); // skip this test
-    }
-    
     /**
      * @dataProvider stepXDataProvider
      */

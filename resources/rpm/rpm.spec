@@ -18,7 +18,7 @@ BuildArch: noarch
 
 Requires:  php(language) >= 5.4.0
 Requires:  php-composer(%{c_vendor}/tc-lib-unicode-data) < 2.0.0
-Requires:  php-composer(%{c_vendor}/tc-lib-unicode-data) >= 1.6.11
+Requires:  php-composer(%{c_vendor}/tc-lib-unicode-data) >= 1.7.0
 Requires:  php-pcre
 Requires:  php-mbstring
 
@@ -29,7 +29,7 @@ Provides:  php-%{gh_project} = %{version}
 PHP library containing Unicode methods
 
 %build
-(cd %{_current_directory} && make build)
+#(cd %{_current_directory} && make build)
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -37,7 +37,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %clean
 rm -rf $RPM_BUILD_ROOT
-(cd %{_current_directory} && make clean)
+#(cd %{_current_directory} && make clean)
 
 %files
 %attr(-,root,root) %{_libpath}

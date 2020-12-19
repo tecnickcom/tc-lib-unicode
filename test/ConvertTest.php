@@ -30,12 +30,10 @@ use PHPUnit\Framework\TestCase;
  */
 class ConvertTest extends TestCase
 {
-    protected $obj = null;
 
-    public function setUp()
+    protected function getTestObject()
     {
-        //$this->markTestSkipped(); // skip this test
-        $this->obj = new \Com\Tecnick\Unicode\Convert();
+        return new \Com\Tecnick\Unicode\Convert();
     }
 
     /**
@@ -43,7 +41,8 @@ class ConvertTest extends TestCase
      */
     public function testChr($ord, $expected)
     {
-        $chr = $this->obj->chr($ord);
+        $testObj = $this->getTestObject();
+        $chr = $testObj->chr($ord);
         $this->assertEquals($expected, $chr);
     }
 
@@ -52,7 +51,8 @@ class ConvertTest extends TestCase
      */
     public function testOrd($expected, $chr)
     {
-        $ord = $this->obj->ord($chr);
+        $testObj = $this->getTestObject();
+        $ord = $testObj->ord($chr);
         $this->assertEquals($expected, $ord);
     }
 
@@ -77,39 +77,45 @@ class ConvertTest extends TestCase
 
     public function testStrToChrArr()
     {
-        $res = $this->obj->strToChrArr('0A¶ÿĀȠΔא台서');
+        $testObj = $this->getTestObject();
+        $res = $testObj->strToChrArr('0A¶ÿĀȠΔא台서');
         $this->assertEquals(array('0', 'A', '¶', 'ÿ', 'Ā', 'Ƞ', 'Δ', 'א', '台', '서'), $res);
     }
 
     public function testChrArrToOrdArr()
     {
-        $res = $this->obj->chrArrToOrdArr(array('0', 'A', '¶', 'ÿ', 'Ā', 'Ƞ', 'Δ', 'א', '台', '서'));
+        $testObj = $this->getTestObject();
+        $res = $testObj->chrArrToOrdArr(array('0', 'A', '¶', 'ÿ', 'Ā', 'Ƞ', 'Δ', 'א', '台', '서'));
         $this->assertEquals(array(48, 65, 182, 255, 256, 544, 916, 1488, 21488, 49436), $res);
     }
 
     public function testOrdArrToChrArr()
     {
-        $res = $this->obj->ordArrToChrArr(array(48, 65, 182, 255, 256, 544, 916, 1488, 21488, 49436));
+        $testObj = $this->getTestObject();
+        $res = $testObj->ordArrToChrArr(array(48, 65, 182, 255, 256, 544, 916, 1488, 21488, 49436));
         $this->assertEquals(array('0', 'A', '¶', 'ÿ', 'Ā', 'Ƞ', 'Δ', 'א', '台', '서'), $res);
     }
 
     public function testStrToOrdArr()
     {
-        $res = $this->obj->strToOrdArr('0A¶ÿĀȠΔא台서');
+        $testObj = $this->getTestObject();
+        $res = $testObj->strToOrdArr('0A¶ÿĀȠΔא台서');
         $this->assertEquals(array(48, 65, 182, 255, 256, 544, 916, 1488, 21488, 49436), $res);
     }
 
     public function testGetSubUniArrStr()
     {
-        $res = $this->obj->getSubUniArrStr(array('0', 'A', '¶', 'ÿ', 'Ā', 'Ƞ', 'Δ', 'א', '台', '서'));
+        $testObj = $this->getTestObject();
+        $res = $testObj->getSubUniArrStr(array('0', 'A', '¶', 'ÿ', 'Ā', 'Ƞ', 'Δ', 'א', '台', '서'));
         $this->assertEquals('0A¶ÿĀȠΔא台서', $res);
 
-        $res = $this->obj->getSubUniArrStr(array('0', 'A', '¶', 'ÿ', 'Ā', 'Ƞ', 'Δ', 'א', '台', '서'), 2, 8);
+        $res = $testObj->getSubUniArrStr(array('0', 'A', '¶', 'ÿ', 'Ā', 'Ƞ', 'Δ', 'א', '台', '서'), 2, 8);
         $this->assertEquals('¶ÿĀȠΔא', $res);
     }
 
     public function testUniArrToLatinArr()
     {
+        $testObj = $this->getTestObject();
         $uniarr = array_keys(\Com\Tecnick\Unicode\Data\Latin::$substitute);
         $uniarr[] = 65533;  // 0xFFFD - character to ignore
         $uniarr[] = 123456; // undefined char
@@ -117,13 +123,14 @@ class ConvertTest extends TestCase
         $latarr = array_values(\Com\Tecnick\Unicode\Data\Latin::$substitute);
         $latarr[] = 63;
         $latarr[] = 65;
-        $res = $this->obj->uniArrToLatinArr($uniarr);
+        $res = $testObj->uniArrToLatinArr($uniarr);
         $this->assertEquals($latarr, $res);
     }
 
     public function testLatinArrToStr()
     {
-        $res = $this->obj->latinArrToStr(array(48, 57, 65, 90, 97, 122));
+        $testObj = $this->getTestObject();
+        $res = $testObj->latinArrToStr(array(48, 57, 65, 90, 97, 122));
         $this->assertEquals('09AZaz', $res);
     }
 
@@ -132,7 +139,8 @@ class ConvertTest extends TestCase
      */
     public function testStrToHex($str, $hex)
     {
-        $res = $this->obj->strToHex($str);
+        $testObj = $this->getTestObject();
+        $res = $testObj->strToHex($str);
         $this->assertEquals($hex, $res);
     }
 
@@ -141,7 +149,8 @@ class ConvertTest extends TestCase
      */
     public function testHexToStr($str, $hex)
     {
-        $res = $this->obj->hexToStr($hex);
+        $testObj = $this->getTestObject();
+        $res = $testObj->hexToStr($hex);
         $this->assertEquals($str, $res);
     }
 
@@ -161,8 +170,9 @@ class ConvertTest extends TestCase
      */
     public function testToUTF16BE($str, $exp)
     {
-        $res = $this->obj->toUTF16BE($str);
-        $this->assertEquals($exp, $this->obj->strToHex($res));
+        $testObj = $this->getTestObject();
+        $res = $testObj->toUTF16BE($str);
+        $this->assertEquals($exp, $testObj->strToHex($res));
     }
 
     public function toUTF16BEDataProvider()
@@ -179,7 +189,8 @@ class ConvertTest extends TestCase
      */
     public function testToUTF8($str, $exp, $enc = null)
     {
-        $res = $this->obj->toUTF8($str, $enc);
+        $testObj = $this->getTestObject();
+        $res = $testObj->toUTF8($str, $enc);
         $this->assertEquals($exp, $res);
     }
 

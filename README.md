@@ -2,14 +2,10 @@
 *PHP library containing Unicode and UTF-8 methods, including the Unicode Bidirectional Algorithm*
 
 [![Latest Stable Version](https://poser.pugx.org/tecnickcom/tc-lib-unicode/version)](https://packagist.org/packages/tecnickcom/tc-lib-unicode)
-[![Master Build Status](https://secure.travis-ci.org/tecnickcom/tc-lib-unicode.png?branch=master)](https://travis-ci.org/tecnickcom/tc-lib-unicode?branch=master)
-[![Master Coverage Status](https://coveralls.io/repos/tecnickcom/tc-lib-unicode/badge.svg?branch=master&service=github)](https://coveralls.io/github/tecnickcom/tc-lib-unicode?branch=master)
+[![Master Build Status](https://secure.travis-ci.org/tecnickcom/tc-lib-unicode.png?branch=main)](https://travis-ci.org/tecnickcom/tc-lib-unicode?branch=main)
+[![Master Coverage Status](https://coveralls.io/repos/tecnickcom/tc-lib-unicode/badge.svg?branch=main&service=github)](https://coveralls.io/github/tecnickcom/tc-lib-unicode?branch=main)
 [![License](https://poser.pugx.org/tecnickcom/tc-lib-unicode/license)](https://packagist.org/packages/tecnickcom/tc-lib-unicode)
 [![Total Downloads](https://poser.pugx.org/tecnickcom/tc-lib-unicode/downloads)](https://packagist.org/packages/tecnickcom/tc-lib-unicode)
-
-[![Develop Branch](https://img.shields.io/badge/-develop:-gray.svg)](https://github.com/tecnickcom/tc-lib-unicode/tree/develop)
-[![Develop Build Status](https://secure.travis-ci.org/tecnickcom/tc-lib-unicode.png?branch=develop)](https://travis-ci.org/tecnickcom/tc-lib-unicode?branch=develop)
-[![Develop Coverage Status](https://coveralls.io/repos/tecnickcom/tc-lib-unicode/badge.svg?branch=develop&service=github)](https://coveralls.io/github/tecnickcom/tc-lib-unicode?branch=develop)
 
 [![Donate via PayPal](https://img.shields.io/badge/donate-paypal-87ceeb.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&currency_code=GBP&business=paypal@tecnick.com&item_name=donation%20for%20tc-lib-unicode%20project)
 *Please consider supporting this project by making a donation via [PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&currency_code=GBP&business=paypal@tecnick.com&item_name=donation%20for%20tc-lib-unicode%20project)*
@@ -17,7 +13,7 @@
 * **category**    Library
 * **package**     \Com\Tecnick\Unicode
 * **author**      Nicola Asuni <info@tecnick.com>
-* **copyright**   2011-2020 Nicola Asuni - Tecnick.com LTD
+* **copyright**   2011-2021 Nicola Asuni - Tecnick.com LTD
 * **license**     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
 * **link**        https://github.com/tecnickcom/tc-lib-unicode
 * **SRC DOC**     https://tcpdf.org/docs/srcdoc/tc-lib-unicode
@@ -50,7 +46,7 @@ make help
 To install all the development dependencies:
 
 ```bash
-make build_dev
+make deps
 ```
 
 ## Running all tests
@@ -58,25 +54,10 @@ make build_dev
 Before committing the code, please check if it passes all tests using
 
 ```bash
-make qa_all
-```
-this generates the phpunit coverage report in target/coverage.
-Please check if the tests are covering all code.
-
-Generate the documentation:
-
-```bash
-make docs
+make qa
 ```
 
-Generate static analysis reports in target/report:
-
-```bash
-make reports
-```
-
-Other make options allows you to install this library globally and build an RPM package.
-Please check all the available options using `make help`.
+All artifacts are generated in the target directory.
 
 
 ## Example
@@ -99,7 +80,7 @@ Create a composer.json in your projects root-directory:
 ```json
 {
     "require": {
-        "tecnickcom/tc-lib-unicode": "^1.3"
+        "tecnickcom/tc-lib-unicode": "^1.4"
     }
 }
 ```
@@ -107,7 +88,7 @@ Create a composer.json in your projects root-directory:
 Or add to an existing project with: 
 
 ```bash
-composer require tecnickcom/tc-lib-unicode ^1.3
+composer require tecnickcom/tc-lib-unicode ^1.4
 ```
 
 

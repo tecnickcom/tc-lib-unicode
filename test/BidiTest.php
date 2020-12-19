@@ -28,18 +28,11 @@ use PHPUnit\Framework\TestCase;
  * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link        https://github.com/tecnickcom/tc-lib-unicode
  */
-class BidiTest extends TestCase
+class BidiTest extends TestUtil
 {
-    public function setUp()
-    {
-        //$this->markTestSkipped(); // skip this test
-    }
-    
-    /**
-     * @expectedException \Com\Tecnick\Unicode\Exception
-     */
     public function testException()
     {
+        $this->bcExpectException('\Com\Tecnick\Unicode\Exception');
         new \Com\Tecnick\Unicode\Bidi(null, null, null, false);
     }
 

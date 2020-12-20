@@ -64,6 +64,7 @@ class StepL
      *
      * @param array $chardata Array of characters data
      * @param int   $pel      Paragraph embedding level
+     * @param int   $maxlevel Maximum level
      */
     public function __construct($chardata, $pel, $maxlevel)
     {
@@ -121,11 +122,12 @@ class StepL
         ) {
             $this->chardata[$idx]['level'] = $this->pel;
             return;
-        } elseif (($this->chardata[$jdx]['otype'] != 'WS')
+        }
+        if (($this->chardata[$jdx]['otype'] != 'WS')
             && (($this->chardata[$idx]['char'] < UniConstant::LRI)
             || ($this->chardata[$idx]['char'] > UniConstant::PDI))
         ) {
-            return $this->processL1b($idx, ($jdx + 1));
+            $this->processL1b($idx, ($jdx + 1));
         }
     }
 
@@ -159,7 +161,6 @@ class StepL
             }
             if (!empty($reversed)) {
                 $ordered = array_merge($ordered, array_reverse($reversed));
-                $reversed = array();
             }
             $this->chardata = $ordered;
         }

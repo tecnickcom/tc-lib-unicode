@@ -28,7 +28,6 @@ use \Com\Tecnick\Unicode\Bidi\Shaping;
 use \Com\Tecnick\Unicode\Bidi\StepL;
 use \Com\Tecnick\Unicode\Data\Pattern as UniPattern;
 use \Com\Tecnick\Unicode\Data\Type as UniType;
-use \Com\Tecnick\Unicode\Data\Constant as UniConstant;
 
 /**
  * Com\Tecnick\Unicode\Bidi
@@ -149,7 +148,6 @@ class Bidi
 
         $this->process();
     }
-    
 
     /**
      * Set Input data
@@ -243,7 +241,6 @@ class Bidi
      */
     protected function getParagraphs()
     {
-        
         $paragraph = array(0 => array());
         $pdx = 0; // paragraphs index
         foreach ($this->ordarr as $ord) {
@@ -271,6 +268,7 @@ class Bidi
             $stepx10 = new StepXten($stepx->getChrData(), $pel);
             $ilrs = $stepx10->getIsolatedLevelRunSequences();
             $chardata = array();
+            $maxlevel = 0;
             foreach ($ilrs as $seq) {
                 $stepw = new StepW($seq);
                 $stepn = new StepN($stepw->getSequence());
@@ -281,8 +279,11 @@ class Bidi
                     $seq = $shaping->getSequence();
                 }
                 $chardata = array_merge($chardata, $seq['item']);
+                if (isset($seq['maxlevel']) && ($seq['maxlevel'] > $maxlevel)) {
+                     $maxlevel = $seq['maxlevel'];
+                }
             }
-            $stepl = new StepL($chardata, $pel, (isset($seq['maxlevel']) ? $seq['maxlevel'] : 0));
+            $stepl = new StepL($chardata, $pel, $maxlevel);
             $chardata = $stepl->getChrData();
             foreach ($chardata as $chd) {
                 $this->bidiordarr[] = $chd['char'];

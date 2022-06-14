@@ -13,7 +13,7 @@
 * **category**    Library
 * **package**     \Com\Tecnick\Unicode
 * **author**      Nicola Asuni <info@tecnick.com>
-* **copyright**   2011-2021 Nicola Asuni - Tecnick.com LTD
+* **copyright**   2011-2022 Nicola Asuni - Tecnick.com LTD
 * **license**     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
 * **link**        https://github.com/tecnickcom/tc-lib-unicode
 * **SRC DOC**     https://tcpdf.org/docs/srcdoc/tc-lib-unicode

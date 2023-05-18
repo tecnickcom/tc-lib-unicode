@@ -39,7 +39,7 @@ class StepLTest extends TestCase
         $this->assertEquals($expected, $stepl->getChrData());
     }
 
-    public function stepLDataProvider()
+    public static function stepLDataProvider()
     {
         return array(
             array(

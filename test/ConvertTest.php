@@ -56,7 +56,7 @@ class ConvertTest extends TestCase
         $this->assertEquals($expected, $ord);
     }
 
-    public function chrDataProvider()
+    public static function chrDataProvider()
     {
         return array(
             array(32, ' '),
@@ -154,7 +154,7 @@ class ConvertTest extends TestCase
         $this->assertEquals($str, $res);
     }
 
-    public function strToHexDataProvider()
+    public static function strToHexDataProvider()
     {
         return array(
             array('', ''),
@@ -175,7 +175,7 @@ class ConvertTest extends TestCase
         $this->assertEquals($exp, $testObj->strToHex($res));
     }
 
-    public function toUTF16BEDataProvider()
+    public static function toUTF16BEDataProvider()
     {
         return array(
             array('', ''),
@@ -194,7 +194,7 @@ class ConvertTest extends TestCase
         $this->assertEquals($exp, $res);
     }
 
-    public function toUTF8DataProvider()
+    public static function toUTF8DataProvider()
     {
         return array(
             array('', ''),

@@ -49,7 +49,7 @@ class BidiTest extends TestUtil
         $this->assertEquals(4, $bidi->getNumChars());
     }
 
-    public function inputDataProvider()
+    public static function inputDataProvider()
     {
         return array(
             array('test', null, null, false),
@@ -73,7 +73,7 @@ class BidiTest extends TestUtil
         $this->assertEquals($expected, $bidi->getString());
     }
 
-    public function bidiStrDataProvider()
+    public static function bidiStrDataProvider()
     {
         return array(
             array(

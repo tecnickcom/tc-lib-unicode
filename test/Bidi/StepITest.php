@@ -39,7 +39,7 @@ class StepITest extends TestCase
         $this->assertEquals($expected, $stepi->getSequence());
     }
 
-    public function stepIDataProvider()
+    public static function stepIDataProvider()
     {
         return array(
             array(

@@ -39,7 +39,7 @@ class StepXtenTest extends TestCase
         $this->assertEquals($expected, $stepxten->getIsolatedLevelRunSequences());
     }
 
-    public function stepXtenDataProvider()
+    public static function stepXtenDataProvider()
     {
         return array(
             array(

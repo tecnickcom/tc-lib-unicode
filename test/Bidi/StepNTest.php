@@ -41,7 +41,7 @@ class StepNTest extends TestCase
         $this->assertEquals($expected, $stepn->getSequence());
     }
 
-    public function stepN0DataProvider()
+    public static function stepN0DataProvider()
     {
         return array(
             array(
@@ -435,7 +435,7 @@ class StepNTest extends TestCase
         $this->assertEquals($expected, $stepn->getSequence());
     }
 
-    public function stepN1DataProvider()
+    public static function stepN1DataProvider()
     {
         return array(
             array(
@@ -783,7 +783,7 @@ class StepNTest extends TestCase
         $this->assertEquals($expected, $stepn->getSequence());
     }
 
-    public function stepN2DataProvider()
+    public static function stepN2DataProvider()
     {
         return array(
             array(
@@ -824,7 +824,7 @@ class StepNTest extends TestCase
         $this->assertEquals($expected, $stepn->getSequence());
     }
 
-    public function stepNDataProvider()
+    public static function stepNDataProvider()
     {
         return array(
             array(

@@ -18,7 +18,7 @@ BuildArch: noarch
 
 Requires:  php(language) >= 5.4.0
 Requires:  php-composer(%{c_vendor}/tc-lib-unicode-data) < 2.0.0
-Requires:  php-composer(%{c_vendor}/tc-lib-unicode-data) >= 1.7.18
+Requires:  php-composer(%{c_vendor}/tc-lib-unicode-data) >= 1.7.19
 Requires:  php-pcre
 Requires:  php-mbstring
 

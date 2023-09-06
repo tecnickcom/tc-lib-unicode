@@ -86,6 +86,16 @@ class BidiTest extends TestUtil
                 'CBA'
             ),
             array(
+                'left to right',
+                'right to left',
+                'R'
+            ),
+            array(
+                'left to right ',
+                ' right to left',
+                'R'
+            ),
+            array(
                 json_decode('"smith (fabrikam \u0600\u0601\u0602) \u05de\u05d6\u05dc"'),
                 json_decode('"\u05dc\u05d6\u05de (\u0602\u0601\u0600 fabrikam) smith"'),
                 'R'

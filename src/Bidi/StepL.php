@@ -114,7 +114,7 @@ class StepL
      */
     protected function processL1b($idx, $jdx)
     {
-        if ($jdx >= $this->numchars) {
+        if ($jdx >= ($this->numchars - 1)) {
             return;
         }
         if ((($this->chardata[$jdx]['otype'] == 'S') || ($this->chardata[$jdx]['otype'] == 'B'))

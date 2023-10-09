@@ -1,4 +1,5 @@
 <?php
+
 /**
  * StepN.php
  *
@@ -15,7 +16,7 @@
 
 namespace Com\Tecnick\Unicode\Bidi;
 
-use \Com\Tecnick\Unicode\Data\Bracket as UniBracket;
+use Com\Tecnick\Unicode\Data\Bracket as UniBracket;
 
 /**
  * Com\Tecnick\Unicode\Bidi\StepN
@@ -35,14 +36,14 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
      *
      * @var array
      */
-    protected $brackets= array();
+    protected $brackets = array();
 
     /**
      * Stack used to store bracket positions
      *
      * @var array
      */
-    protected $bstack= array();
+    protected $bstack = array();
 
     /**
      * Process N steps

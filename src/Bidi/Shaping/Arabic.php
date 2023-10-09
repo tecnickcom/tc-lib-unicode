@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Arabic.php
  *
@@ -15,7 +16,7 @@
 
 namespace Com\Tecnick\Unicode\Bidi\Shaping;
 
-use \Com\Tecnick\Unicode\Data\Arabic as UniArabic;
+use Com\Tecnick\Unicode\Data\Arabic as UniArabic;
 
 /**
  * Com\Tecnick\Unicode\Bidi\Shaping\Arabic
@@ -37,7 +38,8 @@ abstract class Arabic
      */
     protected function isLaaLetter($prevchar, $thischar)
     {
-        if (($prevchar !== false)
+        if (
+            ($prevchar !== false)
             && ($prevchar['char'] == UniArabic::LAM)
             && (isset(UniArabic::$laa[$thischar['char']]))
         ) {
@@ -108,7 +110,7 @@ abstract class Arabic
             || (($nextchar !== false) && ($nextchar['char'] == UniArabic::QUESTION_MARK))
         );
     }
-    
+
     /**
      * Set initial or middle char
      *
@@ -131,7 +133,7 @@ abstract class Arabic
             }
         }
     }
-    
+
     /**
      * Set initial char
      *
@@ -145,7 +147,7 @@ abstract class Arabic
             $this->newchardata[$idx]['char'] = $arabicarr[$thischar['char']][2];
         }
     }
-    
+
     /**
      * Set final char
      *
@@ -156,7 +158,8 @@ abstract class Arabic
      */
     protected function setFinalChar($idx, $prevchar, $thischar, $arabicarr)
     {
-        if (($idx > 1)
+        if (
+            ($idx > 1)
             && ($thischar['char'] == UniArabic::HEH)
             && ($this->seq['item'][($idx - 1)]['char'] == UniArabic::LAM)
             && ($this->seq['item'][($idx - 2)]['char'] == UniArabic::LAM)
@@ -211,7 +214,7 @@ abstract class Arabic
             $this->newchardata[$idx]['char'] = $arabicarr[$thischar['char']][0];
         }
 
-        
+
         // if laa letter
         if ($laaletter) {
             // mark characters to delete with false

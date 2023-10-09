@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Shaping.php
  *
@@ -15,8 +16,8 @@
 
 namespace Com\Tecnick\Unicode\Bidi;
 
-use \Com\Tecnick\Unicode\Data\Constant as UniConstant;
-use \Com\Tecnick\Unicode\Data\Arabic as UniArabic;
+use Com\Tecnick\Unicode\Data\Constant as UniConstant;
+use Com\Tecnick\Unicode\Data\Arabic as UniArabic;
 
 /**
  * Com\Tecnick\Unicode\Bidi\Shaping
@@ -113,7 +114,8 @@ class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
     {
         $this->numalchars = 0;
         for ($idx = 0; $idx < $this->seq['length']; ++$idx) {
-            if (($this->seq['item'][$idx]['otype'] == 'AL')
+            if (
+                ($this->seq['item'][$idx]['otype'] == 'AL')
                 || ($this->seq['item'][$idx]['char'] == UniConstant::SPACE)
                 || ($this->seq['item'][$idx]['char'] == UniConstant::ZERO_WIDTH_NON_JOINER)
             ) {
@@ -134,7 +136,8 @@ class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
     {
         $last = ($this->seq['length'] - 1);
         for ($idx = 0; $idx < $last; ++$idx) {
-            if (($this->newchardata[$idx]['char'] == UniArabic::SHADDA)
+            if (
+                ($this->newchardata[$idx]['char'] == UniArabic::SHADDA)
                 && (isset(UniArabic::$diacritic[($this->newchardata[($idx + 1)]['char'])]))
             ) {
                 $this->newchardata[$idx]['char'] = false;

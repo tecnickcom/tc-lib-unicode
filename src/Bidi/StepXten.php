@@ -1,4 +1,5 @@
 <?php
+
 /**
  * StepXten.php
  *
@@ -15,7 +16,7 @@
 
 namespace Com\Tecnick\Unicode\Bidi;
 
-use \Com\Tecnick\Unicode\Data\Constant as UniConstant;
+use Com\Tecnick\Unicode\Data\Constant as UniConstant;
 
 /**
  * Com\Tecnick\Unicode\Bidi\StepXten
@@ -173,7 +174,8 @@ class StepXten
             if ($this->isIsolateInitiator($endchar)) {
                 // find the next sequence with the same level that starts with a PDI
                 for ($kdx = ($idx + 1); $kdx < $this->numrunseq; ++$kdx) {
-                    if (($this->runseq[$kdx]['e'] == $isorun['e'])
+                    if (
+                        ($this->runseq[$kdx]['e'] == $isorun['e'])
                         && ($this->chardata[$this->runseq[$kdx]['start']]['char'] == UniConstant::PDI)
                     ) {
                         $pdimatch = $this->runseq[$kdx]['start'];
@@ -232,7 +234,7 @@ class StepXten
                 $next = $this->chardata[($seq['end'] + 1)]['level'];
             }
             $this->ilrs[$key]['eos'] = $this->getEmbeddedDirection(($next > $lev) ? $next : $lev);
-            
+
             // If the higher level is odd, the sos or eos is R; otherwise, it is L.
         }
     }

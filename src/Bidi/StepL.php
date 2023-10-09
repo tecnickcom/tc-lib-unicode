@@ -1,4 +1,5 @@
 <?php
+
 /**
  * StepL.php
  *
@@ -15,8 +16,8 @@
 
 namespace Com\Tecnick\Unicode\Bidi;
 
-use \Com\Tecnick\Unicode\Data\Mirror as UniMirror;
-use \Com\Tecnick\Unicode\Data\Constant as UniConstant;
+use Com\Tecnick\Unicode\Data\Mirror as UniMirror;
+use Com\Tecnick\Unicode\Data\Constant as UniConstant;
 
 /**
  * Com\Tecnick\Unicode\Bidi\StepL
@@ -117,13 +118,15 @@ class StepL
         if ($jdx >= ($this->numchars - 1)) {
             return;
         }
-        if ((($this->chardata[$jdx]['otype'] == 'S') || ($this->chardata[$jdx]['otype'] == 'B'))
+        if (
+            (($this->chardata[$jdx]['otype'] == 'S') || ($this->chardata[$jdx]['otype'] == 'B'))
             || (($jdx == ($this->numchars - 1)) && ($this->chardata[$jdx]['otype'] == 'WS'))
         ) {
             $this->chardata[$idx]['level'] = $this->pel;
             return;
         }
-        if (($this->chardata[$jdx]['otype'] != 'WS')
+        if (
+            ($this->chardata[$jdx]['otype'] != 'WS')
             && (($this->chardata[$idx]['char'] < UniConstant::LRI)
             || ($this->chardata[$idx]['char'] > UniConstant::PDI))
         ) {

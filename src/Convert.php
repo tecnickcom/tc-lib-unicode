@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Convert.php
  *
@@ -15,7 +16,7 @@
 
 namespace Com\Tecnick\Unicode;
 
-use \Com\Tecnick\Unicode\Data\Latin as Latin;
+use Com\Tecnick\Unicode\Data\Latin as Latin;
 
 /**
  * Com\Tecnick\Unicode\Convert

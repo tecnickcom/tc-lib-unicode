@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ConvertTest.php
  *
@@ -30,7 +31,6 @@ use PHPUnit\Framework\TestCase;
  */
 class ConvertTest extends TestCase
 {
-
     protected function getTestObject()
     {
         return new \Com\Tecnick\Unicode\Convert();

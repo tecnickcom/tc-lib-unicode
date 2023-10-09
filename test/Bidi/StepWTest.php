@@ -1,4 +1,5 @@
 <?php
+
 /**
  * StepWTest.php
  *
@@ -74,7 +75,7 @@ class StepWTest extends TestCase
             ),
         );
     }
-    
+
     /**
      * @dataProvider stepW1DataProvider
      */

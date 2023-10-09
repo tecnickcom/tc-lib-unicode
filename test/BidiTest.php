@@ -1,4 +1,5 @@
 <?php
+
 /**
  * BidiTest.php
  *
@@ -121,8 +122,8 @@ class BidiTest extends TestUtil
             array(
                 json_decode(
                     '"\u0644\u0644\u0647 \u0600\u0601\u0602 \uFB50'
-                    .' \u0651\u064c\u0651\u064d\u0651\u064e\u0651\u064f\u0651\u0650'
-                    .' \u0644\u0622"'
+                    . ' \u0651\u064c\u0651\u064d\u0651\u064e\u0651\u064f\u0651\u0650'
+                    . ' \u0644\u0622"'
                 ),
                 json_decode('"\ufef5 \ufc62\ufc61\ufc60\ufc5f\ufc5e \ufb50 \u0602\u0601\u0600 \ufdf2"'),
             ),
@@ -133,8 +134,8 @@ class BidiTest extends TestUtil
             array( // RLI + PDI
                 json_decode(
                     '"The words '
-                    .'\"\u2067\u05de\u05d6\u05dc [mazel] \u05d8\u05d5\u05d1 [tov]\u2069\"'
-                    .' mean \"Congratulations!\""'
+                    . '\"\u2067\u05de\u05d6\u05dc [mazel] \u05d8\u05d5\u05d1 [tov]\u2069\"'
+                    . ' mean \"Congratulations!\""'
                 ),
                 'The words "⁧[tov] בוט [mazel] לזמ⁩" mean "Congratulations!"',
             ),

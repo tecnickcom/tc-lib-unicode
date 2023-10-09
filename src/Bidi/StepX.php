@@ -1,4 +1,5 @@
 <?php
+
 /**
  * StepX.php
  *
@@ -15,9 +16,9 @@
 
 namespace Com\Tecnick\Unicode\Bidi;
 
-use \Com\Tecnick\Unicode\Bidi\StepP;
-use \Com\Tecnick\Unicode\Data\Type as UniType;
-use \Com\Tecnick\Unicode\Data\Constant as UniConstant;
+use Com\Tecnick\Unicode\Bidi\StepP;
+use Com\Tecnick\Unicode\Data\Type as UniType;
+use Com\Tecnick\Unicode\Data\Constant as UniConstant;
 
 /**
  * Com\Tecnick\Unicode\Bidi\StepX
@@ -43,21 +44,21 @@ class StepX
      * @var array
      */
     protected $dss = array();
-    
+
     /**
      * Overflow Isolate Count
      *
      * @var int
      */
     protected $oic = 0;
-    
+
     /**
      * Overflow Embedding Count
      *
      * @var int
      */
     protected $oec = 0;
-    
+
     /**
      * Valid Isolate Count
      *

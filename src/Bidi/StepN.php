@@ -183,8 +183,6 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
      * @param int    $open  Open bracket entry
      * @param int    $close Close bracket entry
      * @param string $type  Type
-     *
-     * @return bool True if type has not been found
      */
     protected function setBracketsType($open, $close, $type)
     {

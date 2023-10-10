@@ -32,6 +32,34 @@ use Com\Tecnick\Unicode\Data\Arabic as UniArabic;
 abstract class Arabic
 {
     /**
+     * Sequence to process and return
+     *
+     * @var array
+     */
+    protected $seq = array();
+
+    /**
+     * Array of processed chars
+     *
+     * @var array
+     */
+    protected $newchardata = array();
+
+    /**
+     * Array of AL characters
+     *
+     * @var array
+     */
+    protected $alchars = array();
+
+    /**
+     * Number of AL characters
+     *
+     * @var int
+     */
+    protected $numalchars = 0;
+
+    /**
      * Check if it is a LAA LETTER
      *
      * @return bool

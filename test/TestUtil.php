@@ -34,7 +34,8 @@ class TestUtil extends TestCase
     public function bcExpectException($exception)
     {
         if (\is_callable([self::class, 'expectException'])) {
-            return parent::expectException($exception);
+            parent::expectException($exception);
+            return;
         }
         return parent::setExpectedException($exception);
     }

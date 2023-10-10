@@ -143,8 +143,6 @@ class StepXten
 
     /**
      * Set level Isolated Level Run Sequences
-     *
-     * @return array
      */
     protected function setIsolatedLevelRunSequences()
     {

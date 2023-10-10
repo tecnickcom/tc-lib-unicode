@@ -33,34 +33,6 @@ use Com\Tecnick\Unicode\Data\Arabic as UniArabic;
 class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
 {
     /**
-     * Sequence to process and return
-     *
-     * @var array
-     */
-    protected $seq = array();
-
-    /**
-     * Array of processed chars
-     *
-     * @var array
-     */
-    protected $newchardata = array();
-
-    /**
-     * Array of AL characters
-     *
-     * @var array
-     */
-    protected $alchars = array();
-
-    /**
-     * Number of AL characters
-     *
-     * @var int
-     */
-    protected $numalchars = 0;
-
-    /**
      * Shaping
      * Cursively connected scripts, such as Arabic or Syriac,
      * require the selection of positional character shapes that depend on adjacent characters.

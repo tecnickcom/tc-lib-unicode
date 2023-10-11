@@ -37,6 +37,7 @@ class TestUtil extends TestCase
             parent::expectException($exception);
             return;
         }
-        return parent::setExpectedException($exception);
+        /* @phpstan-ignore-next-line */
+        parent::setExpectedException($exception);
     }
 }

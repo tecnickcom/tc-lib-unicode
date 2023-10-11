@@ -224,7 +224,7 @@ class StepX
      * @param int    $ord     Char code
      * @param string $dos     Directional override status
      * @param bool   $dis     Directional isolate status
-     * @param string $isolate True if Isolate initiator
+     * @param string|bool $isolate True if Isolate initiator
      * @param int    $ivic    increment for the valid isolate count
      */
     protected function setDss($cel, $ord, $dos, $dis = false, $isolate = false, $ivic = 0)

@@ -79,8 +79,8 @@ abstract class Arabic
     /**
      * Check next char
      *
-     * @param int       $thischar Current char
-     * @param int|false $nextchar Next char
+     * @param array $thischar Current char
+     * @param array $nextchar Next char
      *
      * @return bool
      */
@@ -96,8 +96,8 @@ abstract class Arabic
     /**
      * Check previous char
      *
-     * @param int|false $prevchar Previous char
-     * @param int       $thischar Current char
+     * @param array $prevchar Previous char
+     * @param array $thischar Current char
      *
      * @return bool
      */
@@ -112,9 +112,9 @@ abstract class Arabic
     /**
      * Check if it is a middle character
      *
-     * @param int|false $prevchar Previous char
-     * @param int       $thischar Current char
-     * @param int|false $nextchar Next char
+     * @param array $prevchar Previous char
+     * @param array $thischar Current char
+     * @param array $nextchar Next char
      *
      * @return bool
      */
@@ -126,9 +126,9 @@ abstract class Arabic
     /**
      * Check if it is a final character
      *
-     * @param int|false $prevchar Previous char
-     * @param int       $thischar Current char
-     * @param int|false $nextchar Next char
+     * @param array $prevchar Previous char
+     * @param array $thischar Current char
+     * @param array $nextchar Next char
      *
      * @return bool
      */
@@ -142,10 +142,10 @@ abstract class Arabic
     /**
      * Set initial or middle char
      *
-     * @param int       $idx       Current index
-     * @param int|false $prevchar Previous char
-     * @param int       $thischar Current char
-     * @param array     $arabicarr Substitution array
+     * @param int   $idx       Current index
+     * @param array $prevchar  Previous char
+     * @param array $thischar  Current char
+     * @param array $arabicarr Substitution array
      */
     protected function setMiddleChar($idx, $prevchar, $thischar, $arabicarr)
     {
@@ -165,9 +165,9 @@ abstract class Arabic
     /**
      * Set initial char
      *
-     * @param int       $idx       Current index
-     * @param int       $thischar Current char
-     * @param array     $arabicarr Substitution array
+     * @param int   $idx       Current index
+     * @param array $thischar  Current char
+     * @param array $arabicarr Substitution array
      */
     protected function setInitialChar($idx, $thischar, $arabicarr)
     {
@@ -179,10 +179,10 @@ abstract class Arabic
     /**
      * Set final char
      *
-     * @param int       $idx       Current index
-     * @param int|false $prevchar  Previous char
-     * @param int       $thischar  Current char
-     * @param array     $arabicarr Substitution array
+     * @param int   $idx       Current index
+     * @param array $prevchar  Previous char
+     * @param array $thischar  Current char
+     * @param array $arabicarr Substitution array
      */
     protected function setFinalChar($idx, $prevchar, $thischar, $arabicarr)
     {
@@ -214,11 +214,11 @@ abstract class Arabic
     /**
      * Process AL character
      *
-     * @param int       $idx      Current index
-     * @param int       $pos      Current char position
-     * @param int|false $prevchar Previous char
-     * @param int       $thischar Current char
-     * @param int|false $nextchar Next char
+     * @param int   $idx      Current index
+     * @param int   $pos      Current char position
+     * @param array $prevchar Previous char
+     * @param array $thischar Current char
+     * @param array $nextchar Next char
      */
     protected function processAlChar($idx, $pos, $prevchar, $thischar, $nextchar)
     {

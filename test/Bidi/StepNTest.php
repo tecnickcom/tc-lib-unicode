@@ -3,13 +3,13 @@
 /**
  * StepNTest.php
  *
- * @since       2011-05-23
- * @category    Library
- * @package     Unicode
- * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2011-2023 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
- * @link        https://github.com/tecnickcom/tc-lib-unicode
+ * @since     2011-05-23
+ * @category  Library
+ * @package   Unicode
+ * @author    Nicola Asuni <info@tecnick.com>
+ * @copyright 2011-2023 Nicola Asuni - Tecnick.com LTD
+ * @license   http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @link      https://github.com/tecnickcom/tc-lib-unicode
  *
  * This file is part of tc-lib-unicode software library.
  */
@@ -21,20 +21,20 @@ use PHPUnit\Framework\TestCase;
 /**
  * Bidi Test
  *
- * @since       2011-05-23
- * @category    Library
- * @package     Unicode
- * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2011-2023 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
- * @link        https://github.com/tecnickcom/tc-lib-unicode
+ * @since     2011-05-23
+ * @category  Library
+ * @package   Unicode
+ * @author    Nicola Asuni <info@tecnick.com>
+ * @copyright 2011-2023 Nicola Asuni - Tecnick.com LTD
+ * @license   http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @link      https://github.com/tecnickcom/tc-lib-unicode
  */
 class StepNTest extends TestCase
 {
     /**
      * @dataProvider stepN0DataProvider
      */
-    public function testStepN0($seq, $expected)
+    public function testStepN0(array $seq, mixed $expected): void
     {
         $stepn = new \Com\Tecnick\Unicode\Bidi\StepN($seq, false);
         $stepn->processStep('getBracketPairs');
@@ -42,972 +42,1963 @@ class StepNTest extends TestCase
         $this->assertEquals($expected, $stepn->getSequence());
     }
 
-    public static function stepN0DataProvider()
+    public static function stepN0DataProvider(): array
     {
-        return array(
-            array(
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 4,
-                    'length' => 5,
-                    'sos' => 'L',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 8207,   'level' => 0, 'type' => 'R',  'otype' => 'R'),
-                        array('pos' => 1, 'char' => 0x3008, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
-                        array('pos' => 2, 'char' => 65,     'level' => 0, 'type' => 'L',  'otype' => 'L'),
-                        array('pos' => 3, 'char' => 0x3009, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
-                        array('pos' => 4, 'char' => 8207,   'level' => 0, 'type' => 'R',  'otype' => 'R'),
-                    ),
-                ),
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 4,
-                    'length' => 5,
-                    'sos' => 'L',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 8207,   'level' => 0, 'type' => 'R', 'otype' => 'R'),
-                        array('pos' => 1, 'char' => 0x3008, 'level' => 0, 'type' => 'L', 'otype' => 'ON'),
-                        array('pos' => 2, 'char' => 65,     'level' => 0, 'type' => 'L', 'otype' => 'L'),
-                        array('pos' => 3, 'char' => 0x3009, 'level' => 0, 'type' => 'L', 'otype' => 'ON'),
-                        array('pos' => 4, 'char' => 8207,   'level' => 0, 'type' => 'R', 'otype' => 'R'),
-                    ),
-                )
-            ),
-            array(
-                array(
-                    'e' => 1,
-                    'edir' => 'R',
-                    'start' => 0,
-                    'end' => 4,
-                    'length' => 5,
-                    'sos' => 'R',
-                    'eos' => 'R',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
-                        array('pos' => 1, 'char' => 91,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // [
-                        array('pos' => 2, 'char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
-                        array('pos' => 3, 'char' => 8207, 'level' => 1, 'type' => 'R',  'otype' => 'R'),
-                        array('pos' => 4, 'char' => 93,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // ]
-                    ),
-                ),
-                array(
-                    'e' => 1,
-                    'edir' => 'R',
-                    'start' => 0,
-                    'end' => 4,
-                    'length' => 5,
-                    'sos' => 'R',
-                    'eos' => 'R',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 65, 'level' => 1, 'type' => 'L', 'otype' => 'L'),
-                        array('pos' => 1, 'char' => 91, 'level' => 1, 'type' => 'R', 'otype' => 'ON'),
-                        array('pos' => 2, 'char' => 65, 'level' => 1, 'type' => 'L', 'otype' => 'L'),
-                        array('pos' => 3, 'char' => 8207, 'level' => 1, 'type' => 'R', 'otype' => 'R'),
-                        array('pos' => 4, 'char' => 93, 'level' => 1, 'type' => 'R', 'otype' => 'ON'),
-                    ),
-                )
-            ),
-            array(
-                array(
-                    'e' => 1,
-                    'edir' => 'R',
-                    'start' => 0,
-                    'end' => 4,
-                    'length' => 5,
-                    'sos' => 'R',
-                    'eos' => 'R',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
-                        array('pos' => 1, 'char' => 91,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // [
-                        array('pos' => 2, 'char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
-                        array('pos' => 3, 'char' => 8207, 'level' => 1, 'type' => 'R',  'otype' => 'R'),
-                        array('pos' => 4, 'char' => 93,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // ]
-                    ),
-                ),
-                array(
-                    'e' => 1,
-                    'edir' => 'R',
-                    'start' => 0,
-                    'end' => 4,
-                    'length' => 5,
-                    'sos' => 'R',
-                    'eos' => 'R',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 65, 'level' => 1, 'type' => 'L', 'otype' => 'L'),
-                        array('pos' => 1, 'char' => 91, 'level' => 1, 'type' => 'R', 'otype' => 'ON'),
-                        array('pos' => 2, 'char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
-                        array('pos' => 3, 'char' => 8207, 'level' => 1, 'type' => 'R', 'otype' => 'R'),
-                        array('pos' => 4, 'char' => 93, 'level' => 1, 'type' => 'R', 'otype' => 'ON'),
-                    ),
-                )
-            ),
-            array(
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 4,
-                    'length' => 5,
-                    'sos' => 'L',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
-                        array('pos' => 1, 'char' => 91,   'level' => 0, 'type' => 'ON', 'otype' => 'ON'), // [
-                        array('pos' => 2, 'char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
-                        array('pos' => 3, 'char' => 93,   'level' => 0, 'type' => 'ON', 'otype' => 'ON'), // ]
-                        array('pos' => 4, 'char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
-                    ),
-                ),
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 4,
-                    'length' => 5,
-                    'sos' => 'L',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
-                        array('pos' => 1, 'char' => 91, 'level' => 0, 'type' => 'R', 'otype' => 'ON'),
-                        array('pos' => 2, 'char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
-                        array('pos' => 3, 'char' => 93, 'level' => 0, 'type' => 'R', 'otype' => 'ON'),
-                        array('pos' => 4, 'char' => 65, 'level' => 0, 'type' => 'L', 'otype' => 'L'),
-                    ),
-                )
-            ),
-            array(
-                array(
-                    'e' => 1,
-                    'edir' => 'R',
-                    'start' => 0,
-                    'end' => 5,
-                    'length' => 6,
-                    'sos' => 'R',
-                    'eos' => 'R',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
-                        array('pos' => 1, 'char' => 91,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // [
-                        array('pos' => 2, 'char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
-                        array('pos' => 3, 'char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
-                        array('pos' => 4, 'char' => 93,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // ]
-                        array('pos' => 5, 'char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
-                    ),
-                ),
-                array(
-                    'e' => 1,
-                    'edir' => 'R',
-                    'start' => 0,
-                    'end' => 5,
-                    'length' => 6,
-                    'sos' => 'R',
-                    'eos' => 'R',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 65, 'level' => 1, 'type' => 'L', 'otype' => 'L'),
-                        array('pos' => 1, 'char' => 91, 'level' => 1, 'type' => 'L', 'otype' => 'ON'),
-                        array('pos' => 2, 'char' => 65, 'level' => 1, 'type' => 'L', 'otype' => 'L'),
-                        array('pos' => 3, 'char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
-                        array('pos' => 4, 'char' => 93, 'level' => 1, 'type' => 'L', 'otype' => 'ON'),
-                        array('pos' => 5, 'char' => 65, 'level' => 1, 'type' => 'L', 'otype' => 'L'),
-                    ),
-                )
-            ),
-            array(
-                array(
-                    'e' => 1,
-                    'edir' => 'R',
-                    'start' => 0,
-                    'end' => 4,
-                    'length' => 5,
-                    'sos' => 'R',
-                    'eos' => 'R',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 8207, 'level' => 1, 'type' => 'R',  'otype' => 'R'),
-                        array('pos' => 1, 'char' => 91,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // [
-                        array('pos' => 2, 'char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
-                        array('pos' => 3, 'char' => 93,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // ]
-                        array('pos' => 4, 'char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
-                    ),
-                ),
-                array(
-                    'e' => 1,
-                    'edir' => 'R',
-                    'start' => 0,
-                    'end' => 4,
-                    'length' => 5,
-                    'sos' => 'R',
-                    'eos' => 'R',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 8207, 'level' => 1, 'type' => 'R', 'otype' => 'R'),
-                        array('pos' => 1, 'char' => 91, 'level' => 1, 'type' => 'R', 'otype' => 'ON'),
-                        array('pos' => 2, 'char' => 65, 'level' => 1, 'type' => 'L', 'otype' => 'L'),
-                        array('pos' => 3, 'char' => 93, 'level' => 1, 'type' => 'R', 'otype' => 'ON'),
-                        array('pos' => 4, 'char' => 65, 'level' => 1, 'type' => 'L', 'otype' => 'L'),
-                    ),
-                )
-            ),
-            array(
-                array(
-                    'e' => 1,
-                    'edir' => 'R',
-                    'start' => 0,
-                    'end' => 4,
-                    'length' => 5,
-                    'sos' => 'R',
-                    'eos' => 'R',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 8207, 'level' => 1, 'type' => 'R',  'otype' => 'R'),
-                        array('pos' => 1, 'char' => 91,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // [
-                        array('pos' => 2, 'char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
-                        array('pos' => 3, 'char' => 93,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // ]
-                        array('pos' => 4, 'char' => 8207, 'level' => 1, 'type' => 'R',  'otype' => 'R'),
-                    ),
-                ),
-                array(
-                    'e' => 1,
-                    'edir' => 'R',
-                    'start' => 0,
-                    'end' => 4,
-                    'length' => 5,
-                    'sos' => 'R',
-                    'eos' => 'R',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 8207, 'level' => 1, 'type' => 'R', 'otype' => 'R'),
-                        array('pos' => 1, 'char' => 91, 'level' => 1, 'type' => 'R', 'otype' => 'ON'),
-                        array('pos' => 2, 'char' => 65, 'level' => 1, 'type' => 'L', 'otype' => 'L'),
-                        array('pos' => 3, 'char' => 93, 'level' => 1, 'type' => 'R', 'otype' => 'ON'),
-                        array('pos' => 4, 'char' => 8207, 'level' => 1, 'type' => 'R', 'otype' => 'R'),
-                    ),
-                )
-            ),
-            array(
-                array(
-                    'e' => 1,
-                    'edir' => 'R',
-                    'start' => 0,
-                    'end' => 4,
-                    'length' => 5,
-                    'sos' => 'R',
-                    'eos' => 'R',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 8207, 'level' => 1, 'type' => 'R',  'otype' => 'R'),
-                        array('pos' => 1, 'char' => 91,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // [
-                        array('pos' => 2, 'char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
-                        array('pos' => 3, 'char' => 93,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // ]
-                        array('pos' => 4, 'char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
-                    ),
-                ),
-                array(
-                    'e' => 1,
-                    'edir' => 'R',
-                    'start' => 0,
-                    'end' => 4,
-                    'length' => 5,
-                    'sos' => 'R',
-                    'eos' => 'R',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 8207, 'level' => 1, 'type' => 'R', 'otype' => 'R'),
-                        array('pos' => 1, 'char' => 91, 'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
-                        array('pos' => 2, 'char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
-                        array('pos' => 3, 'char' => 93, 'level' => 1, 'type' => 'ON', 'otype' => 'ON'),
-                        array('pos' => 4, 'char' => 65, 'level' => 1, 'type' => 'L', 'otype' => 'L'),
-                    ),
-                )
-            ),
-            array(
-                array(
-                    'e' => 1,
-                    'edir' => 'R',
-                    'start' => 0,
-                    'end' => 4,
-                    'length' => 5,
-                    'sos' => 'R',
-                    'eos' => 'R',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 8207, 'level' => 1, 'type' => 'R',  'otype' => 'R'),
-                        array('pos' => 1, 'char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
-                        array('pos' => 2, 'char' => 91,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // [
-                        array('pos' => 3, 'char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
-                        array('pos' => 4, 'char' => 93,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // ]
-                    ),
-                ),
-                array(
-                    'e' => 1,
-                    'edir' => 'R',
-                    'start' => 0,
-                    'end' => 4,
-                    'length' => 5,
-                    'sos' => 'R',
-                    'eos' => 'R',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 8207, 'level' => 1, 'type' => 'R',  'otype' => 'R'),
-                        array('pos' => 1, 'char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
-                        array('pos' => 2, 'char' => 91,   'level' => 1, 'type' => 'R',  'otype' => 'ON'),
-                        array('pos' => 3, 'char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
-                        array('pos' => 4, 'char' => 93,   'level' => 1, 'type' => 'R',  'otype' => 'ON'),
-                    ),
-                )
-            ),
-            array(
-                array(
-                    'e' => 1,
-                    'edir' => 'R',
-                    'start' => 0,
-                    'end' => 4,
-                    'length' => 5,
-                    'sos' => 'R',
-                    'eos' => 'R',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
-                        array('pos' => 1, 'char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
-                        array('pos' => 2, 'char' => 91,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // [
-                        array('pos' => 3, 'char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
-                        array('pos' => 4, 'char' => 93,   'level' => 1, 'type' => 'ON', 'otype' => 'ON'), // ]
-                    ),
-                ),
-                array(
-                    'e' => 1,
-                    'edir' => 'R',
-                    'start' => 0,
-                    'end' => 4,
-                    'length' => 5,
-                    'sos' => 'R',
-                    'eos' => 'R',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
-                        array('pos' => 1, 'char' => 5760, 'level' => 1, 'type' => 'NI', 'otype' => 'NI'),
-                        array('pos' => 2, 'char' => 91,   'level' => 1, 'type' => 'R',  'otype' => 'ON'),
-                        array('pos' => 3, 'char' => 65,   'level' => 1, 'type' => 'L',  'otype' => 'L'),
-                        array('pos' => 4, 'char' => 93,   'level' => 1, 'type' => 'R',  'otype' => 'ON'),
-                    ),
-                )
-            ),
-            array(
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 5,
-                    'length' => 6,
-                    'sos' => 'L',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 8207,   'level' => 0, 'type' => 'R',  'otype' => 'R'),
-                        array('pos' => 1, 'char' => 0x3008, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
-                        array('pos' => 2, 'char' => 65,     'level' => 0, 'type' => 'L',  'otype' => 'L'),
-                        array('pos' => 3, 'char' => 0x3009, 'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
-                        array('pos' => 4, 'char' => 1809,   'level' => 0, 'type' => 'NSM',  'otype' => 'NSM'),
-                        array('pos' => 5, 'char' => 1809,   'level' => 0, 'type' => 'NSM',  'otype' => 'NSM'),
-                    ),
-                ),
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 5,
-                    'length' => 6,
-                    'sos' => 'L',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 8207,   'level' => 0, 'type' => 'R', 'otype' => 'R'),
-                        array('pos' => 1, 'char' => 0x3008, 'level' => 0, 'type' => 'L', 'otype' => 'ON'),
-                        array('pos' => 2, 'char' => 65,     'level' => 0, 'type' => 'L', 'otype' => 'L'),
-                        array('pos' => 3, 'char' => 0x3009, 'level' => 0, 'type' => 'L', 'otype' => 'ON'),
-                        array('pos' => 4, 'char' => 1809,   'level' => 0, 'type' => 'L', 'otype' => 'NSM'),
-                        array('pos' => 5, 'char' => 1809,   'level' => 0, 'type' => 'L', 'otype' => 'NSM'),
-                    ),
-                )
-            ),
-        );
+        return [[[
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 4,
+            'length' => 5,
+            'sos' => 'L',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 8207,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'R',
+            ], [
+                'pos' => 1,
+                'char' => 0x3008,
+                'level' => 0,
+                'type' => 'ON',
+                'otype' => 'ON',
+            ], [
+                'pos' => 2,
+                'char' => 65,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'L',
+            ], [
+                'pos' => 3,
+                'char' => 0x3009,
+                'level' => 0,
+                'type' => 'ON',
+                'otype' => 'ON',
+            ], [
+                'pos' => 4,
+                'char' => 8207,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'R',
+            ]],
+        ], [
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 4,
+            'length' => 5,
+            'sos' => 'L',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 8207,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'R',
+            ], [
+                'pos' => 1,
+                'char' => 0x3008,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'ON',
+            ], [
+                'pos' => 2,
+                'char' => 65,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'L',
+            ], [
+                'pos' => 3,
+                'char' => 0x3009,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'ON',
+            ], [
+                'pos' => 4,
+                'char' => 8207,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'R',
+            ]],
+        ]], [[
+            'e' => 1,
+            'edir' => 'R',
+            'start' => 0,
+            'end' => 4,
+            'length' => 5,
+            'sos' => 'R',
+            'eos' => 'R',
+            'item' => [
+                [
+                    'pos' => 0,
+                    'char' => 65,
+                    'level' => 1,
+                    'type' => 'L',
+                    'otype' => 'L',
+                ],
+                [
+                    'pos' => 1,
+                    'char' => 91,
+                    'level' => 1,
+                    'type' => 'ON',
+                    'otype' => 'ON',
+                ],
+                // [
+                [
+                    'pos' => 2,
+                    'char' => 65,
+                    'level' => 1,
+                    'type' => 'L',
+                    'otype' => 'L',
+                ],
+                [
+                    'pos' => 3,
+                    'char' => 8207,
+                    'level' => 1,
+                    'type' => 'R',
+                    'otype' => 'R',
+                ],
+                [
+                    'pos' => 4,
+                    'char' => 93,
+                    'level' => 1,
+                    'type' => 'ON',
+                    'otype' => 'ON',
+                ],
+            ],
+        ], [
+            'e' => 1,
+            'edir' => 'R',
+            'start' => 0,
+            'end' => 4,
+            'length' => 5,
+            'sos' => 'R',
+            'eos' => 'R',
+            'item' => [[
+                'pos' => 0,
+                'char' => 65,
+                'level' => 1,
+                'type' => 'L',
+                'otype' => 'L',
+            ], [
+                'pos' => 1,
+                'char' => 91,
+                'level' => 1,
+                'type' => 'R',
+                'otype' => 'ON',
+            ], [
+                'pos' => 2,
+                'char' => 65,
+                'level' => 1,
+                'type' => 'L',
+                'otype' => 'L',
+            ], [
+                'pos' => 3,
+                'char' => 8207,
+                'level' => 1,
+                'type' => 'R',
+                'otype' => 'R',
+            ], [
+                'pos' => 4,
+                'char' => 93,
+                'level' => 1,
+                'type' => 'R',
+                'otype' => 'ON',
+            ]],
+        ]], [[
+            'e' => 1,
+            'edir' => 'R',
+            'start' => 0,
+            'end' => 4,
+            'length' => 5,
+            'sos' => 'R',
+            'eos' => 'R',
+            'item' => [
+                [
+                    'pos' => 0,
+                    'char' => 65,
+                    'level' => 1,
+                    'type' => 'L',
+                    'otype' => 'L',
+                ],
+                [
+                    'pos' => 1,
+                    'char' => 91,
+                    'level' => 1,
+                    'type' => 'ON',
+                    'otype' => 'ON',
+                ],
+                // [
+                [
+                    'pos' => 2,
+                    'char' => 5760,
+                    'level' => 1,
+                    'type' => 'NI',
+                    'otype' => 'NI',
+                ],
+                [
+                    'pos' => 3,
+                    'char' => 8207,
+                    'level' => 1,
+                    'type' => 'R',
+                    'otype' => 'R',
+                ],
+                [
+                    'pos' => 4,
+                    'char' => 93,
+                    'level' => 1,
+                    'type' => 'ON',
+                    'otype' => 'ON',
+                ],
+            ],
+        ], [
+            'e' => 1,
+            'edir' => 'R',
+            'start' => 0,
+            'end' => 4,
+            'length' => 5,
+            'sos' => 'R',
+            'eos' => 'R',
+            'item' => [[
+                'pos' => 0,
+                'char' => 65,
+                'level' => 1,
+                'type' => 'L',
+                'otype' => 'L',
+            ], [
+                'pos' => 1,
+                'char' => 91,
+                'level' => 1,
+                'type' => 'R',
+                'otype' => 'ON',
+            ], [
+                'pos' => 2,
+                'char' => 5760,
+                'level' => 1,
+                'type' => 'NI',
+                'otype' => 'NI',
+            ], [
+                'pos' => 3,
+                'char' => 8207,
+                'level' => 1,
+                'type' => 'R',
+                'otype' => 'R',
+            ], [
+                'pos' => 4,
+                'char' => 93,
+                'level' => 1,
+                'type' => 'R',
+                'otype' => 'ON',
+            ]],
+        ]], [[
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 4,
+            'length' => 5,
+            'sos' => 'L',
+            'eos' => 'L',
+            'item' => [
+                [
+                    'pos' => 0,
+                    'char' => 8207,
+                    'level' => 0,
+                    'type' => 'R',
+                    'otype' => 'R',
+                ],
+                [
+                    'pos' => 1,
+                    'char' => 91,
+                    'level' => 0,
+                    'type' => 'ON',
+                    'otype' => 'ON',
+                ],
+                // [
+                [
+                    'pos' => 2,
+                    'char' => 8207,
+                    'level' => 0,
+                    'type' => 'R',
+                    'otype' => 'R',
+                ],
+                [
+                    'pos' => 3,
+                    'char' => 93,
+                    'level' => 0,
+                    'type' => 'ON',
+                    'otype' => 'ON',
+                ],
+                // ]
+                [
+                    'pos' => 4,
+                    'char' => 65,
+                    'level' => 0,
+                    'type' => 'L',
+                    'otype' => 'L',
+                ],
+            ],
+        ], [
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 4,
+            'length' => 5,
+            'sos' => 'L',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 8207,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'R',
+            ], [
+                'pos' => 1,
+                'char' => 91,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'ON',
+            ], [
+                'pos' => 2,
+                'char' => 8207,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'R',
+            ], [
+                'pos' => 3,
+                'char' => 93,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'ON',
+            ], [
+                'pos' => 4,
+                'char' => 65,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'L',
+            ]],
+        ]], [[
+            'e' => 1,
+            'edir' => 'R',
+            'start' => 0,
+            'end' => 5,
+            'length' => 6,
+            'sos' => 'R',
+            'eos' => 'R',
+            'item' => [
+                [
+                    'pos' => 0,
+                    'char' => 65,
+                    'level' => 1,
+                    'type' => 'L',
+                    'otype' => 'L',
+                ],
+                [
+                    'pos' => 1,
+                    'char' => 91,
+                    'level' => 1,
+                    'type' => 'ON',
+                    'otype' => 'ON',
+                ],
+                // [
+                [
+                    'pos' => 2,
+                    'char' => 65,
+                    'level' => 1,
+                    'type' => 'L',
+                    'otype' => 'L',
+                ],
+                [
+                    'pos' => 3,
+                    'char' => 5760,
+                    'level' => 1,
+                    'type' => 'NI',
+                    'otype' => 'NI',
+                ],
+                [
+                    'pos' => 4,
+                    'char' => 93,
+                    'level' => 1,
+                    'type' => 'ON',
+                    'otype' => 'ON',
+                ],
+                // ]
+                [
+                    'pos' => 5,
+                    'char' => 65,
+                    'level' => 1,
+                    'type' => 'L',
+                    'otype' => 'L',
+                ],
+            ],
+        ], [
+            'e' => 1,
+            'edir' => 'R',
+            'start' => 0,
+            'end' => 5,
+            'length' => 6,
+            'sos' => 'R',
+            'eos' => 'R',
+            'item' => [[
+                'pos' => 0,
+                'char' => 65,
+                'level' => 1,
+                'type' => 'L',
+                'otype' => 'L',
+            ], [
+                'pos' => 1,
+                'char' => 91,
+                'level' => 1,
+                'type' => 'L',
+                'otype' => 'ON',
+            ], [
+                'pos' => 2,
+                'char' => 65,
+                'level' => 1,
+                'type' => 'L',
+                'otype' => 'L',
+            ], [
+                'pos' => 3,
+                'char' => 5760,
+                'level' => 1,
+                'type' => 'NI',
+                'otype' => 'NI',
+            ], [
+                'pos' => 4,
+                'char' => 93,
+                'level' => 1,
+                'type' => 'L',
+                'otype' => 'ON',
+            ], [
+                'pos' => 5,
+                'char' => 65,
+                'level' => 1,
+                'type' => 'L',
+                'otype' => 'L',
+            ]],
+        ]], [[
+            'e' => 1,
+            'edir' => 'R',
+            'start' => 0,
+            'end' => 4,
+            'length' => 5,
+            'sos' => 'R',
+            'eos' => 'R',
+            'item' => [
+                [
+                    'pos' => 0,
+                    'char' => 8207,
+                    'level' => 1,
+                    'type' => 'R',
+                    'otype' => 'R',
+                ],
+                [
+                    'pos' => 1,
+                    'char' => 91,
+                    'level' => 1,
+                    'type' => 'ON',
+                    'otype' => 'ON',
+                ],
+                // [
+                [
+                    'pos' => 2,
+                    'char' => 65,
+                    'level' => 1,
+                    'type' => 'L',
+                    'otype' => 'L',
+                ],
+                [
+                    'pos' => 3,
+                    'char' => 93,
+                    'level' => 1,
+                    'type' => 'ON',
+                    'otype' => 'ON',
+                ],
+                // ]
+                [
+                    'pos' => 4,
+                    'char' => 65,
+                    'level' => 1,
+                    'type' => 'L',
+                    'otype' => 'L',
+                ],
+            ],
+        ], [
+            'e' => 1,
+            'edir' => 'R',
+            'start' => 0,
+            'end' => 4,
+            'length' => 5,
+            'sos' => 'R',
+            'eos' => 'R',
+            'item' => [[
+                'pos' => 0,
+                'char' => 8207,
+                'level' => 1,
+                'type' => 'R',
+                'otype' => 'R',
+            ], [
+                'pos' => 1,
+                'char' => 91,
+                'level' => 1,
+                'type' => 'R',
+                'otype' => 'ON',
+            ], [
+                'pos' => 2,
+                'char' => 65,
+                'level' => 1,
+                'type' => 'L',
+                'otype' => 'L',
+            ], [
+                'pos' => 3,
+                'char' => 93,
+                'level' => 1,
+                'type' => 'R',
+                'otype' => 'ON',
+            ], [
+                'pos' => 4,
+                'char' => 65,
+                'level' => 1,
+                'type' => 'L',
+                'otype' => 'L',
+            ]],
+        ]], [[
+            'e' => 1,
+            'edir' => 'R',
+            'start' => 0,
+            'end' => 4,
+            'length' => 5,
+            'sos' => 'R',
+            'eos' => 'R',
+            'item' => [
+                [
+                    'pos' => 0,
+                    'char' => 8207,
+                    'level' => 1,
+                    'type' => 'R',
+                    'otype' => 'R',
+                ],
+                [
+                    'pos' => 1,
+                    'char' => 91,
+                    'level' => 1,
+                    'type' => 'ON',
+                    'otype' => 'ON',
+                ],
+                // [
+                [
+                    'pos' => 2,
+                    'char' => 65,
+                    'level' => 1,
+                    'type' => 'L',
+                    'otype' => 'L',
+                ],
+                [
+                    'pos' => 3,
+                    'char' => 93,
+                    'level' => 1,
+                    'type' => 'ON',
+                    'otype' => 'ON',
+                ],
+                // ]
+                [
+                    'pos' => 4,
+                    'char' => 8207,
+                    'level' => 1,
+                    'type' => 'R',
+                    'otype' => 'R',
+                ],
+            ],
+        ], [
+            'e' => 1,
+            'edir' => 'R',
+            'start' => 0,
+            'end' => 4,
+            'length' => 5,
+            'sos' => 'R',
+            'eos' => 'R',
+            'item' => [[
+                'pos' => 0,
+                'char' => 8207,
+                'level' => 1,
+                'type' => 'R',
+                'otype' => 'R',
+            ], [
+                'pos' => 1,
+                'char' => 91,
+                'level' => 1,
+                'type' => 'R',
+                'otype' => 'ON',
+            ], [
+                'pos' => 2,
+                'char' => 65,
+                'level' => 1,
+                'type' => 'L',
+                'otype' => 'L',
+            ], [
+                'pos' => 3,
+                'char' => 93,
+                'level' => 1,
+                'type' => 'R',
+                'otype' => 'ON',
+            ], [
+                'pos' => 4,
+                'char' => 8207,
+                'level' => 1,
+                'type' => 'R',
+                'otype' => 'R',
+            ]],
+        ]], [[
+            'e' => 1,
+            'edir' => 'R',
+            'start' => 0,
+            'end' => 4,
+            'length' => 5,
+            'sos' => 'R',
+            'eos' => 'R',
+            'item' => [
+                [
+                    'pos' => 0,
+                    'char' => 8207,
+                    'level' => 1,
+                    'type' => 'R',
+                    'otype' => 'R',
+                ],
+                [
+                    'pos' => 1,
+                    'char' => 91,
+                    'level' => 1,
+                    'type' => 'ON',
+                    'otype' => 'ON',
+                ],
+                // [
+                [
+                    'pos' => 2,
+                    'char' => 5760,
+                    'level' => 1,
+                    'type' => 'NI',
+                    'otype' => 'NI',
+                ],
+                [
+                    'pos' => 3,
+                    'char' => 93,
+                    'level' => 1,
+                    'type' => 'ON',
+                    'otype' => 'ON',
+                ],
+                // ]
+                [
+                    'pos' => 4,
+                    'char' => 65,
+                    'level' => 1,
+                    'type' => 'L',
+                    'otype' => 'L',
+                ],
+            ],
+        ], [
+            'e' => 1,
+            'edir' => 'R',
+            'start' => 0,
+            'end' => 4,
+            'length' => 5,
+            'sos' => 'R',
+            'eos' => 'R',
+            'item' => [[
+                'pos' => 0,
+                'char' => 8207,
+                'level' => 1,
+                'type' => 'R',
+                'otype' => 'R',
+            ], [
+                'pos' => 1,
+                'char' => 91,
+                'level' => 1,
+                'type' => 'ON',
+                'otype' => 'ON',
+            ], [
+                'pos' => 2,
+                'char' => 5760,
+                'level' => 1,
+                'type' => 'NI',
+                'otype' => 'NI',
+            ], [
+                'pos' => 3,
+                'char' => 93,
+                'level' => 1,
+                'type' => 'ON',
+                'otype' => 'ON',
+            ], [
+                'pos' => 4,
+                'char' => 65,
+                'level' => 1,
+                'type' => 'L',
+                'otype' => 'L',
+            ]],
+        ]], [[
+            'e' => 1,
+            'edir' => 'R',
+            'start' => 0,
+            'end' => 4,
+            'length' => 5,
+            'sos' => 'R',
+            'eos' => 'R',
+            'item' => [
+                [
+                    'pos' => 0,
+                    'char' => 8207,
+                    'level' => 1,
+                    'type' => 'R',
+                    'otype' => 'R',
+                ],
+                [
+                    'pos' => 1,
+                    'char' => 5760,
+                    'level' => 1,
+                    'type' => 'NI',
+                    'otype' => 'NI',
+                ],
+                [
+                    'pos' => 2,
+                    'char' => 91,
+                    'level' => 1,
+                    'type' => 'ON',
+                    'otype' => 'ON',
+                ],
+                // [
+                [
+                    'pos' => 3,
+                    'char' => 65,
+                    'level' => 1,
+                    'type' => 'L',
+                    'otype' => 'L',
+                ],
+                [
+                    'pos' => 4,
+                    'char' => 93,
+                    'level' => 1,
+                    'type' => 'ON',
+                    'otype' => 'ON',
+                ],
+            ],
+        ], [
+            'e' => 1,
+            'edir' => 'R',
+            'start' => 0,
+            'end' => 4,
+            'length' => 5,
+            'sos' => 'R',
+            'eos' => 'R',
+            'item' => [[
+                'pos' => 0,
+                'char' => 8207,
+                'level' => 1,
+                'type' => 'R',
+                'otype' => 'R',
+            ], [
+                'pos' => 1,
+                'char' => 5760,
+                'level' => 1,
+                'type' => 'NI',
+                'otype' => 'NI',
+            ], [
+                'pos' => 2,
+                'char' => 91,
+                'level' => 1,
+                'type' => 'R',
+                'otype' => 'ON',
+            ], [
+                'pos' => 3,
+                'char' => 65,
+                'level' => 1,
+                'type' => 'L',
+                'otype' => 'L',
+            ], [
+                'pos' => 4,
+                'char' => 93,
+                'level' => 1,
+                'type' => 'R',
+                'otype' => 'ON',
+            ]],
+        ]], [[
+            'e' => 1,
+            'edir' => 'R',
+            'start' => 0,
+            'end' => 4,
+            'length' => 5,
+            'sos' => 'R',
+            'eos' => 'R',
+            'item' => [
+                [
+                    'pos' => 0,
+                    'char' => 5760,
+                    'level' => 1,
+                    'type' => 'NI',
+                    'otype' => 'NI',
+                ],
+                [
+                    'pos' => 1,
+                    'char' => 5760,
+                    'level' => 1,
+                    'type' => 'NI',
+                    'otype' => 'NI',
+                ],
+                [
+                    'pos' => 2,
+                    'char' => 91,
+                    'level' => 1,
+                    'type' => 'ON',
+                    'otype' => 'ON',
+                ],
+                // [
+                [
+                    'pos' => 3,
+                    'char' => 65,
+                    'level' => 1,
+                    'type' => 'L',
+                    'otype' => 'L',
+                ],
+                [
+                    'pos' => 4,
+                    'char' => 93,
+                    'level' => 1,
+                    'type' => 'ON',
+                    'otype' => 'ON',
+                ],
+            ],
+        ], [
+            'e' => 1,
+            'edir' => 'R',
+            'start' => 0,
+            'end' => 4,
+            'length' => 5,
+            'sos' => 'R',
+            'eos' => 'R',
+            'item' => [[
+                'pos' => 0,
+                'char' => 5760,
+                'level' => 1,
+                'type' => 'NI',
+                'otype' => 'NI',
+            ], [
+                'pos' => 1,
+                'char' => 5760,
+                'level' => 1,
+                'type' => 'NI',
+                'otype' => 'NI',
+            ], [
+                'pos' => 2,
+                'char' => 91,
+                'level' => 1,
+                'type' => 'R',
+                'otype' => 'ON',
+            ], [
+                'pos' => 3,
+                'char' => 65,
+                'level' => 1,
+                'type' => 'L',
+                'otype' => 'L',
+            ], [
+                'pos' => 4,
+                'char' => 93,
+                'level' => 1,
+                'type' => 'R',
+                'otype' => 'ON',
+            ]],
+        ]], [[
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 5,
+            'length' => 6,
+            'sos' => 'L',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 8207,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'R',
+            ], [
+                'pos' => 1,
+                'char' => 0x3008,
+                'level' => 0,
+                'type' => 'ON',
+                'otype' => 'ON',
+            ], [
+                'pos' => 2,
+                'char' => 65,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'L',
+            ], [
+                'pos' => 3,
+                'char' => 0x3009,
+                'level' => 0,
+                'type' => 'ON',
+                'otype' => 'ON',
+            ], [
+                'pos' => 4,
+                'char' => 1809,
+                'level' => 0,
+                'type' => 'NSM',
+                'otype' => 'NSM',
+            ], [
+                'pos' => 5,
+                'char' => 1809,
+                'level' => 0,
+                'type' => 'NSM',
+                'otype' => 'NSM',
+            ]],
+        ], [
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 5,
+            'length' => 6,
+            'sos' => 'L',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 8207,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'R',
+            ], [
+                'pos' => 1,
+                'char' => 0x3008,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'ON',
+            ], [
+                'pos' => 2,
+                'char' => 65,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'L',
+            ], [
+                'pos' => 3,
+                'char' => 0x3009,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'ON',
+            ], [
+                'pos' => 4,
+                'char' => 1809,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'NSM',
+            ], [
+                'pos' => 5,
+                'char' => 1809,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'NSM',
+            ]],
+        ]]];
     }
 
     /**
      * @dataProvider stepN1DataProvider
      */
-    public function testStepN1($seq, $expected)
+    public function testStepN1(array $seq, mixed $expected): void
     {
         $stepn = new \Com\Tecnick\Unicode\Bidi\StepN($seq, false);
         $stepn->processStep('processN1');
         $this->assertEquals($expected, $stepn->getSequence());
     }
 
-    public static function stepN1DataProvider()
+    public static function stepN1DataProvider(): array
     {
-        return array(
-            array(
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 2,
-                    'length' => 3,
-                    'sos' => 'L',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
-                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('pos' => 2, 'char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
-                    ),
-                ),
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 2,
-                    'length' => 3,
-                    'sos' => 'L',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 65, 'level' => 0, 'type' => 'L', 'otype' => 'L'),
-                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
-                        array('pos' => 2, 'char' => 65, 'level' => 0, 'type' => 'L', 'otype' => 'L'),
-                    ),
-                )
-            ),
-            array(
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 2,
-                    'length' => 3,
-                    'sos' => 'L',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
-                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('pos' => 2, 'char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
-                    ),
-                ),
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 2,
-                    'length' => 3,
-                    'sos' => 'L',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
-                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'R', 'otype' => 'NI'),
-                        array('pos' => 2, 'char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
-                    ),
-                )
-            ),
-            array(
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 2,
-                    'length' => 3,
-                    'sos' => 'L',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
-                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('pos' => 2, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
-                    ),
-                ),
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 2,
-                    'length' => 3,
-                    'sos' => 'L',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
-                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'R', 'otype' => 'NI'),
-                        array('pos' => 2, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
-                    ),
-                )
-            ),
-            array(
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 2,
-                    'length' => 3,
-                    'sos' => 'L',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
-                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('pos' => 2, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
-                    ),
-                ),
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 2,
-                    'length' => 3,
-                    'sos' => 'L',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
-                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'R', 'otype' => 'NI'),
-                        array('pos' => 2, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
-                    ),
-                )
-            ),
-            array(
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 2,
-                    'length' => 3,
-                    'sos' => 'L',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
-                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('pos' => 2, 'char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
-                    ),
-                ),
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 2,
-                    'length' => 3,
-                    'sos' => 'L',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
-                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'R', 'otype' => 'NI'),
-                        array('pos' => 2, 'char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
-                    ),
-                )
-            ),
-            array(
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 2,
-                    'length' => 3,
-                    'sos' => 'L',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
-                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('pos' => 2, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
-                    ),
-                ),
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 2,
-                    'length' => 3,
-                    'sos' => 'L',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
-                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'R', 'otype' => 'NI'),
-                        array('pos' => 2, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
-                    ),
-                )
-            ),
-            array(
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 2,
-                    'length' => 3,
-                    'sos' => 'L',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
-                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('pos' => 2, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
-                    ),
-                ),
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 2,
-                    'length' => 3,
-                    'sos' => 'L',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
-                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'R', 'otype' => 'NI'),
-                        array('pos' => 2, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
-                    ),
-                )
-            ),
-            array(
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 2,
-                    'length' => 3,
-                    'sos' => 'L',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
-                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('pos' => 2, 'char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
-                    ),
-                ),
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 2,
-                    'length' => 3,
-                    'sos' => 'L',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
-                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'R', 'otype' => 'NI'),
-                        array('pos' => 2, 'char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
-                    ),
-                )
-            ),
-            array(
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 2,
-                    'length' => 3,
-                    'sos' => 'L',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
-                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('pos' => 2, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
-                    ),
-                ),
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 2,
-                    'length' => 3,
-                    'sos' => 'L',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
-                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'R', 'otype' => 'NI'),
-                        array('pos' => 2, 'char' => 1632, 'level' => 0, 'type' => 'AN', 'otype' => 'AN'),
-                    ),
-                )
-            ),
-            array(
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 2,
-                    'length' => 3,
-                    'sos' => 'L',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
-                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('pos' => 2, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
-                    ),
-                ),
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 2,
-                    'length' => 3,
-                    'sos' => 'L',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
-                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'R', 'otype' => 'NI'),
-                        array('pos' => 2, 'char' => 1776, 'level' => 0, 'type' => 'EN', 'otype' => 'EN'),
-                    ),
-                )
-            ),
-            array(
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 3,
-                    'length' => 4,
-                    'sos' => 'L',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
-                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('pos' => 2, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('pos' => 3, 'char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
-                    ),
-                ),
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 3,
-                    'length' => 4,
-                    'sos' => 'L',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 65,   'level' => 0, 'type' => 'L', 'otype' => 'L'),
-                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
-                        array('pos' => 2, 'char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
-                        array('pos' => 3, 'char' => 65,   'level' => 0, 'type' => 'L', 'otype' => 'L'),
-                    ),
-                )
-            ),
-        );
+        return [[[
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 2,
+            'length' => 3,
+            'sos' => 'L',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 65,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'L',
+            ], [
+                'pos' => 1,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'NI',
+                'otype' => 'NI',
+            ], [
+                'pos' => 2,
+                'char' => 65,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'L',
+            ]],
+        ], [
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 2,
+            'length' => 3,
+            'sos' => 'L',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 65,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'L',
+            ], [
+                'pos' => 1,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'NI',
+            ], [
+                'pos' => 2,
+                'char' => 65,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'L',
+            ]],
+        ]], [[
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 2,
+            'length' => 3,
+            'sos' => 'L',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 8207,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'R',
+            ], [
+                'pos' => 1,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'NI',
+                'otype' => 'NI',
+            ], [
+                'pos' => 2,
+                'char' => 8207,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'R',
+            ]],
+        ], [
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 2,
+            'length' => 3,
+            'sos' => 'L',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 8207,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'R',
+            ], [
+                'pos' => 1,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'NI',
+            ], [
+                'pos' => 2,
+                'char' => 8207,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'R',
+            ]],
+        ]], [[
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 2,
+            'length' => 3,
+            'sos' => 'L',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 8207,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'R',
+            ], [
+                'pos' => 1,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'NI',
+                'otype' => 'NI',
+            ], [
+                'pos' => 2,
+                'char' => 1632,
+                'level' => 0,
+                'type' => 'AN',
+                'otype' => 'AN',
+            ]],
+        ], [
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 2,
+            'length' => 3,
+            'sos' => 'L',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 8207,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'R',
+            ], [
+                'pos' => 1,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'NI',
+            ], [
+                'pos' => 2,
+                'char' => 1632,
+                'level' => 0,
+                'type' => 'AN',
+                'otype' => 'AN',
+            ]],
+        ]], [[
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 2,
+            'length' => 3,
+            'sos' => 'L',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 8207,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'R',
+            ], [
+                'pos' => 1,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'NI',
+                'otype' => 'NI',
+            ], [
+                'pos' => 2,
+                'char' => 1776,
+                'level' => 0,
+                'type' => 'EN',
+                'otype' => 'EN',
+            ]],
+        ], [
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 2,
+            'length' => 3,
+            'sos' => 'L',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 8207,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'R',
+            ], [
+                'pos' => 1,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'NI',
+            ], [
+                'pos' => 2,
+                'char' => 1776,
+                'level' => 0,
+                'type' => 'EN',
+                'otype' => 'EN',
+            ]],
+        ]], [[
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 2,
+            'length' => 3,
+            'sos' => 'L',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 1632,
+                'level' => 0,
+                'type' => 'AN',
+                'otype' => 'AN',
+            ], [
+                'pos' => 1,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'NI',
+                'otype' => 'NI',
+            ], [
+                'pos' => 2,
+                'char' => 8207,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'R',
+            ]],
+        ], [
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 2,
+            'length' => 3,
+            'sos' => 'L',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 1632,
+                'level' => 0,
+                'type' => 'AN',
+                'otype' => 'AN',
+            ], [
+                'pos' => 1,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'NI',
+            ], [
+                'pos' => 2,
+                'char' => 8207,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'R',
+            ]],
+        ]], [[
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 2,
+            'length' => 3,
+            'sos' => 'L',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 1632,
+                'level' => 0,
+                'type' => 'AN',
+                'otype' => 'AN',
+            ], [
+                'pos' => 1,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'NI',
+                'otype' => 'NI',
+            ], [
+                'pos' => 2,
+                'char' => 1632,
+                'level' => 0,
+                'type' => 'AN',
+                'otype' => 'AN',
+            ]],
+        ], [
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 2,
+            'length' => 3,
+            'sos' => 'L',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 1632,
+                'level' => 0,
+                'type' => 'AN',
+                'otype' => 'AN',
+            ], [
+                'pos' => 1,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'NI',
+            ], [
+                'pos' => 2,
+                'char' => 1632,
+                'level' => 0,
+                'type' => 'AN',
+                'otype' => 'AN',
+            ]],
+        ]], [[
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 2,
+            'length' => 3,
+            'sos' => 'L',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 1632,
+                'level' => 0,
+                'type' => 'AN',
+                'otype' => 'AN',
+            ], [
+                'pos' => 1,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'NI',
+                'otype' => 'NI',
+            ], [
+                'pos' => 2,
+                'char' => 1776,
+                'level' => 0,
+                'type' => 'EN',
+                'otype' => 'EN',
+            ]],
+        ], [
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 2,
+            'length' => 3,
+            'sos' => 'L',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 1632,
+                'level' => 0,
+                'type' => 'AN',
+                'otype' => 'AN',
+            ], [
+                'pos' => 1,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'NI',
+            ], [
+                'pos' => 2,
+                'char' => 1776,
+                'level' => 0,
+                'type' => 'EN',
+                'otype' => 'EN',
+            ]],
+        ]], [[
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 2,
+            'length' => 3,
+            'sos' => 'L',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 1776,
+                'level' => 0,
+                'type' => 'EN',
+                'otype' => 'EN',
+            ], [
+                'pos' => 1,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'NI',
+                'otype' => 'NI',
+            ], [
+                'pos' => 2,
+                'char' => 8207,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'R',
+            ]],
+        ], [
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 2,
+            'length' => 3,
+            'sos' => 'L',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 1776,
+                'level' => 0,
+                'type' => 'EN',
+                'otype' => 'EN',
+            ], [
+                'pos' => 1,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'NI',
+            ], [
+                'pos' => 2,
+                'char' => 8207,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'R',
+            ]],
+        ]], [[
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 2,
+            'length' => 3,
+            'sos' => 'L',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 1776,
+                'level' => 0,
+                'type' => 'EN',
+                'otype' => 'EN',
+            ], [
+                'pos' => 1,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'NI',
+                'otype' => 'NI',
+            ], [
+                'pos' => 2,
+                'char' => 1632,
+                'level' => 0,
+                'type' => 'AN',
+                'otype' => 'AN',
+            ]],
+        ], [
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 2,
+            'length' => 3,
+            'sos' => 'L',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 1776,
+                'level' => 0,
+                'type' => 'EN',
+                'otype' => 'EN',
+            ], [
+                'pos' => 1,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'NI',
+            ], [
+                'pos' => 2,
+                'char' => 1632,
+                'level' => 0,
+                'type' => 'AN',
+                'otype' => 'AN',
+            ]],
+        ]], [[
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 2,
+            'length' => 3,
+            'sos' => 'L',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 1776,
+                'level' => 0,
+                'type' => 'EN',
+                'otype' => 'EN',
+            ], [
+                'pos' => 1,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'NI',
+                'otype' => 'NI',
+            ], [
+                'pos' => 2,
+                'char' => 1776,
+                'level' => 0,
+                'type' => 'EN',
+                'otype' => 'EN',
+            ]],
+        ], [
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 2,
+            'length' => 3,
+            'sos' => 'L',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 1776,
+                'level' => 0,
+                'type' => 'EN',
+                'otype' => 'EN',
+            ], [
+                'pos' => 1,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'NI',
+            ], [
+                'pos' => 2,
+                'char' => 1776,
+                'level' => 0,
+                'type' => 'EN',
+                'otype' => 'EN',
+            ]],
+        ]], [[
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 3,
+            'length' => 4,
+            'sos' => 'L',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 65,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'L',
+            ], [
+                'pos' => 1,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'NI',
+                'otype' => 'NI',
+            ], [
+                'pos' => 2,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'NI',
+                'otype' => 'NI',
+            ], [
+                'pos' => 3,
+                'char' => 65,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'L',
+            ]],
+        ], [
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 3,
+            'length' => 4,
+            'sos' => 'L',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 65,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'L',
+            ], [
+                'pos' => 1,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'NI',
+            ], [
+                'pos' => 2,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'NI',
+            ], [
+                'pos' => 3,
+                'char' => 65,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'L',
+            ]],
+        ]]];
     }
 
     /**
      * @dataProvider stepN2DataProvider
      */
-    public function testStepN2($seq, $expected)
+    public function testStepN2(array $seq, mixed $expected): void
     {
         $stepn = new \Com\Tecnick\Unicode\Bidi\StepN($seq, false);
         $stepn->processStep('processN2');
         $this->assertEquals($expected, $stepn->getSequence());
     }
 
-    public static function stepN2DataProvider()
+    public static function stepN2DataProvider(): array
     {
-        return array(
-            array(
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 1,
-                    'length' => 1,
-                    'sos' => 'L',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                    ),
-                ),
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 1,
-                    'length' => 1,
-                    'sos' => 'L',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
-                    ),
-                )
-            ),
-        );
+        return [[[
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 1,
+            'length' => 1,
+            'sos' => 'L',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'NI',
+                'otype' => 'NI',
+            ]],
+        ], [
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 1,
+            'length' => 1,
+            'sos' => 'L',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'NI',
+            ]],
+        ]]];
     }
 
     /**
      * @dataProvider stepNDataProvider
      */
-    public function testStepN($seq, $expected)
+    public function testStepN(array $seq, mixed $expected): void
     {
         $stepn = new \Com\Tecnick\Unicode\Bidi\StepN($seq);
         $this->assertEquals($expected, $stepn->getSequence());
     }
 
-    public static function stepNDataProvider()
+    public static function stepNDataProvider(): array
     {
-        return array(
-            array(
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 2,
-                    'length' => 3,
-                    'sos' => 'R',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
-                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('pos' => 2, 'char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
-                    ),
-                ),
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 2,
-                    'length' => 3,
-                    'sos' => 'R',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 65, 'level' => 0, 'type' => 'L', 'otype' => 'L'),
-                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
-                        array('pos' => 2, 'char' => 65, 'level' => 0, 'type' => 'L', 'otype' => 'L'),
-                    ),
-                )
-            ),
-            array(
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 2,
-                    'length' => 3,
-                    'sos' => 'R',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
-                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('pos' => 2, 'char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
-                    ),
-                ),
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 2,
-                    'length' => 3,
-                    'sos' => 'R',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
-                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
-                        array('pos' => 2, 'char' => 65, 'level' => 0, 'type' => 'L', 'otype' => 'L'),
-                    ),
-                )
-            ),
-            array(
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 2,
-                    'length' => 3,
-                    'sos' => 'R',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 65,   'level' => 0, 'type' => 'L',  'otype' => 'L'),
-                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('pos' => 2, 'char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
-                    ),
-                ),
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 2,
-                    'length' => 3,
-                    'sos' => 'R',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 65, 'level' => 0, 'type' => 'L', 'otype' => 'L'),
-                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
-                        array('pos' => 2, 'char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
-                    ),
-                )
-            ),
-            array(
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 2,
-                    'length' => 3,
-                    'sos' => 'R',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
-                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('pos' => 2, 'char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
-                    ),
-                ),
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 2,
-                    'length' => 3,
-                    'sos' => 'R',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
-                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'R', 'otype' => 'NI'),
-                        array('pos' => 2, 'char' => 8207, 'level' => 0, 'type' => 'R', 'otype' => 'R'),
-                    ),
-                )
-            ),
-            array(
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 2,
-                    'length' => 3,
-                    'sos' => 'R',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('pos' => 1, 'char' => 91,   'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
-                        array('pos' => 2, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                    ),
-                ),
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 2,
-                    'length' => 3,
-                    'sos' => 'R',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
-                        array('pos' => 1, 'char' => 91,   'level' => 0, 'type' => 'ON', 'otype' => 'ON'),
-                        array('pos' => 2, 'char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
-                    ),
-                )
-            ),
-            array(
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 2,
-                    'length' => 3,
-                    'sos' => 'R',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
-                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                        array('pos' => 2, 'char' => 5760, 'level' => 0, 'type' => 'NI', 'otype' => 'NI'),
-                    ),
-                ),
-                array(
-                    'e' => 0,
-                    'edir' => 'L',
-                    'start' => 0,
-                    'end' => 2,
-                    'length' => 3,
-                    'sos' => 'R',
-                    'eos' => 'L',
-                    'item' => array(
-                        array('pos' => 0, 'char' => 8207, 'level' => 0, 'type' => 'R',  'otype' => 'R'),
-                        array('pos' => 1, 'char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
-                        array('pos' => 2, 'char' => 5760, 'level' => 0, 'type' => 'L', 'otype' => 'NI'),
-                    ),
-                )
-            ),
-        );
+        return [[[
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 2,
+            'length' => 3,
+            'sos' => 'R',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 65,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'L',
+            ], [
+                'pos' => 1,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'NI',
+                'otype' => 'NI',
+            ], [
+                'pos' => 2,
+                'char' => 65,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'L',
+            ]],
+        ], [
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 2,
+            'length' => 3,
+            'sos' => 'R',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 65,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'L',
+            ], [
+                'pos' => 1,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'NI',
+            ], [
+                'pos' => 2,
+                'char' => 65,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'L',
+            ]],
+        ]], [[
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 2,
+            'length' => 3,
+            'sos' => 'R',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 8207,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'R',
+            ], [
+                'pos' => 1,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'NI',
+                'otype' => 'NI',
+            ], [
+                'pos' => 2,
+                'char' => 65,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'L',
+            ]],
+        ], [
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 2,
+            'length' => 3,
+            'sos' => 'R',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 8207,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'R',
+            ], [
+                'pos' => 1,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'NI',
+            ], [
+                'pos' => 2,
+                'char' => 65,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'L',
+            ]],
+        ]], [[
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 2,
+            'length' => 3,
+            'sos' => 'R',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 65,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'L',
+            ], [
+                'pos' => 1,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'NI',
+                'otype' => 'NI',
+            ], [
+                'pos' => 2,
+                'char' => 8207,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'R',
+            ]],
+        ], [
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 2,
+            'length' => 3,
+            'sos' => 'R',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 65,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'L',
+            ], [
+                'pos' => 1,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'NI',
+            ], [
+                'pos' => 2,
+                'char' => 8207,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'R',
+            ]],
+        ]], [[
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 2,
+            'length' => 3,
+            'sos' => 'R',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 8207,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'R',
+            ], [
+                'pos' => 1,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'NI',
+                'otype' => 'NI',
+            ], [
+                'pos' => 2,
+                'char' => 8207,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'R',
+            ]],
+        ], [
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 2,
+            'length' => 3,
+            'sos' => 'R',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 8207,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'R',
+            ], [
+                'pos' => 1,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'NI',
+            ], [
+                'pos' => 2,
+                'char' => 8207,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'R',
+            ]],
+        ]], [[
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 2,
+            'length' => 3,
+            'sos' => 'R',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'NI',
+                'otype' => 'NI',
+            ], [
+                'pos' => 1,
+                'char' => 91,
+                'level' => 0,
+                'type' => 'ON',
+                'otype' => 'ON',
+            ], [
+                'pos' => 2,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'NI',
+                'otype' => 'NI',
+            ]],
+        ], [
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 2,
+            'length' => 3,
+            'sos' => 'R',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'NI',
+            ], [
+                'pos' => 1,
+                'char' => 91,
+                'level' => 0,
+                'type' => 'ON',
+                'otype' => 'ON',
+            ], [
+                'pos' => 2,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'NI',
+            ]],
+        ]], [[
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 2,
+            'length' => 3,
+            'sos' => 'R',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 8207,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'R',
+            ], [
+                'pos' => 1,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'NI',
+                'otype' => 'NI',
+            ], [
+                'pos' => 2,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'NI',
+                'otype' => 'NI',
+            ]],
+        ], [
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 2,
+            'length' => 3,
+            'sos' => 'R',
+            'eos' => 'L',
+            'item' => [[
+                'pos' => 0,
+                'char' => 8207,
+                'level' => 0,
+                'type' => 'R',
+                'otype' => 'R',
+            ], [
+                'pos' => 1,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'NI',
+            ], [
+                'pos' => 2,
+                'char' => 5760,
+                'level' => 0,
+                'type' => 'L',
+                'otype' => 'NI',
+            ]],
+        ]]];
     }
 }

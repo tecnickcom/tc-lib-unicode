@@ -3,13 +3,13 @@
 /**
  * StepXten.php
  *
- * @since       2011-05-23
- * @category    Library
- * @package     Unicode
- * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2011-2023 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
- * @link        https://github.com/tecnickcom/tc-lib-unicode
+ * @since     2011-05-23
+ * @category  Library
+ * @package   Unicode
+ * @author    Nicola Asuni <info@tecnick.com>
+ * @copyright 2011-2023 Nicola Asuni - Tecnick.com LTD
+ * @license   http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @link      https://github.com/tecnickcom/tc-lib-unicode
  *
  * This file is part of tc-lib-unicode software library.
  */
@@ -21,98 +21,110 @@ use Com\Tecnick\Unicode\Data\Constant as UniConstant;
 /**
  * Com\Tecnick\Unicode\Bidi\StepXten
  *
- * @since       2015-07-13
- * @category    Library
- * @package     Unicode
- * @author      Nicola Asuni <info@tecnick.com>
- * @copyright   2011-2023 Nicola Asuni - Tecnick.com LTD
- * @license     http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
- * @link        https://github.com/tecnickcom/tc-lib-unicode
+ * @since     2015-07-13
+ * @category  Library
+ * @package   Unicode
+ * @author    Nicola Asuni <info@tecnick.com>
+ * @copyright 2011-2023 Nicola Asuni - Tecnick.com LTD
+ * @license   http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @link      https://github.com/tecnickcom/tc-lib-unicode
  */
 class StepXten
 {
     /**
-     * Array of characters data to return
-     *
-     * @var array
-     */
-    protected $chardata = array();
-
-    /**
-     * Paragraph Embedding Level
-     *
-     * @var int
-     */
-    protected $pel = 0;
-
-    /**
      * Number of characters
-     *
-     * @var int
      */
-    protected $numchars = 0;
+    protected int $numchars;
 
     /**
      * Array of Level Run sequences
      *
-     * @var array
+     * @var array<int, array{'start': int, 'end': int, 'e': int}>
      */
-    protected $runseq = array();
+    protected array $runseq = [];
 
     /**
      * Number of Level Run sequences
-     *
-     * @var int
      */
-    protected $numrunseq = 0;
+    protected int $numrunseq = 0;
 
     /**
      * Array of Isolated Level Run sequences
      *
-     * @var array
+     * @var array<int, array{
+     *         'e': int,
+     *         'edir': string,
+     *         'end': int,
+     *         'eos': string,
+     *         'length': int,
+     *         'maxlevel': int,
+     *         'sos': string,
+     *         'start': int,
+     *         'item': array<int, array{
+     *                'pos': int,
+     *                'char': int,
+     *                'level': int,
+     *                'otype': string,
+     *                'type': string,
+     *                'x': int}>,
+     *         }>
      */
-    protected $ilrs = array();
+    protected array $ilrs = [];
 
     /**
      * X Steps for Bidirectional algorithm
      *
-     * @param array  $chardata  Array of UTF-8 codepoints
-     * @param int    $pel       Paragraph Embedding Level
+     * @param array $chardata Array of UTF-8 codepoints
+     * @param int   $pel      Paragraph Embedding Level
      */
-    public function __construct($chardata, $pel)
-    {
-        $this->chardata = $chardata;
+    public function __construct(
+        /**
+         * Array of characters data to return
+         */
+        protected array $chardata, /**
+         * Paragraph Embedding Level
+         */
+        protected int $pel
+    ) {
         $this->numchars = count($chardata);
-        $this->pel = $pel;
         $this->setIsolatedLevelRunSequences();
     }
 
     /**
      * Get the Isolated Run Sequences
      *
-     * @return array
+     * @return array<int, array{
+     *         'e': int,
+     *         'edir': string,
+     *         'end': int,
+     *         'eos': string,
+     *         'length': int,
+     *         'maxlevel': int,
+     *         'sos': string,
+     *         'start': int,
+     *         'item': array<int, array{
+     *                'pos': int,
+     *                'char': int,
+     *                'level': int,
+     *                'otype': string,
+     *                'type': string,
+     *                'x': int}>,
+     *         }>
      */
-    public function getIsolatedLevelRunSequences()
+    public function getIsolatedLevelRunSequences(): array
     {
         return $this->ilrs;
     }
 
     /**
      * Get the embedded direction (L or R)
-     *
-     * @param int $level
-     *
-     * @return string
      */
-    protected function getEmbeddedDirection($level)
+    protected function getEmbeddedDirection(int $level): string
     {
         return ((($level % 2) == 0) ? 'L' : 'R');
     }
 
-    /**
-     * Set Level Run Sequences
-     */
-    protected function setLevelRunSequences()
+    protected function setLevelRunSequences(): void
     {
         $start = 0;
         while ($start < $this->numchars) {
@@ -120,12 +132,13 @@ class StepXten
             while (($end < $this->numchars) && ($this->chardata[$end]['level'] == $this->chardata[$start]['level'])) {
                 ++$end;
             }
+
             --$end;
-            $this->runseq[] = array(
+            $this->runseq[] = [
                 'start' => $start,
-                'end'   => $end,
-                'e'     => $this->chardata[$start]['level']
-            );
+                'end' => $end,
+                'e' => $this->chardata[$start]['level'],
+            ];
             ++$this->numrunseq;
             $start = ($end + 1);
         }
@@ -133,10 +146,8 @@ class StepXten
 
     /**
      * returns true if the input char is an Isolate Initiator
-     *
-     * @return bool
      */
-    protected function isIsolateInitiator($ord)
+    protected function isIsolateInitiator(int $ord): bool
     {
         return (($ord == UniConstant::RLI) || ($ord == UniConstant::LRI) || ($ord == UniConstant::FSI));
     }
@@ -144,25 +155,31 @@ class StepXten
     /**
      * Set level Isolated Level Run Sequences
      */
-    protected function setIsolatedLevelRunSequences()
+    protected function setIsolatedLevelRunSequences(): void
     {
         $this->setLevelRunSequences();
         $numiso = 0;
         foreach ($this->runseq as $idx => $seq) {
             // Create a new level run sequence, and initialize it to contain just that level run
-            $isorun = array(
-                'e'      => $seq['e'],
-                'edir'   => $this->getEmbeddedDirection($seq['e']), // embedded direction
-                'start'  => $seq['start'], // position of the first char
-                'end'    => $seq['end'],   // position of the last char
+            $isorun = [
+                'e' => $seq['e'],
+                'edir' => $this->getEmbeddedDirection($seq['e']),
+                // embedded direction
+                'start' => $seq['start'],
+                // position of the first char
+                'end' => $seq['end'],
+                // position of the last char
                 'length' => ($seq['end'] - $seq['start'] + 1),
-                'sos'    => '', // start-of-sequence
-                'eos'    => '', // end-of-sequence
-                'item'   => array()
-            );
+                'sos' => '',
+                // start-of-sequence
+                'eos' => '',
+                // end-of-sequence
+                'item' => [],
+            ];
             for ($jdx = 0; $jdx < $isorun['length']; ++$jdx) {
                 $isorun['item'][$jdx] = $this->chardata[($seq['start'] + $jdx)];
             }
+
             $endchar = $isorun['item'][($jdx - 1)]['char'];
 
             // While the level run currently last in the sequence ends with an isolate initiator that has a
@@ -198,6 +215,7 @@ class StepXten
                 ++$numiso;
             }
         }
+
         $this->setStartEndOfSequence();
     }
 
@@ -205,7 +223,7 @@ class StepXten
      * Determine the start-of-sequence (sos) and end-of-sequence (eos) types, either L or R,
      * for each isolating run sequence.
      */
-    protected function setStartEndOfSequence()
+    protected function setStartEndOfSequence(): void
     {
         foreach ($this->ilrs as $key => $seq) {
             // For sos, compare the level of the first character in the sequence with the level of the character
@@ -218,6 +236,7 @@ class StepXten
                 $lastchr = $this->chardata[($seq['start'] - 1)];
                 $prev = $lastchr['level'];
             }
+
             $this->ilrs[$key]['sos'] = $this->getEmbeddedDirection(($prev > $lev) ? $prev : $lev);
 
             // For eos, compare the level of the last character in the sequence with the level of the character
@@ -226,11 +245,12 @@ class StepXten
             // embedding level.
             $lastchr = end($seq['item']);
             $lev = $lastchr['level'];
-            if (!isset($this->chardata[($seq['end'] + 1)]['level']) || $this->isIsolateInitiator($lastchr['char'])) {
+            if (! isset($this->chardata[($seq['end'] + 1)]['level']) || $this->isIsolateInitiator($lastchr['char'])) {
                 $next = $this->pel;
             } else {
                 $next = $this->chardata[($seq['end'] + 1)]['level'];
             }
+
             $this->ilrs[$key]['eos'] = $this->getEmbeddedDirection(($next > $lev) ? $next : $lev);
 
             // If the higher level is odd, the sos or eos is R; otherwise, it is L.

@@ -63,12 +63,14 @@ class StepX
      * Array of characters data to return
      *
      * @var array<int, array{
-     *                'pos': int,
-     *                'char': int,
-     *                'level': int,
-     *                'otype': string,
-     *                'type': string,
-     *                'x': int}>
+     *        'char': int,
+     *        'level': int,
+     *        'otype': string,
+     *        'pdimatch': int,
+     *        'pos': int,
+     *        'type': string,
+     *        'x': int,
+     *        }>
      */
     protected array $chardata = [];
 
@@ -105,12 +107,14 @@ class StepX
      * Returns the processed array
      *
      * @return array<int, array{
-     *                'pos': int,
-     *                'char': int,
-     *                'level': int,
-     *                'otype': string,
-     *                'type': string,
-     *                'x': int}>
+     *        'char': int,
+     *        'level': int,
+     *        'otype': string,
+     *        'pdimatch': int,
+     *        'pos': int,
+     *        'type': string,
+     *        'x': int,
+     *        }>
      */
     public function getChrData(): array
     {
@@ -158,6 +162,10 @@ class StepX
     protected function processXcase(int $pos, int $ord): void
     {
         $edss = end($this->dss);
+        if ($edss === false) {
+            return;
+        }
+
         switch ($ord) {
             case UniConstant::RLE:
                 // X2
@@ -256,17 +264,23 @@ class StepX
      *
      * @param int   $pos  Original character position in the input string
      * @param int   $ord  Char code
-     * @param array $edss Last entry in the Directional Status Stack
+     * @param array{'ord': int,
+     *        'cel': int,
+     *        'dos': string,
+     *        'dis': bool
+     *        } $edss Last entry in the Directional Status Stack
      */
     protected function pushChar(int $pos, int $ord, array $edss): void
     {
         $unitype = (UniType::UNI[$ord] ?? $edss['dos']);
         $this->chardata[] = [
-            'pos' => $pos,
             'char' => $ord,
             'level' => $edss['cel'],
-            'type' => (($edss['dos'] !== 'NI') ? $edss['dos'] : $unitype),
             'otype' => $unitype,
+            'pdimatch' => 0,
+            'pos' => $pos,
+            'type' => (($edss['dos'] !== 'NI') ? $edss['dos'] : $unitype),
+            'x' => 0,
         ];
     }
 
@@ -275,7 +289,11 @@ class StepX
      *
      * @param int   $pos  Original character position in the input string
      * @param int   $ord  Char code
-     * @param array $edss Last entry in the Directional Status Stack
+     * @param array{'ord': int,
+     *        'cel': int,
+     *        'dos': string,
+     *        'dis': bool
+     *        } $edss Last entry in the Directional Status Stack
      */
     protected function processChar(int $pos, int $ord, array $edss): void
     {
@@ -295,7 +313,11 @@ class StepX
     /**
      * Process the PDF type character
      *
-     * @param array $edss Last entry in the Directional Status Stack
+     * @param array{'ord': int,
+     *        'cel': int,
+     *        'dos': string,
+     *        'dis': bool
+     *        } $edss Last entry in the Directional Status Stack
      */
     protected function processPdfCase(array $edss): void
     {
@@ -333,7 +355,11 @@ class StepX
      *
      * @param int   $pos  Original character position in the input string
      * @param int   $ord  Char code
-     * @param array $edss Last entry in the Directional Status Stack
+     * @param array{'ord': int,
+     *        'cel': int,
+     *        'dos': string,
+     *        'dis': bool
+     *        } $edss Last entry in the Directional Status Stack
      */
     protected function processPdiCase(int $pos, int $ord, array $edss): void
     {
@@ -369,8 +395,11 @@ class StepX
         $count_dss = count($this->dss);
         while (($edss['dis'] === false) && ($count_dss > 1)) {
             array_pop($this->dss);
-            $edss = end($this->dss);
             --$count_dss;
+            $edss = end($this->dss);
+            if ($edss === false) {
+                break;
+            }
         }
 
         //        - Pop the last entry from the directional status stack and decrement the valid isolate
@@ -378,8 +407,13 @@ class StepX
         //          preceding step left the stack with at least two entries, this pop does not leave the
         //          stack empty.)
         array_pop($this->dss);
-        $edss = end($this->dss);
         --$this->vic;
+
+        $edss = end($this->dss);
+        if ($edss === false) {
+            return;
+        }
+
         //      - In all cases, look up the last entry on the directional status stack left after the
         //        steps above and:
         //        - Set the PDI’s level to the entry's embedding level.
@@ -393,7 +427,11 @@ class StepX
      * Process the PDF type character
      *
      * @param int   $pos  Original character position in the input string
-     * @param array $edss Last entry in the Directional Status Stack
+     * @param array{'ord': int,
+     *        'cel': int,
+     *        'dos': string,
+     *        'dis': bool
+     *        } $edss Last entry in the Directional Status Stack
      */
     protected function processFsiCase(int $pos, array $edss): void
     {

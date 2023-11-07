@@ -61,10 +61,10 @@ class StepXten
      *         'sos': string,
      *         'start': int,
      *         'item': array<int, array{
-     *                'pos': int,
      *                'char': int,
      *                'level': int,
      *                'otype': string,
+     *                'pos': int,
      *                'type': string,
      *                'x': int}>,
      *         }>
@@ -74,7 +74,15 @@ class StepXten
     /**
      * X Steps for Bidirectional algorithm
      *
-     * @param array $chardata Array of UTF-8 codepoints
+     * @param array<int, array{
+     *        'char': int,
+     *        'level': int,
+     *        'otype': string,
+     *        'pdimatch': int,
+     *        'pos': int,
+     *        'type': string,
+     *        'x': int,
+     *        }> $chardata Array of UTF-8 codepoints
      * @param int   $pel      Paragraph Embedding Level
      */
     public function __construct(
@@ -163,17 +171,13 @@ class StepXten
             // Create a new level run sequence, and initialize it to contain just that level run
             $isorun = [
                 'e' => $seq['e'],
-                'edir' => $this->getEmbeddedDirection($seq['e']),
-                // embedded direction
-                'start' => $seq['start'],
-                // position of the first char
-                'end' => $seq['end'],
-                // position of the last char
+                'edir' => $this->getEmbeddedDirection($seq['e']), // embedded direction
+                'start' => $seq['start'], // position of the first char
+                'end' => $seq['end'],  // position of the last char
                 'length' => ($seq['end'] - $seq['start'] + 1),
-                'sos' => '',
-                // start-of-sequence
-                'eos' => '',
-                // end-of-sequence
+                'sos' => '',  // start-of-sequence
+                'eos' => '',  // end-of-sequence
+                'maxlevel' => 0,
                 'item' => [],
             ];
             for ($jdx = 0; $jdx < $isorun['length']; ++$jdx) {
@@ -237,13 +241,17 @@ class StepXten
                 $prev = $lastchr['level'];
             }
 
-            $this->ilrs[$key]['sos'] = $this->getEmbeddedDirection(($prev > $lev) ? $prev : $lev);
+            $this->ilrs[$key]['sos'] = $this->getEmbeddedDirection(max($prev, $lev));
 
             // For eos, compare the level of the last character in the sequence with the level of the character
             // following it in the paragraph (not counting characters removed by X9), and if there is none or the
             // last character of the sequence is an isolate initiator (lacking a matching PDI), with the paragraph
             // embedding level.
             $lastchr = end($seq['item']);
+            if ($lastchr === false) {
+                return;
+            }
+
             $lev = $lastchr['level'];
             if (! isset($this->chardata[($seq['end'] + 1)]['level']) || $this->isIsolateInitiator($lastchr['char'])) {
                 $next = $this->pel;
@@ -251,7 +259,7 @@ class StepXten
                 $next = $this->chardata[($seq['end'] + 1)]['level'];
             }
 
-            $this->ilrs[$key]['eos'] = $this->getEmbeddedDirection(($next > $lev) ? $next : $lev);
+            $this->ilrs[$key]['eos'] = $this->getEmbeddedDirection(max($next, $lev));
 
             // If the higher level is odd, the sos or eos is R; otherwise, it is L.
         }

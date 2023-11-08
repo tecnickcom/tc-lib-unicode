@@ -97,7 +97,16 @@ class Bidi
     /**
      * Array of character data
      *
-     * @var array<int, array{'pos': int, 'char': int, 'level': int, 'type': string, 'otype': string}>
+     * @var array<int, array{
+     *        'char': int,
+     *        'i': int,
+     *        'level': int,
+     *        'otype': string,
+     *        'pdimatch': int,
+     *        'pos': int,
+     *        'type': string,
+     *        'x': int,
+     *      }>
      */
     protected array $chardata = [];
 

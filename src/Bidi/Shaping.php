@@ -49,12 +49,15 @@ class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
      *        'sos': string,
      *        'start': int,
      *        'item': array<int, array{
-     *                'pos': int,
-     *                'char': int,
-     *                'level': int,
-     *                'otype': string,
-     *                'type': string,
-     *                'x': int}>,
+     *            'char': int,
+     *            'i': int,
+     *            'level': int,
+     *            'otype': string,
+     *            'pdimatch': int,
+     *            'pos': int,
+     *            'type': string,
+     *            'x': int,
+     *          }>,
      *        } $seq isolated Sequence array
      */
     public function __construct(array $seq)
@@ -68,21 +71,24 @@ class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
      * Returns the processed sequence
      *
      * @return array{
-     *        'e': int,
-     *        'edir': string,
-     *        'end': int,
-     *        'eos': string,
-     *        'length': int,
-     *        'maxlevel': int,
-     *        'sos': string,
-     *        'start': int,
-     *        'item': array<int, array{
-     *                'pos': int,
-     *                'char': int,
-     *                'level': int,
-     *                'otype': string,
-     *                'type': string,
-     *                'x': int}>,
+     *          'e': int,
+     *          'edir': string,
+     *          'end': int,
+     *          'eos': string,
+     *          'length': int,
+     *          'maxlevel': int,
+     *          'sos': string,
+     *          'start': int,
+     *          'item': array<int, array{
+     *            'char': int,
+     *            'i': int,
+     *            'level': int,
+     *            'otype': string,
+     *            'pdimatch': int,
+     *            'pos': int,
+     *            'type': string,
+     *            'x': int,
+     *          }>,
      *        }
      */
     public function getSequence(): array

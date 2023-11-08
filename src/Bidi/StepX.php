@@ -64,13 +64,14 @@ class StepX
      *
      * @var array<int, array{
      *        'char': int,
+     *        'i': int,
      *        'level': int,
      *        'otype': string,
      *        'pdimatch': int,
      *        'pos': int,
      *        'type': string,
      *        'x': int,
-     *        }>
+     *      }>
      */
     protected array $chardata = [];
 
@@ -107,13 +108,14 @@ class StepX
      * Returns the processed array
      *
      * @return array<int, array{
-     *        'char': int,
-     *        'level': int,
-     *        'otype': string,
-     *        'pdimatch': int,
-     *        'pos': int,
-     *        'type': string,
-     *        'x': int,
+     *          'char': int,
+     *          'i': int,
+     *          'level': int,
+     *          'otype': string,
+     *          'pdimatch': int,
+     *          'pos': int,
+     *          'type': string,
+     *          'x': int,
      *        }>
      */
     public function getChrData(): array
@@ -275,12 +277,13 @@ class StepX
         $unitype = (UniType::UNI[$ord] ?? $edss['dos']);
         $this->chardata[] = [
             'char' => $ord,
+            'i' => -1,
             'level' => $edss['cel'],
             'otype' => $unitype,
-            'pdimatch' => 0,
+            'pdimatch' => -1,
             'pos' => $pos,
             'type' => (($edss['dos'] !== 'NI') ? $edss['dos'] : $unitype),
-            'x' => 0,
+            'x' => -1,
         ];
     }
 

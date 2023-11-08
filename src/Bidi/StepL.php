@@ -36,12 +36,15 @@ class StepL
      * Array of characters data to return
      *
      * @var array<int, array{
-     *                'pos': int,
-     *                'char': int,
-     *                'level': int,
-     *                'otype': string,
-     *                'type': string,
-     *                'x': int}>
+     *             'char': int,
+     *             'i': int,
+     *             'level': int,
+     *             'otype': string,
+     *             'pdimatch': int,
+     *             'pos': int,
+     *             'type': string,
+     *             'x': int,
+     *           }>
      */
     protected array $chardata = [];
 
@@ -54,12 +57,15 @@ class StepL
      * L steps
      *
      * @param array<int, array{
-     *                'pos': int,
-     *                'char': int,
-     *                'level': int,
-     *                'otype': string,
-     *                'type': string,
-     *                'x': int}> $chardata Array of characters data
+     *             'char': int,
+     *             'i': int,
+     *             'level': int,
+     *             'otype': string,
+     *             'pdimatch': int,
+     *             'pos': int,
+     *             'type': string,
+     *             'x': int,
+     *           }> $chardata Array of characters data
      * @param int   $pel      Paragraph embedding level
      * @param int   $maxlevel Maximum level
      */
@@ -89,12 +95,15 @@ class StepL
      * Returns the processed array
      *
      * @return array<int, array{
-     *                'pos': int,
-     *                'char': int,
-     *                'level': int,
-     *                'otype': string,
-     *                'type': string,
-     *                'x': int}>
+     *             'char': int,
+     *             'i': int,
+     *             'level': int,
+     *             'otype': string,
+     *             'pdimatch': int,
+     *             'pos': int,
+     *             'type': string,
+     *             'x': int,
+     *           }>
      */
     public function getChrData(): array
     {

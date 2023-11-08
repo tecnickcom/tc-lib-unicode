@@ -57,6 +57,9 @@ class ConvertTest extends TestCase
         $this->assertEquals($expected, $ord);
     }
 
+    /**
+     * @return array<int, array{0:int,1:string}>
+     */
     public static function chrDataProvider(): array
     {
         return [
@@ -155,9 +158,18 @@ class ConvertTest extends TestCase
         $this->assertEquals($str, $res);
     }
 
+    /**
+     * @return array<int, array<string>>
+     */
     public static function strToHexDataProvider(): array
     {
-        return [['', ''], ['A', '41'], ['AB', '4142'], ['ABC', '414243'], ["\n", '0a']];
+        return [
+            ['', ''],
+            ['A', '41'],
+            ['AB', '4142'],
+            ['ABC', '414243'],
+            ["\n", '0a'],
+        ];
     }
 
     /**
@@ -170,9 +182,16 @@ class ConvertTest extends TestCase
         $this->assertEquals($exp, $convert->strToHex($res));
     }
 
+    /**
+     * @return array<int, array<string>>
+     */
     public static function toUTF16BEDataProvider(): array
     {
-        return [['', ''], ['ABC', '004100420043'], [json_decode('"\u0010\uffff\u00ff\uff00"'), '0010ffff00ffff00']];
+        return [
+            ['', ''],
+            ['ABC', '004100420043'],
+            [json_decode('"\u0010\uffff\u00ff\uff00"'), '0010ffff00ffff00'],
+        ];
     }
 
     /**
@@ -185,8 +204,15 @@ class ConvertTest extends TestCase
         $this->assertEquals($exp, $res);
     }
 
+    /**
+     * @return array<int, array<string>>
+     */
     public static function toUTF8DataProvider(): array
     {
-        return [['', ''], ['òèìòù', 'òèìòù'], ['òèìòù', 'Ã²Ã¨Ã¬Ã²Ã¹', 'ISO-8859-1']];
+        return [
+            ['', ''],
+            ['òèìòù', 'òèìòù'],
+            ['òèìòù', 'Ã²Ã¨Ã¬Ã²Ã¹', 'ISO-8859-1'],
+        ];
     }
 }

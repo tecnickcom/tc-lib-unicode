@@ -42,12 +42,15 @@ abstract class StepBase
      *        'sos': string,
      *        'start': int,
      *        'item': array<int, array{
-     *                'pos': int,
-     *                'char': int,
-     *                'level': int,
-     *                'otype': string,
-     *                'type': string,
-     *                'x': int}>,
+     *             'char': int,
+     *             'i': int,
+     *             'level': int,
+     *             'otype': string,
+     *             'pdimatch': int,
+     *             'pos': int,
+     *             'type': string,
+     *             'x': int,
+     *           }>,
      *        } $seq     Isolated Sequence array
      * @param bool  $process If false disable automatic processing (this is a testing flag)
      */
@@ -76,12 +79,15 @@ abstract class StepBase
      *        'sos': string,
      *        'start': int,
      *        'item': array<int, array{
-     *                'pos': int,
-     *                'char': int,
-     *                'level': int,
-     *                'otype': string,
-     *                'type': string,
-     *                'x': int}>,
+     *             'char': int,
+     *             'i': int,
+     *             'level': int,
+     *             'otype': string,
+     *             'pdimatch': int,
+     *             'pos': int,
+     *             'type': string,
+     *             'x': int,
+     *           }>,
      *        }
      */
     public function getSequence(): array

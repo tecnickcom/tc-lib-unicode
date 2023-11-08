@@ -61,12 +61,15 @@ class StepXten
      *         'sos': string,
      *         'start': int,
      *         'item': array<int, array{
-     *                'char': int,
-     *                'level': int,
-     *                'otype': string,
-     *                'pos': int,
-     *                'type': string,
-     *                'x': int}>,
+     *             'char': int,
+     *             'i': int,
+     *             'level': int,
+     *             'otype': string,
+     *             'pdimatch': int,
+     *             'pos': int,
+     *             'type': string,
+     *             'x': int,
+     *           }>,
      *         }>
      */
     protected array $ilrs = [];
@@ -75,14 +78,15 @@ class StepXten
      * X Steps for Bidirectional algorithm
      *
      * @param array<int, array{
-     *        'char': int,
-     *        'level': int,
-     *        'otype': string,
-     *        'pdimatch': int,
-     *        'pos': int,
-     *        'type': string,
-     *        'x': int,
-     *        }> $chardata Array of UTF-8 codepoints
+     *             'char': int,
+     *             'i': int,
+     *             'level': int,
+     *             'otype': string,
+     *             'pdimatch': int,
+     *             'pos': int,
+     *             'type': string,
+     *             'x': int,
+     *           }> $chardata Array of UTF-8 codepoints
      * @param int   $pel      Paragraph Embedding Level
      */
     public function __construct(
@@ -111,12 +115,15 @@ class StepXten
      *         'sos': string,
      *         'start': int,
      *         'item': array<int, array{
-     *                'pos': int,
-     *                'char': int,
-     *                'level': int,
-     *                'otype': string,
-     *                'type': string,
-     *                'x': int}>,
+     *             'char': int,
+     *             'i': int,
+     *             'level': int,
+     *             'otype': string,
+     *             'pdimatch': int,
+     *             'pos': int,
+     *             'type': string,
+     *             'x': int,
+     *           }>,
      *         }>
      */
     public function getIsolatedLevelRunSequences(): array
@@ -178,6 +185,7 @@ class StepXten
                 'sos' => '',  // start-of-sequence
                 'eos' => '',  // end-of-sequence
                 'maxlevel' => 0,
+                'pdimatch' => -1, // position of the matching PDI
                 'item' => [],
             ];
             for ($jdx = 0; $jdx < $isorun['length']; ++$jdx) {

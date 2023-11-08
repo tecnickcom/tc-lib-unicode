@@ -49,7 +49,8 @@ class StepXtenTest extends TestCase
     public function testStepXteN(array $chardata, mixed $expected): void
     {
         $stepxten = new StepXten($chardata, 0);
-        $this->assertEquals($expected, $stepxten->getIsolatedLevelRunSequences());
+        $out = $stepxten->getIsolatedLevelRunSequences();
+        $this->assertEquals($expected, $out);
     }
 
     /**
@@ -100,7 +101,7 @@ class StepXtenTest extends TestCase
                         'level' => 0,
                         'type' => 'ON',
                         'otype' => 'ON',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -110,7 +111,7 @@ class StepXtenTest extends TestCase
                         'level' => 1,
                         'type' => 'ON',
                         'otype' => 'ON',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -120,7 +121,7 @@ class StepXtenTest extends TestCase
                         'level' => 1,
                         'type' => 'ON',
                         'otype' => 'ON',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -130,7 +131,7 @@ class StepXtenTest extends TestCase
                         'level' => 0,
                         'type' => 'ON',
                         'otype' => 'ON',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                 ],
                 [
@@ -223,7 +224,7 @@ class StepXtenTest extends TestCase
                         'level' => 0,
                         'type' => 'ON',
                         'otype' => 'ON',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -233,7 +234,7 @@ class StepXtenTest extends TestCase
                         'level' => 0,
                         'type' => 'NI',
                         'otype' => 'NI',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -243,7 +244,7 @@ class StepXtenTest extends TestCase
                         'level' => 1,
                         'type' => 'ON',
                         'otype' => 'ON',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -253,7 +254,7 @@ class StepXtenTest extends TestCase
                         'level' => 0,
                         'type' => 'NI',
                         'otype' => 'NI',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -263,7 +264,7 @@ class StepXtenTest extends TestCase
                         'level' => 0,
                         'type' => 'NI',
                         'otype' => 'NI',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -273,7 +274,7 @@ class StepXtenTest extends TestCase
                         'level' => 1,
                         'type' => 'ON',
                         'otype' => 'ON',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -283,7 +284,7 @@ class StepXtenTest extends TestCase
                         'level' => 0,
                         'type' => 'NI',
                         'otype' => 'NI',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -293,7 +294,7 @@ class StepXtenTest extends TestCase
                         'level' => 0,
                         'type' => 'ON',
                         'otype' => 'ON',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                 ],
                 [
@@ -333,7 +334,7 @@ class StepXtenTest extends TestCase
                                 'char' => 8297,
                                 'i' => -1,
                                 'level' => 0,
-                                'pdimatch' => -1,
+                                'pdimatch' => 0,
                                 'type' => 'NI',
                                 'otype' => 'NI',
                             ],
@@ -353,7 +354,7 @@ class StepXtenTest extends TestCase
                                 'char' => 8297,
                                 'i' => -1,
                                 'level' => 0,
-                                'pdimatch' => -1,
+                                'pdimatch' => 0,
                                 'type' => 'NI',
                                 'otype' => 'NI',
                             ],
@@ -426,7 +427,7 @@ class StepXtenTest extends TestCase
                         'level' => 0,
                         'type' => 'ON',
                         'otype' => 'ON',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -436,7 +437,7 @@ class StepXtenTest extends TestCase
                         'level' => 0,
                         'type' => 'NI',
                         'otype' => 'NI',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -446,7 +447,7 @@ class StepXtenTest extends TestCase
                         'level' => 1,
                         'type' => 'ON',
                         'otype' => 'ON',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -456,7 +457,7 @@ class StepXtenTest extends TestCase
                         'level' => 1,
                         'type' => 'NI',
                         'otype' => 'NI',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -466,7 +467,7 @@ class StepXtenTest extends TestCase
                         'level' => 2,
                         'type' => 'ON',
                         'otype' => 'ON',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -476,7 +477,7 @@ class StepXtenTest extends TestCase
                         'level' => 3,
                         'type' => 'ON',
                         'otype' => 'ON',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -486,7 +487,7 @@ class StepXtenTest extends TestCase
                         'level' => 2,
                         'type' => 'ON',
                         'otype' => 'ON',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -496,7 +497,7 @@ class StepXtenTest extends TestCase
                         'level' => 1,
                         'type' => 'NI',
                         'otype' => 'NI',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -506,7 +507,7 @@ class StepXtenTest extends TestCase
                         'level' => 1,
                         'type' => 'ON',
                         'otype' => 'ON',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -516,7 +517,7 @@ class StepXtenTest extends TestCase
                         'level' => 0,
                         'type' => 'NI',
                         'otype' => 'NI',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -526,7 +527,7 @@ class StepXtenTest extends TestCase
                         'level' => 0,
                         'type' => 'ON',
                         'otype' => 'ON',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                 ],
                 [
@@ -566,7 +567,7 @@ class StepXtenTest extends TestCase
                                 'char' => 8297,
                                 'i' => -1,
                                 'level' => 0,
-                                'pdimatch' => -1,
+                                'pdimatch' => 0,
                                 'type' => 'NI',
                                 'otype' => 'NI',
                             ],
@@ -618,9 +619,9 @@ class StepXtenTest extends TestCase
                                 'char' => 8297,
                                 'i' => -1,
                                 'level' => 1,
+                                'pdimatch' => 1,
                                 'type' => 'NI',
                                 'otype' => 'NI',
-                                'pdimatch' => 1,
                             ],
                             [
                                 'x' => 0,
@@ -713,7 +714,7 @@ class StepXtenTest extends TestCase
                         'level' => 0,
                         'type' => 'ON',
                         'otype' => 'ON',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -723,7 +724,7 @@ class StepXtenTest extends TestCase
                         'level' => 1,
                         'type' => 'ON',
                         'otype' => 'ON',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -733,7 +734,7 @@ class StepXtenTest extends TestCase
                         'level' => 2,
                         'type' => 'ON',
                         'otype' => 'ON',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -743,7 +744,7 @@ class StepXtenTest extends TestCase
                         'level' => 1,
                         'type' => 'ON',
                         'otype' => 'ON',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -753,7 +754,7 @@ class StepXtenTest extends TestCase
                         'level' => 1,
                         'type' => 'ON',
                         'otype' => 'ON',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -763,7 +764,7 @@ class StepXtenTest extends TestCase
                         'level' => 0,
                         'type' => 'ON',
                         'otype' => 'ON',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                 ],
                 [
@@ -900,7 +901,7 @@ class StepXtenTest extends TestCase
                         'level' => 0,
                         'type' => 'ON',
                         'otype' => 'ON',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -910,7 +911,7 @@ class StepXtenTest extends TestCase
                         'level' => 0,
                         'type' => 'NI',
                         'otype' => 'NI',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -920,7 +921,7 @@ class StepXtenTest extends TestCase
                         'level' => 1,
                         'type' => 'ON',
                         'otype' => 'ON',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -930,7 +931,7 @@ class StepXtenTest extends TestCase
                         'level' => 1,
                         'type' => 'NI',
                         'otype' => 'NI',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -940,7 +941,7 @@ class StepXtenTest extends TestCase
                         'level' => 2,
                         'type' => 'ON',
                         'otype' => 'ON',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -950,7 +951,7 @@ class StepXtenTest extends TestCase
                         'level' => 1,
                         'type' => 'NI',
                         'otype' => 'NI',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -960,7 +961,7 @@ class StepXtenTest extends TestCase
                         'level' => 1,
                         'type' => 'ON',
                         'otype' => 'ON',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -970,7 +971,7 @@ class StepXtenTest extends TestCase
                         'level' => 0,
                         'type' => 'NI',
                         'otype' => 'NI',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -980,7 +981,7 @@ class StepXtenTest extends TestCase
                         'level' => 0,
                         'type' => 'NI',
                         'otype' => 'NI',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -990,7 +991,7 @@ class StepXtenTest extends TestCase
                         'level' => 1,
                         'type' => 'ON',
                         'otype' => 'ON',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -1000,7 +1001,7 @@ class StepXtenTest extends TestCase
                         'level' => 0,
                         'type' => 'NI',
                         'otype' => 'NI',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -1010,7 +1011,7 @@ class StepXtenTest extends TestCase
                         'level' => 0,
                         'type' => 'ON',
                         'otype' => 'ON',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                 ],
                 [
@@ -1050,7 +1051,7 @@ class StepXtenTest extends TestCase
                                 'char' => 8297,
                                 'i' => -1,
                                 'level' => 0,
-                                'pdimatch' => -1,
+                                'pdimatch' => 0,
                                 'type' => 'NI',
                                 'otype' => 'NI',
                             ],
@@ -1070,7 +1071,7 @@ class StepXtenTest extends TestCase
                                 'char' => 8297,
                                 'i' => -1,
                                 'level' => 0,
-                                'pdimatch' => -1,
+                                'pdimatch' => 0,
                                 'type' => 'NI',
                                 'otype' => 'NI',
                             ],
@@ -1122,9 +1123,9 @@ class StepXtenTest extends TestCase
                                 'char' => 8297,
                                 'i' => -1,
                                 'level' => 1,
+                                'pdimatch' => 1,
                                 'type' => 'NI',
                                 'otype' => 'NI',
-                                'pdimatch' => 1,
                             ],
                             [
                                 'x' => 0,
@@ -1195,7 +1196,7 @@ class StepXtenTest extends TestCase
                         'level' => 0,
                         'type' => 'ON',
                         'otype' => 'ON',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -1205,7 +1206,7 @@ class StepXtenTest extends TestCase
                         'level' => 1,
                         'type' => 'ON',
                         'otype' => 'ON',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -1215,7 +1216,7 @@ class StepXtenTest extends TestCase
                         'level' => 1,
                         'type' => 'NI',
                         'otype' => 'NI',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -1225,7 +1226,7 @@ class StepXtenTest extends TestCase
                         'level' => 2,
                         'type' => 'ON',
                         'otype' => 'ON',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -1235,7 +1236,7 @@ class StepXtenTest extends TestCase
                         'level' => 3,
                         'type' => 'ON',
                         'otype' => 'ON',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -1245,7 +1246,7 @@ class StepXtenTest extends TestCase
                         'level' => 1,
                         'type' => 'NI',
                         'otype' => 'NI',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -1255,7 +1256,7 @@ class StepXtenTest extends TestCase
                         'level' => 1,
                         'type' => 'ON',
                         'otype' => 'ON',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                     [
                         'x' => 0,
@@ -1265,7 +1266,7 @@ class StepXtenTest extends TestCase
                         'level' => 0,
                         'type' => 'ON',
                         'otype' => 'ON',
-                        'pdimatch' => 0,
+                        'pdimatch' => -1,
                     ],
                 ],
                 [

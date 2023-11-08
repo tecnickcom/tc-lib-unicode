@@ -296,11 +296,9 @@ class Bidi
 
                 $chardata = array_merge($chardata, $ilr['item']);
 
-                if ($ilr['maxlevel'] <= $maxlevel) {
-                    continue;
+                if ($ilr['maxlevel'] > $maxlevel) {
+                    $maxlevel = $ilr['maxlevel'];
                 }
-
-                $maxlevel = $ilr['maxlevel'];
             }
 
             $stepl = new StepL($chardata, $pel, $maxlevel);

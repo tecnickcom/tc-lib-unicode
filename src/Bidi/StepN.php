@@ -197,7 +197,7 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
         // prior to the application of W1 that immediately follow a paired bracket which
         // changed to L or R under N0 should change to match the type of their preceding bracket.
         $next = ($close + 1);
-        while (isset($this->seq['item'][$next]['otype']) && ($this->seq['item'][$next]['otype'] == 'NSM')) {
+        while ($this->seq['item'][$next]['otype'] === 'NSM') {
             $this->seq['item'][$next]['type'] = $type;
             ++$next;
         }

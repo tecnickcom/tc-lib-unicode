@@ -93,7 +93,8 @@ class StepXten
         /**
          * Array of characters data to return
          */
-        protected array $chardata, /**
+        protected array $chardata,
+        /**
          * Paragraph Embedding Level
          */
         protected int $pel
@@ -185,7 +186,6 @@ class StepXten
                 'sos' => '',  // start-of-sequence
                 'eos' => '',  // end-of-sequence
                 'maxlevel' => 0,
-                'pdimatch' => -1, // position of the matching PDI
                 'item' => [],
             ];
             for ($jdx = 0; $jdx < $isorun['length']; ++$jdx) {
@@ -214,9 +214,14 @@ class StepXten
 
             // For each level run in the paragraph whose first character is not a PDI,
             // or is a PDI that does not match any isolate initiator
-            if (isset($this->chardata[$seq['start']]['pdimatch'])) {
+            if ($this->chardata[$seq['start']]['pdimatch'] >= 0) {
                 $parent = $this->chardata[$seq['start']]['pdimatch'];
-                $this->ilrs[$parent]['item'] = array_merge($this->ilrs[$parent]['item'], $isorun['item']);
+
+                $this->ilrs[$parent]['item'] = array_merge(
+                    $this->ilrs[$parent]['item'],
+                    $isorun['item']
+                );
+
                 $this->ilrs[$parent]['length'] += $isorun['length'];
                 $this->ilrs[$parent]['end'] += $isorun['end'];
                 if ($pdimatch >= 0) {
@@ -261,7 +266,7 @@ class StepXten
             }
 
             $lev = $lastchr['level'];
-            if (! isset($this->chardata[($seq['end'] + 1)]['level']) || $this->isIsolateInitiator($lastchr['char'])) {
+            if ((! isset($this->chardata[($seq['end'] + 1)]['level'])) || $this->isIsolateInitiator($lastchr['char'])) {
                 $next = $this->pel;
             } else {
                 $next = $this->chardata[($seq['end'] + 1)]['level'];

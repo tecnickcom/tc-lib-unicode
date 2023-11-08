@@ -68,7 +68,7 @@ class StepXTest extends TestCase
                 0,
                 [
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 0,
                         'char' => 33,
                         'i' => -1,
@@ -78,7 +78,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 2,
                         'char' => 34,
                         'i' => -1,
@@ -88,7 +88,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 5,
                         'char' => 38,
                         'i' => -1,
@@ -98,7 +98,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 7,
                         'char' => 39,
                         'i' => -1,
@@ -115,7 +115,7 @@ class StepXTest extends TestCase
                 0,
                 [
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 0,
                         'char' => 33,
                         'i' => -1,
@@ -125,7 +125,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 1,
                         'char' => 8295,
                         'i' => -1,
@@ -135,7 +135,7 @@ class StepXTest extends TestCase
                         'otype' => 'NI',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 2,
                         'char' => 34,
                         'i' => -1,
@@ -145,7 +145,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 3,
                         'char' => 8297,
                         'i' => -1,
@@ -155,7 +155,7 @@ class StepXTest extends TestCase
                         'otype' => 'NI',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 4,
                         'char' => 8295,
                         'i' => -1,
@@ -165,7 +165,7 @@ class StepXTest extends TestCase
                         'otype' => 'NI',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 5,
                         'char' => 38,
                         'i' => -1,
@@ -175,7 +175,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 6,
                         'char' => 8297,
                         'i' => -1,
@@ -185,7 +185,7 @@ class StepXTest extends TestCase
                         'otype' => 'NI',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 7,
                         'char' => 39,
                         'i' => -1,
@@ -202,7 +202,7 @@ class StepXTest extends TestCase
                 0,
                 [
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 0,
                         'char' => 33,
                         'i' => -1,
@@ -212,7 +212,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 1,
                         'char' => 8295,
                         'i' => -1,
@@ -222,7 +222,7 @@ class StepXTest extends TestCase
                         'otype' => 'NI',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 2,
                         'char' => 34,
                         'i' => -1,
@@ -232,7 +232,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 3,
                         'char' => 8294,
                         'i' => -1,
@@ -242,7 +242,7 @@ class StepXTest extends TestCase
                         'otype' => 'NI',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 4,
                         'char' => 38,
                         'i' => -1,
@@ -252,7 +252,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 6,
                         'char' => 39,
                         'i' => -1,
@@ -262,7 +262,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 8,
                         'char' => 40,
                         'i' => -1,
@@ -272,7 +272,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 9,
                         'char' => 8297,
                         'i' => -1,
@@ -282,7 +282,7 @@ class StepXTest extends TestCase
                         'otype' => 'NI',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 10,
                         'char' => 41,
                         'i' => -1,
@@ -292,7 +292,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 11,
                         'char' => 8297,
                         'i' => -1,
@@ -302,7 +302,7 @@ class StepXTest extends TestCase
                         'otype' => 'NI',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 12,
                         'char' => 42,
                         'i' => -1,
@@ -319,7 +319,7 @@ class StepXTest extends TestCase
                 0,
                 [
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 0,
                         'char' => 33,
                         'i' => -1,
@@ -329,7 +329,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 2,
                         'char' => 34,
                         'i' => -1,
@@ -339,7 +339,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 4,
                         'char' => 38,
                         'i' => -1,
@@ -349,7 +349,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 6,
                         'char' => 39,
                         'i' => -1,
@@ -359,7 +359,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 9,
                         'char' => 40,
                         'i' => -1,
@@ -369,7 +369,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 11,
                         'char' => 41,
                         'i' => -1,
@@ -386,7 +386,7 @@ class StepXTest extends TestCase
                 0,
                 [
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 0,
                         'char' => 33,
                         'i' => -1,
@@ -396,7 +396,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 1,
                         'char' => 8295,
                         'i' => -1,
@@ -406,7 +406,7 @@ class StepXTest extends TestCase
                         'otype' => 'NI',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 2,
                         'char' => 34,
                         'i' => -1,
@@ -416,7 +416,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 3,
                         'char' => 8294,
                         'i' => -1,
@@ -426,7 +426,7 @@ class StepXTest extends TestCase
                         'otype' => 'NI',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 4,
                         'char' => 38,
                         'i' => -1,
@@ -436,7 +436,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 5,
                         'char' => 8297,
                         'i' => -1,
@@ -446,7 +446,7 @@ class StepXTest extends TestCase
                         'otype' => 'NI',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 6,
                         'char' => 39,
                         'i' => -1,
@@ -456,7 +456,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 7,
                         'char' => 8297,
                         'i' => -1,
@@ -466,7 +466,7 @@ class StepXTest extends TestCase
                         'otype' => 'NI',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 8,
                         'char' => 8295,
                         'i' => -1,
@@ -476,7 +476,7 @@ class StepXTest extends TestCase
                         'otype' => 'NI',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 9,
                         'char' => 40,
                         'i' => -1,
@@ -486,7 +486,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 10,
                         'char' => 8297,
                         'i' => -1,
@@ -496,7 +496,7 @@ class StepXTest extends TestCase
                         'otype' => 'NI',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 11,
                         'char' => 41,
                         'i' => -1,
@@ -513,7 +513,7 @@ class StepXTest extends TestCase
                 0,
                 [
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 0,
                         'char' => 33,
                         'i' => -1,
@@ -523,7 +523,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 2,
                         'char' => 34,
                         'i' => -1,
@@ -533,7 +533,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 3,
                         'char' => 8294,
                         'i' => -1,
@@ -543,7 +543,7 @@ class StepXTest extends TestCase
                         'otype' => 'NI',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 4,
                         'char' => 38,
                         'i' => -1,
@@ -553,7 +553,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 6,
                         'char' => 39,
                         'i' => -1,
@@ -563,7 +563,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 7,
                         'char' => 8297,
                         'i' => -1,
@@ -573,7 +573,7 @@ class StepXTest extends TestCase
                         'otype' => 'NI',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 8,
                         'char' => 40,
                         'i' => -1,
@@ -583,7 +583,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 10,
                         'char' => 41,
                         'i' => -1,
@@ -600,7 +600,7 @@ class StepXTest extends TestCase
                 0,
                 [
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 0,
                         'char' => 33,
                         'i' => -1,
@@ -610,7 +610,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 2,
                         'char' => 34,
                         'i' => -1,
@@ -620,7 +620,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 4,
                         'char' => 38,
                         'i' => -1,
@@ -630,7 +630,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 6,
                         'char' => 39,
                         'i' => -1,
@@ -640,7 +640,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 8,
                         'char' => 40,
                         'i' => -1,
@@ -650,7 +650,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 10,
                         'char' => 41,
                         'i' => -1,
@@ -667,7 +667,7 @@ class StepXTest extends TestCase
                 0,
                 [
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 0,
                         'char' => 33,
                         'i' => -1,
@@ -677,7 +677,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 1,
                         'char' => 8296,
                         'i' => -1,
@@ -687,7 +687,7 @@ class StepXTest extends TestCase
                         'otype' => 'NI',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 2,
                         'char' => 34,
                         'i' => -1,
@@ -697,7 +697,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 3,
                         'char' => 8297,
                         'i' => -1,
@@ -707,7 +707,7 @@ class StepXTest extends TestCase
                         'otype' => 'NI',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 4,
                         'char' => 38,
                         'i' => -1,
@@ -724,7 +724,7 @@ class StepXTest extends TestCase
                 1,
                 [
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 0,
                         'char' => 1488,
                         'i' => -1,
@@ -734,7 +734,7 @@ class StepXTest extends TestCase
                         'otype' => 'R',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 1,
                         'char' => 8296,
                         'i' => -1,
@@ -744,7 +744,7 @@ class StepXTest extends TestCase
                         'otype' => 'NI',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 2,
                         'char' => 1489,
                         'i' => -1,
@@ -754,7 +754,7 @@ class StepXTest extends TestCase
                         'otype' => 'R',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 3,
                         'char' => 8297,
                         'i' => -1,
@@ -764,7 +764,7 @@ class StepXTest extends TestCase
                         'otype' => 'NI',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 4,
                         'char' => 1490,
                         'i' => -1,
@@ -781,7 +781,7 @@ class StepXTest extends TestCase
                 0,
                 [
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 0,
                         'char' => 33,
                         'i' => -1,
@@ -791,7 +791,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 2,
                         'char' => 34,
                         'i' => -1,
@@ -801,7 +801,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 4,
                         'char' => 38,
                         'i' => -1,
@@ -833,7 +833,7 @@ class StepXTest extends TestCase
                 0,
                 [
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 0,
                         'char' => 33,
                         'i' => -1,
@@ -843,7 +843,7 @@ class StepXTest extends TestCase
                         'otype' => 'ON',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 121,
                         'char' => 8294,
                         'i' => -1,
@@ -853,7 +853,7 @@ class StepXTest extends TestCase
                         'otype' => 'NI',
                     ],
                     [
-                        'x' => 0,
+                        'x' => -1,
                         'pos' => 126,
                         'char' => 34,
                         'i' => -1,

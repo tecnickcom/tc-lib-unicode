@@ -186,7 +186,10 @@ class Bidi
         $this->str = $str;
         $this->chrarr = $chrarr;
         $this->ordarr = $ordarr;
-        $this->forcedir = strtoupper($forcedir[0]);
+        $this->forcedir = '';
+        if ($forcedir !== '') {
+            $this->forcedir = strtoupper($forcedir[0]);
+        }
     }
 
     /**

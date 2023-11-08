@@ -149,7 +149,7 @@ class BidiTest extends TestUtil
                     . ' \u0651\u064c\u0651\u064d\u0651\u064e\u0651\u064f\u0651\u0650'
                     . ' \u0644\u0622"'
                 ),
-                json_decode('"\ufef5 \ufc62\ufc61\ufc60\ufc5f\ufc5e \ufb50 \u0602\u0601\u0600 \ufdf2"'),
+                json_decode('"\ufef5\ufedf \ufc62\ufc61\ufc60\ufc5f\ufc5e \ufb50 \u0602\u0601\u0600 \ufdf2"'),
                 '',
             ],
             [

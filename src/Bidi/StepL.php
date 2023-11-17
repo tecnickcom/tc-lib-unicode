@@ -29,22 +29,15 @@ use Com\Tecnick\Unicode\Data\Mirror as UniMirror;
  * @copyright 2011-2023 Nicola Asuni - Tecnick.com LTD
  * @license   http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link      https://github.com/tecnickcom/tc-lib-unicode
+ *
+ * @phpstan-import-type CharData from \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
  */
 class StepL
 {
     /**
      * Array of characters data to return
      *
-     * @var array<int, array{
-     *             'char': int,
-     *             'i': int,
-     *             'level': int,
-     *             'otype': string,
-     *             'pdimatch': int,
-     *             'pos': int,
-     *             'type': string,
-     *             'x': int,
-     *           }>
+     * @var array<int, CharData>
      */
     protected array $chardata = [];
 
@@ -56,16 +49,7 @@ class StepL
     /**
      * L steps
      *
-     * @param array<int, array{
-     *             'char': int,
-     *             'i': int,
-     *             'level': int,
-     *             'otype': string,
-     *             'pdimatch': int,
-     *             'pos': int,
-     *             'type': string,
-     *             'x': int,
-     *           }> $chardata Array of characters data
+     * @param array<int, CharData> $chardata Array of characters data
      * @param int   $pel      Paragraph embedding level
      * @param int   $maxlevel Maximum level
      */
@@ -94,16 +78,7 @@ class StepL
     /**
      * Returns the processed array
      *
-     * @return array<int, array{
-     *             'char': int,
-     *             'i': int,
-     *             'level': int,
-     *             'otype': string,
-     *             'pdimatch': int,
-     *             'pos': int,
-     *             'type': string,
-     *             'x': int,
-     *           }>
+     * @return array<int, CharData>
      */
     public function getChrData(): array
     {

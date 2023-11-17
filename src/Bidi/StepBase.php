@@ -26,32 +26,15 @@ namespace Com\Tecnick\Unicode\Bidi;
  * @copyright 2011-2023 Nicola Asuni - Tecnick.com LTD
  * @license   http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link      https://github.com/tecnickcom/tc-lib-unicode
+ *
+ * @phpstan-import-type SeqData from \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
  */
 abstract class StepBase
 {
     /**
      * Initialize Sequence to process
      *
-     * @param array{
-     *        'e': int,
-     *        'edir': string,
-     *        'end': int,
-     *        'eos': string,
-     *        'length': int,
-     *        'maxlevel': int,
-     *        'sos': string,
-     *        'start': int,
-     *        'item': array<int, array{
-     *             'char': int,
-     *             'i': int,
-     *             'level': int,
-     *             'otype': string,
-     *             'pdimatch': int,
-     *             'pos': int,
-     *             'type': string,
-     *             'x': int,
-     *           }>,
-     *        } $seq     Isolated Sequence array
+     * @param SeqData $seq     Isolated Sequence array
      * @param bool  $process If false disable automatic processing (this is a testing flag)
      */
     public function __construct(
@@ -69,26 +52,7 @@ abstract class StepBase
     /**
      * Returns the processed array
      *
-     * @return array{
-     *        'e': int,
-     *        'edir': string,
-     *        'end': int,
-     *        'eos': string,
-     *        'length': int,
-     *        'maxlevel': int,
-     *        'sos': string,
-     *        'start': int,
-     *        'item': array<int, array{
-     *             'char': int,
-     *             'i': int,
-     *             'level': int,
-     *             'otype': string,
-     *             'pdimatch': int,
-     *             'pos': int,
-     *             'type': string,
-     *             'x': int,
-     *           }>,
-     *        }
+     * @return SeqData
      */
     public function getSequence(): array
     {

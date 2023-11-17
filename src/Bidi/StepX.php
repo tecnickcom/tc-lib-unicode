@@ -29,6 +29,16 @@ use Com\Tecnick\Unicode\Data\Type as UniType;
  * @copyright 2011-2023 Nicola Asuni - Tecnick.com LTD
  * @license   http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link      https://github.com/tecnickcom/tc-lib-unicode
+ *
+ * @phpstan-import-type SeqData from \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
+ * @phpstan-import-type CharData from \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
+ *
+ * @phpstan-type DssData array{
+ *          'ord': int,
+ *          'cel': int,
+ *          'dos': string,
+ *          'dis': bool,
+ *      }
  */
 class StepX
 {
@@ -40,7 +50,7 @@ class StepX
     /**
      * Directional Status Stack
      *
-     * @var array<int, array{'ord': int, 'cel': int, 'dos': string, 'dis': bool}>
+     * @var array<int, DssData>
      */
     protected array $dss = [];
 
@@ -62,16 +72,7 @@ class StepX
     /**
      * Array of characters data to return
      *
-     * @var array<int, array{
-     *        'char': int,
-     *        'i': int,
-     *        'level': int,
-     *        'otype': string,
-     *        'pdimatch': int,
-     *        'pos': int,
-     *        'type': string,
-     *        'x': int,
-     *      }>
+     * @var array<int, CharData>
      */
     protected array $chardata = [];
 
@@ -107,16 +108,7 @@ class StepX
     /**
      * Returns the processed array
      *
-     * @return array<int, array{
-     *          'char': int,
-     *          'i': int,
-     *          'level': int,
-     *          'otype': string,
-     *          'pdimatch': int,
-     *          'pos': int,
-     *          'type': string,
-     *          'x': int,
-     *        }>
+     * @return array<int, CharData>
      */
     public function getChrData(): array
     {
@@ -266,11 +258,7 @@ class StepX
      *
      * @param int   $pos  Original character position in the input string
      * @param int   $ord  Char code
-     * @param array{'ord': int,
-     *        'cel': int,
-     *        'dos': string,
-     *        'dis': bool
-     *        } $edss Last entry in the Directional Status Stack
+     * @param DssData $edss Last entry in the Directional Status Stack
      */
     protected function pushChar(int $pos, int $ord, array $edss): void
     {
@@ -292,11 +280,7 @@ class StepX
      *
      * @param int   $pos  Original character position in the input string
      * @param int   $ord  Char code
-     * @param array{'ord': int,
-     *        'cel': int,
-     *        'dos': string,
-     *        'dis': bool
-     *        } $edss Last entry in the Directional Status Stack
+     * @param DssData $edss Last entry in the Directional Status Stack
      */
     protected function processChar(int $pos, int $ord, array $edss): void
     {
@@ -316,11 +300,7 @@ class StepX
     /**
      * Process the PDF type character
      *
-     * @param array{'ord': int,
-     *        'cel': int,
-     *        'dos': string,
-     *        'dis': bool
-     *        } $edss Last entry in the Directional Status Stack
+     * @param DssData $edss Last entry in the Directional Status Stack
      */
     protected function processPdfCase(array $edss): void
     {
@@ -358,11 +338,7 @@ class StepX
      *
      * @param int   $pos  Original character position in the input string
      * @param int   $ord  Char code
-     * @param array{'ord': int,
-     *        'cel': int,
-     *        'dos': string,
-     *        'dis': bool
-     *        } $edss Last entry in the Directional Status Stack
+     * @param DssData $edss Last entry in the Directional Status Stack
      */
     protected function processPdiCase(int $pos, int $ord, array $edss): void
     {
@@ -430,11 +406,7 @@ class StepX
      * Process the PDF type character
      *
      * @param int   $pos  Original character position in the input string
-     * @param array{'ord': int,
-     *        'cel': int,
-     *        'dos': string,
-     *        'dis': bool
-     *        } $edss Last entry in the Directional Status Stack
+     * @param DssData $edss Last entry in the Directional Status Stack
      */
     protected function processFsiCase(int $pos, array $edss): void
     {

@@ -29,6 +29,8 @@ use Com\Tecnick\Unicode\Data\Constant as UniConstant;
  * @copyright 2011-2023 Nicola Asuni - Tecnick.com LTD
  * @license   http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link      https://github.com/tecnickcom/tc-lib-unicode
+ *
+ * @phpstan-import-type SeqData from \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
  */
 class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
 {
@@ -39,26 +41,7 @@ class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
      * Shaping is logically applied after the Bidirectional Algorithm is used and is limited to
      * characters within the same directional run.
      *
-     * @param array{
-     *        'e': int,
-     *        'edir': string,
-     *        'end': int,
-     *        'eos': string,
-     *        'length': int,
-     *        'maxlevel': int,
-     *        'sos': string,
-     *        'start': int,
-     *        'item': array<int, array{
-     *            'char': int,
-     *            'i': int,
-     *            'level': int,
-     *            'otype': string,
-     *            'pdimatch': int,
-     *            'pos': int,
-     *            'type': string,
-     *            'x': int,
-     *          }>,
-     *        } $seq isolated Sequence array
+     * @param SeqData $seq isolated Sequence array
      */
     public function __construct(array $seq)
     {
@@ -70,26 +53,7 @@ class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
     /**
      * Returns the processed sequence
      *
-     * @return array{
-     *          'e': int,
-     *          'edir': string,
-     *          'end': int,
-     *          'eos': string,
-     *          'length': int,
-     *          'maxlevel': int,
-     *          'sos': string,
-     *          'start': int,
-     *          'item': array<int, array{
-     *            'char': int,
-     *            'i': int,
-     *            'level': int,
-     *            'otype': string,
-     *            'pdimatch': int,
-     *            'pos': int,
-     *            'type': string,
-     *            'x': int,
-     *          }>,
-     *        }
+     * @return SeqData
      */
     public function getSequence(): array
     {

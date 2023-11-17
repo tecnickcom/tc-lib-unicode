@@ -28,6 +28,9 @@ use Com\Tecnick\Unicode\Data\Constant as UniConstant;
  * @copyright 2011-2023 Nicola Asuni - Tecnick.com LTD
  * @license   http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link      https://github.com/tecnickcom/tc-lib-unicode
+ *
+ * @phpstan-import-type SeqData from \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
+ * @phpstan-import-type CharData from \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
  */
 class StepXten
 {
@@ -51,42 +54,14 @@ class StepXten
     /**
      * Array of Isolated Level Run sequences
      *
-     * @var array<int, array{
-     *         'e': int,
-     *         'edir': string,
-     *         'end': int,
-     *         'eos': string,
-     *         'length': int,
-     *         'maxlevel': int,
-     *         'sos': string,
-     *         'start': int,
-     *         'item': array<int, array{
-     *             'char': int,
-     *             'i': int,
-     *             'level': int,
-     *             'otype': string,
-     *             'pdimatch': int,
-     *             'pos': int,
-     *             'type': string,
-     *             'x': int,
-     *           }>,
-     *         }>
+     * @var array<int, SeqData>
      */
     protected array $ilrs = [];
 
     /**
      * X Steps for Bidirectional algorithm
      *
-     * @param array<int, array{
-     *             'char': int,
-     *             'i': int,
-     *             'level': int,
-     *             'otype': string,
-     *             'pdimatch': int,
-     *             'pos': int,
-     *             'type': string,
-     *             'x': int,
-     *           }> $chardata Array of UTF-8 codepoints
+     * @param array<int, CharData> $chardata Array of UTF-8 codepoints
      * @param int   $pel      Paragraph Embedding Level
      */
     public function __construct(
@@ -106,26 +81,7 @@ class StepXten
     /**
      * Get the Isolated Run Sequences
      *
-     * @return array<int, array{
-     *         'e': int,
-     *         'edir': string,
-     *         'end': int,
-     *         'eos': string,
-     *         'length': int,
-     *         'maxlevel': int,
-     *         'sos': string,
-     *         'start': int,
-     *         'item': array<int, array{
-     *             'char': int,
-     *             'i': int,
-     *             'level': int,
-     *             'otype': string,
-     *             'pdimatch': int,
-     *             'pos': int,
-     *             'type': string,
-     *             'x': int,
-     *           }>,
-     *         }>
+     * @return array<int, SeqData>
      */
     public function getIsolatedLevelRunSequences(): array
     {

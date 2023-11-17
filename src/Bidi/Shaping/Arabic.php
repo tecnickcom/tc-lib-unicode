@@ -28,32 +28,36 @@ use Com\Tecnick\Unicode\Data\Arabic as UniArabic;
  * @copyright 2011-2023 Nicola Asuni - Tecnick.com LTD
  * @license   http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link      https://github.com/tecnickcom/tc-lib-unicode
+ *
+ * @phpstan-type CharData array{
+ *     'char': int,
+ *     'i': int,
+ *     'level': int,
+ *     'otype': string,
+ *     'pdimatch': int,
+ *     'pos': int,
+ *     'type': string,
+ *     'x': int,
+ * }
+ *
+ * @phpstan-type SeqData array{
+ *     'e': int,
+ *     'edir': string,
+ *     'end': int,
+ *     'eos': string,
+ *     'length': int,
+ *     'maxlevel': int,
+ *     'sos': string,
+ *     'start': int,
+ *     'item': array<int, CharData>,
+ * }
  */
 abstract class Arabic
 {
     /**
      * Sequence to process and return
      *
-     * @var array{
-     *        'e': int,
-     *        'edir': string,
-     *        'end': int,
-     *        'eos': string,
-     *        'length': int,
-     *        'maxlevel': int,
-     *        'sos': string,
-     *        'start': int,
-     *        'item': array<int, array{
-     *             'char': int,
-     *             'i': int,
-     *             'level': int,
-     *             'otype': string,
-     *             'pdimatch': int,
-     *             'pos': int,
-     *             'type': string,
-     *             'x': int,
-     *           }>,
-     *        }
+     * @var SeqData
      */
     protected array $seq = [
         'e' => 0,
@@ -70,32 +74,14 @@ abstract class Arabic
     /**
      * Array of processed chars
      *
-     * @var array<int, array{
-     *             'char': int,
-     *             'i': int,
-     *             'level': int,
-     *             'otype': string,
-     *             'pdimatch': int,
-     *             'pos': int,
-     *             'type': string,
-     *             'x': int,
-     *           }>
+     * @var array<int, CharData>
      */
     protected array $newchardata = [];
 
     /**
      * Array of AL characters
      *
-     * @var array<int, array{
-     *             'char': int,
-     *             'i': int,
-     *             'level': int,
-     *             'otype': string,
-     *             'pdimatch': int,
-     *             'pos': int,
-     *             'type': string,
-     *             'x': int,
-     *           }>
+     * @var array<int, CharData>
      */
     protected array $alchars = [];
 
@@ -107,26 +93,8 @@ abstract class Arabic
     /**
      * Check if it is a LAA LETTER
      *
-     * @param ?array{
-     *             'char': int,
-     *             'i': int,
-     *             'level': int,
-     *             'otype': string,
-     *             'pdimatch': int,
-     *             'pos': int,
-     *             'type': string,
-     *             'x': int,
-     *           } $prevchar Previous char
-     * @param array{
-     *             'char': int,
-     *             'i': int,
-     *             'level': int,
-     *             'otype': string,
-     *             'pdimatch': int,
-     *             'pos': int,
-     *             'type': string,
-     *             'x': int,
-     *           } $thischar Current char
+     * @param ?CharData $prevchar Previous char
+     * @param CharData  $thischar Current char
      */
     protected function isLaaLetter(?array $prevchar, array $thischar): bool
     {
@@ -138,26 +106,8 @@ abstract class Arabic
     /**
      * Check next char
      *
-     * @param array{
-     *             'char': int,
-     *             'i': int,
-     *             'level': int,
-     *             'otype': string,
-     *             'pdimatch': int,
-     *             'pos': int,
-     *             'type': string,
-     *             'x': int,
-     *           } $thischar Current char
-     * @param ?array{
-     *             'char': int,
-     *             'i': int,
-     *             'level': int,
-     *             'otype': string,
-     *             'pdimatch': int,
-     *             'pos': int,
-     *             'type': string,
-     *             'x': int,
-     *           } $nextchar Next char
+     * @param CharData  $thischar Current char
+     * @param ?CharData $nextchar Next char
      */
     protected function hasNextChar(array $thischar, ?array $nextchar): bool
     {
@@ -171,26 +121,8 @@ abstract class Arabic
     /**
      * Check previous char
      *
-     * @param ?array{
-     *             'char': int,
-     *             'i': int,
-     *             'level': int,
-     *             'otype': string,
-     *             'pdimatch': int,
-     *             'pos': int,
-     *             'type': string,
-     *             'x': int,
-     *           } $prevchar Previous char
-     * @param array{
-     *             'char': int,
-     *             'i': int,
-     *             'level': int,
-     *             'otype': string,
-     *             'pdimatch': int,
-     *             'pos': int,
-     *             'type': string,
-     *             'x': int,
-     *           } $thischar Current char
+     * @param ?CharData $prevchar Previous char
+     * @param CharData  $thischar Current char
      */
     protected function hasPrevChar(?array $prevchar, array $thischar): bool
     {
@@ -203,36 +135,9 @@ abstract class Arabic
     /**
      * Check if it is a middle character
      *
-     * @param ?array{
-     *             'char': int,
-     *             'i': int,
-     *             'level': int,
-     *             'otype': string,
-     *             'pdimatch': int,
-     *             'pos': int,
-     *             'type': string,
-     *             'x': int,
-     *           } $prevchar Previous char
-     * @param array{
-     *             'char': int,
-     *             'i': int,
-     *             'level': int,
-     *             'otype': string,
-     *             'pdimatch': int,
-     *             'pos': int,
-     *             'type': string,
-     *             'x': int,
-     *           } $thischar Current char
-     * @param ?array{
-     *             'char': int,
-     *             'i': int,
-     *             'level': int,
-     *             'otype': string,
-     *             'pdimatch': int,
-     *             'pos': int,
-     *             'type': string,
-     *             'x': int,
-     *           } $nextchar Next char
+     * @param ?CharData $prevchar Previous char
+     * @param CharData  $thischar Current char
+     * @param ?CharData $nextchar Next char
      */
     protected function isMiddleChar(?array $prevchar, array $thischar, ?array $nextchar): bool
     {
@@ -242,36 +147,9 @@ abstract class Arabic
     /**
      * Check if it is a final character
      *
-     * @param ?array{
-     *             'char': int,
-     *             'i': int,
-     *             'level': int,
-     *             'otype': string,
-     *             'pdimatch': int,
-     *             'pos': int,
-     *             'type': string,
-     *             'x': int,
-     *           } $prevchar Previous char
-     * @param array{
-     *             'char': int,
-     *             'i': int,
-     *             'level': int,
-     *             'otype': string,
-     *             'pdimatch': int,
-     *             'pos': int,
-     *             'type': string,
-     *             'x': int,
-     *           } $thischar Current char
-     * @param ?array{
-     *             'char': int,
-     *             'i': int,
-     *             'level': int,
-     *             'otype': string,
-     *             'pdimatch': int,
-     *             'pos': int,
-     *             'type': string,
-     *             'x': int,
-     *           }  $nextchar Next char
+     * @param ?CharData $prevchar Previous char
+     * @param CharData  $thischar Current char
+     * @param ?CharData $nextchar Next char
      */
     protected function isFinalChar(?array $prevchar, array $thischar, ?array $nextchar): bool
     {
@@ -285,27 +163,9 @@ abstract class Arabic
     /**
      * Set initial or middle char
      *
-     * @param int   $idx       Current index
-     * @param ?array{
-     *             'char': int,
-     *             'i': int,
-     *             'level': int,
-     *             'otype': string,
-     *             'pdimatch': int,
-     *             'pos': int,
-     *             'type': string,
-     *             'x': int,
-     *           } $prevchar  Previous char
-     * @param array{
-     *             'char': int,
-     *             'i': int,
-     *             'level': int,
-     *             'otype': string,
-     *             'pdimatch': int,
-     *             'pos': int,
-     *             'type': string,
-     *             'x': int,
-     *           } $thischar  Current char
+     * @param int                    $idx       Current index
+     * @param ?CharData              $prevchar  Previous char
+     * @param CharData               $thischar  Current char
      * @param array<int, array<int>> $arabicarr Substitution array
      */
     protected function setMiddleChar(int $idx, ?array $prevchar, array $thischar, array $arabicarr): void
@@ -324,17 +184,8 @@ abstract class Arabic
     /**
      * Set initial char
      *
-     * @param int   $idx       Current index
-     * @param array{
-     *             'char': int,
-     *             'i': int,
-     *             'level': int,
-     *             'otype': string,
-     *             'pdimatch': int,
-     *             'pos': int,
-     *             'type': string,
-     *             'x': int,
-     *           } $thischar  Current char
+     * @param int                    $idx       Current index
+     * @param CharData               $thischar  Current char
      * @param array<int, array<int>> $arabicarr Substitution array
      */
     protected function setInitialChar(int $idx, array $thischar, array $arabicarr): void
@@ -347,27 +198,9 @@ abstract class Arabic
     /**
      * Set final char
      *
-     * @param int   $idx       Current index
-     * @param ?array{
-     *             'char': int,
-     *             'i': int,
-     *             'level': int,
-     *             'otype': string,
-     *             'pdimatch': int,
-     *             'pos': int,
-     *             'type': string,
-     *             'x': int,
-     *           } $prevchar  Previous char
-     * @param array{
-     *             'char': int,
-     *             'i': int,
-     *             'level': int,
-     *             'otype': string,
-     *             'pdimatch': int,
-     *             'pos': int,
-     *             'type': string,
-     *             'x': int,
-     *           } $thischar  Current char
+     * @param int                    $idx       Current index
+     * @param ?CharData              $prevchar  Previous char
+     * @param CharData               $thischar  Current char
      * @param array<int, array<int>> $arabicarr Substitution array
      */
     protected function setFinalChar(int $idx, ?array $prevchar, array $thischar, array $arabicarr): void
@@ -396,38 +229,11 @@ abstract class Arabic
     /**
      * Process AL character
      *
-     * @param int   $idx      Current index
-     * @param int   $pos      Current char position
-     * @param ?array{
-     *             'char': int,
-     *             'i': int,
-     *             'level': int,
-     *             'otype': string,
-     *             'pdimatch': int,
-     *             'pos': int,
-     *             'type': string,
-     *             'x': int,
-     *           } $prevchar Previous char
-     * @param array{
-     *             'char': int,
-     *             'i': int,
-     *             'level': int,
-     *             'otype': string,
-     *             'pdimatch': int,
-     *             'pos': int,
-     *             'type': string,
-     *             'x': int,
-     *           } $thischar Current char
-     * @param ?array{
-     *             'char': int,
-     *             'i': int,
-     *             'level': int,
-     *             'otype': string,
-     *             'pdimatch': int,
-     *             'pos': int,
-     *             'type': string,
-     *             'x': int,
-     *           } $nextchar Next char
+     * @param int       $idx      Current index
+     * @param int       $pos      Current char position
+     * @param ?CharData $prevchar Previous char
+     * @param CharData  $thischar Current char
+     * @param ?CharData $nextchar Next char
      */
     protected function processAlChar(int $idx, int $pos, ?array $prevchar, array $thischar, ?array $nextchar): void
     {

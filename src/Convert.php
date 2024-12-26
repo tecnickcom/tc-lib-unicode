@@ -53,7 +53,7 @@ class Convert extends \Com\Tecnick\Unicode\Convert\Encoding
     public function ord(string $chr): int
     {
         $uni = unpack('N', mb_convert_encoding($chr, 'UCS-4BE', 'UTF-8'));
-        if ($uni === false) {
+        if (($uni === false) || (!isset($uni[1])) || (!is_int($uni[1]))) {
             throw new UniException('Error converting string');
         }
 

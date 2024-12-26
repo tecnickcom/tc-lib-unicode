@@ -18,6 +18,7 @@ namespace Test\Bidi;
 
 use Com\Tecnick\Unicode\Bidi\StepI;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Bidi Test
@@ -33,8 +34,6 @@ use PHPUnit\Framework\TestCase;
 class StepITest extends TestCase
 {
     /**
-     * @dataProvider stepIDataProvider
-     *
      * @param array{
      *        'e': int,
      *        'edir': string,
@@ -55,7 +54,10 @@ class StepITest extends TestCase
      *            'x': int,
      *          }>,
      *        } $seq     Isolated Sequence array
+     *
+     * @param mixed $expected Expected result
      */
+    #[DataProvider('stepIDataProvider')]
     public function testStepI(array $seq, mixed $expected): void
     {
         $stepi = new StepI($seq);

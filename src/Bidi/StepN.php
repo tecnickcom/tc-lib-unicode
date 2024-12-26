@@ -288,7 +288,7 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
      *
      * @param int $idx Start index
      */
-    protected function getNextN1Char(int $idx): int|float
+    protected function getNextN1Char(int $idx): int
     {
         $jdx = ($idx + 1);
         while (($jdx < $this->seq['length']) && ($this->seq['item'][$jdx]['type'] == 'NI')) {

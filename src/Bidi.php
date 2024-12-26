@@ -159,7 +159,7 @@ class Bidi
      * @param ?array<int>  $ordarr   Array of UTF-8 codepoints (if empty it will be generated from $str or $chrarr)
      * @param string $forcedir If 'R' forces RTL, if 'L' forces LTR
      *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings("PHPMD.CyclomaticComplexity")
      */
     protected function setInput(
         ?string $str = null,
@@ -272,7 +272,7 @@ class Bidi
     /**
      * Process the string
      *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings("PHPMD.CyclomaticComplexity")
      */
     protected function process(): void
     {

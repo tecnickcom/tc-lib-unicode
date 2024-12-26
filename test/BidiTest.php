@@ -17,6 +17,7 @@
 namespace Test;
 
 use Com\Tecnick\Unicode\Bidi;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Bidi Test
@@ -38,14 +39,13 @@ class BidiTest extends TestUtil
     }
 
     /**
-     * @dataProvider inputDataProvider
-     *
      * @param ?string $str      String to convert (if null it will be generated from $chrarr or $ordarr)
      * @param ?array<string>  $chrarr   Array of UTF-8 chars (if empty it will be generated from $str or $ordarr)
      * @param ?array<int>  $ordarr   Array of UTF-8 codepoints (if empty it will be generated from $str or $chrarr)
      * @param string $forcedir If 'R' forces RTL, if 'L' forces LTR
      * @param bool   $shaping  If true enable the shaping algorithm
      */
+    #[DataProvider('inputDataProvider')]
     public function testStr(
         ?string $str = null,
         ?array $chrarr = null,
@@ -83,9 +83,7 @@ class BidiTest extends TestUtil
         ];
     }
 
-    /**
-     * @dataProvider bidiStrDataProvider
-     */
+    #[DataProvider('bidiStrDataProvider')]
     public function testBidiStr(string $str, mixed $expected, string $forcedir = ''): void
     {
         $bidi = new Bidi($str, null, null, $forcedir, true);

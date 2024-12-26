@@ -151,7 +151,7 @@ class StepX
      * @param int $pos Original character position in the input string
      * @param int $ord Char code
      *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings("PHPMD.CyclomaticComplexity")
      */
     protected function processXcase(int $pos, int $ord): void
     {

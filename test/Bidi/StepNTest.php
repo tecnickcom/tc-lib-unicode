@@ -18,6 +18,7 @@ namespace Test\Bidi;
 
 use Com\Tecnick\Unicode\Bidi\StepN;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Bidi Test
@@ -33,8 +34,6 @@ use PHPUnit\Framework\TestCase;
 class StepNTest extends TestCase
 {
     /**
-     * @dataProvider stepN0DataProvider
-     *
      * @param array{
      *        'e': int,
      *        'edir': string,
@@ -56,6 +55,7 @@ class StepNTest extends TestCase
      *          }>,
      *        } $seq     Isolated Sequence array
      */
+    #[DataProvider('stepN0DataProvider')]
     public function testStepN0(array $seq, mixed $expected): void
     {
         $stepn = new StepN($seq, false);
@@ -1533,8 +1533,6 @@ class StepNTest extends TestCase
     }
 
     /**
-     * @dataProvider stepN1DataProvider
-     *
      * @param array{
      *        'e': int,
      *        'edir': string,
@@ -1556,6 +1554,7 @@ class StepNTest extends TestCase
      *          }>,
      *        } $seq     Isolated Sequence array
      */
+    #[DataProvider('stepN1DataProvider')]
     public function testStepN1(array $seq, mixed $expected): void
     {
         $stepn = new \Com\Tecnick\Unicode\Bidi\StepN($seq, false);
@@ -2558,8 +2557,6 @@ class StepNTest extends TestCase
     }
 
     /**
-     * @dataProvider stepN2DataProvider
-     *
      * @param array{
      *        'e': int,
      *        'edir': string,
@@ -2581,6 +2578,7 @@ class StepNTest extends TestCase
      *          }>,
      *        } $seq     Isolated Sequence array
      */
+    #[DataProvider('stepN2DataProvider')]
     public function testStepN2(array $seq, mixed $expected): void
     {
         $stepn = new \Com\Tecnick\Unicode\Bidi\StepN($seq, false);
@@ -2663,8 +2661,6 @@ class StepNTest extends TestCase
     }
 
     /**
-     * @dataProvider stepNDataProvider
-     *
      * @param array{
      *        'e': int,
      *        'edir': string,
@@ -2686,6 +2682,7 @@ class StepNTest extends TestCase
      *          }>,
      *        } $seq     Isolated Sequence array
      */
+    #[DataProvider('stepNDataProvider')]
     public function testStepN(array $seq, mixed $expected): void
     {
         $stepn = new \Com\Tecnick\Unicode\Bidi\StepN($seq);

@@ -18,6 +18,7 @@ namespace Test;
 
 use Com\Tecnick\Unicode\Data\Latin;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Convert Test
@@ -37,9 +38,7 @@ class ConvertTest extends TestCase
         return new \Com\Tecnick\Unicode\Convert();
     }
 
-    /**
-     * @dataProvider chrDataProvider
-     */
+    #[DataProvider('chrDataProvider')]
     public function testChr(int $ord, mixed $expected): void
     {
         $convert = $this->getTestObject();
@@ -47,9 +46,7 @@ class ConvertTest extends TestCase
         $this->assertEquals($expected, $chr);
     }
 
-    /**
-     * @dataProvider chrDataProvider
-     */
+    #[DataProvider('chrDataProvider')]
     public function testOrd(mixed $expected, string $chr): void
     {
         $convert = $this->getTestObject();
@@ -138,9 +135,7 @@ class ConvertTest extends TestCase
         $this->assertEquals('09AZaz', $res);
     }
 
-    /**
-     * @dataProvider strToHexDataProvider
-     */
+    #[DataProvider('strToHexDataProvider')]
     public function testStrToHex(string $str, mixed $hex): void
     {
         $convert = $this->getTestObject();
@@ -148,9 +143,7 @@ class ConvertTest extends TestCase
         $this->assertEquals($hex, $res);
     }
 
-    /**
-     * @dataProvider strToHexDataProvider
-     */
+    #[DataProvider('strToHexDataProvider')]
     public function testHexToStr(mixed $str, string $hex): void
     {
         $convert = $this->getTestObject();
@@ -172,9 +165,7 @@ class ConvertTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider toUTF16BEDataProvider
-     */
+    #[DataProvider('toUTF16BEDataProvider')]
     public function testToUTF16BE(string $str, mixed $exp): void
     {
         $convert = $this->getTestObject();
@@ -194,9 +185,7 @@ class ConvertTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider toUTF8DataProvider
-     */
+    #[DataProvider('toUTF8DataProvider')]
     public function testToUTF8(string $str, mixed $exp, string $enc = null): void
     {
         $convert = $this->getTestObject();

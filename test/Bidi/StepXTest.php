@@ -18,6 +18,7 @@ namespace Test\Bidi;
 
 use Com\Tecnick\Unicode\Bidi\StepX;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Bidi Test
@@ -33,10 +34,9 @@ use PHPUnit\Framework\TestCase;
 class StepXTest extends TestCase
 {
     /**
-     * @dataProvider stepXDataProvider
-     *
      * @param array<int> $ordarr Array of character codes
      */
+    #[DataProvider('stepXDataProvider')]
     public function testStepX(array $ordarr, int $pel, mixed $expected): void
     {
         $stepx = new StepX($ordarr, $pel);

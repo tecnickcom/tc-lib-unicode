@@ -18,6 +18,7 @@ namespace Test\Bidi;
 
 use Com\Tecnick\Unicode\Bidi\StepXten;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Bidi Test
@@ -33,8 +34,6 @@ use PHPUnit\Framework\TestCase;
 class StepXtenTest extends TestCase
 {
     /**
-     * @dataProvider stepXtenDataProvider
-     *
      * @param array<int, array{
      *            'char': int,
      *            'i': int,
@@ -46,6 +45,7 @@ class StepXtenTest extends TestCase
      *            'x': int,
      *          }> $chardata
      */
+    #[DataProvider('stepXtenDataProvider')]
     public function testStepXteN(array $chardata, mixed $expected): void
     {
         $stepxten = new StepXten($chardata, 0);

@@ -18,6 +18,7 @@ namespace Test\Bidi;
 
 use Com\Tecnick\Unicode\Bidi\StepL;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Bidi Test
@@ -33,8 +34,6 @@ use PHPUnit\Framework\TestCase;
 class StepLTest extends TestCase
 {
     /**
-     * @dataProvider stepLDataProvider
-     *
      * @param array<int, array{
      *                'char': int,
      *                'i': int,
@@ -46,6 +45,7 @@ class StepLTest extends TestCase
      *                'x': int,
      *              }> $chardata
      */
+    #[DataProvider('stepLDataProvider')]
     public function testStepL(array $chardata, int $pel, int $maxlevel, mixed $expected): void
     {
         $stepl = new StepL($chardata, $pel, $maxlevel);

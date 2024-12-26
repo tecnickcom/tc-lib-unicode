@@ -18,6 +18,7 @@ namespace Test\Bidi;
 
 use Com\Tecnick\Unicode\Bidi\StepW;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * Bidi Test
@@ -33,8 +34,6 @@ use PHPUnit\Framework\TestCase;
 class StepWTest extends TestCase
 {
     /**
-     * @dataProvider stepWDataProvider
-     *
      * @param array{
      *          'e': int,
      *          'edir': string,
@@ -56,6 +55,7 @@ class StepWTest extends TestCase
      *          }>,
      *        } $seq
      */
+    #[DataProvider('stepWDataProvider')]
     public function testStepW(array $seq, mixed $expected): void
     {
         $stepw = new StepW($seq);
@@ -199,8 +199,6 @@ class StepWTest extends TestCase
     }
 
     /**
-     * @dataProvider stepW1DataProvider
-     *
      * @param array{
      *          'e': int,
      *          'edir': string,
@@ -222,6 +220,7 @@ class StepWTest extends TestCase
      *          }>,
      *        } $seq
      */
+    #[DataProvider('stepW1DataProvider')]
     public function testStepW1(array $seq, mixed $expected): void
     {
         $stepw = new \Com\Tecnick\Unicode\Bidi\StepW($seq, false);
@@ -630,8 +629,6 @@ class StepWTest extends TestCase
     }
 
     /**
-     * @dataProvider stepW2DataProvider
-     *
      * @param array{
      *          'e': int,
      *          'edir': string,
@@ -653,6 +650,7 @@ class StepWTest extends TestCase
      *          }>,
      *        } $seq
      */
+    #[DataProvider('stepW2DataProvider')]
     public function testStepW2(array $seq, mixed $expected): void
     {
         $stepw = new \Com\Tecnick\Unicode\Bidi\StepW($seq, false);
@@ -1121,8 +1119,6 @@ class StepWTest extends TestCase
     }
 
     /**
-     * @dataProvider stepW3DataProvider
-     *
      * @param array{
      *          'e': int,
      *          'edir': string,
@@ -1144,6 +1140,7 @@ class StepWTest extends TestCase
      *          }>,
      *        } $seq
      */
+    #[DataProvider('stepW3DataProvider')]
     public function testStepW3(array $seq, mixed $expected): void
     {
         $stepw = new \Com\Tecnick\Unicode\Bidi\StepW($seq, false);
@@ -1268,8 +1265,6 @@ class StepWTest extends TestCase
     }
 
     /**
-     * @dataProvider stepW4DataProvider
-     *
      * @param array{
      *          'e': int,
      *          'edir': string,
@@ -1291,6 +1286,7 @@ class StepWTest extends TestCase
      *          }>,
      *        } $seq
      */
+    #[DataProvider('stepW4DataProvider')]
     public function testStepW4(array $seq, mixed $expected): void
     {
         $stepw = new \Com\Tecnick\Unicode\Bidi\StepW($seq, false);
@@ -1607,8 +1603,6 @@ class StepWTest extends TestCase
     }
 
     /**
-     * @dataProvider stepW5DataProvider
-     *
      * @param array{
      *          'e': int,
      *          'edir': string,
@@ -1630,6 +1624,7 @@ class StepWTest extends TestCase
      *          }>,
      *        } $seq
      */
+    #[DataProvider('stepW5DataProvider')]
     public function testStepW5(array $seq, mixed $expected): void
     {
         $stepw = new \Com\Tecnick\Unicode\Bidi\StepW($seq, false);
@@ -2072,8 +2067,6 @@ class StepWTest extends TestCase
     }
 
     /**
-     * @dataProvider stepW6DataProvider
-     *
      * @param array{
      *          'e': int,
      *          'edir': string,
@@ -2095,6 +2088,7 @@ class StepWTest extends TestCase
      *          }>,
      *        } $seq
      */
+    #[DataProvider('stepW6DataProvider')]
     public function testStepW6(array $seq, mixed $expected): void
     {
         $stepw = new \Com\Tecnick\Unicode\Bidi\StepW($seq, false);
@@ -2457,8 +2451,6 @@ class StepWTest extends TestCase
     }
 
     /**
-     * @dataProvider stepW7DataProvider
-     *
      * @param array{
      *          'e': int,
      *          'edir': string,
@@ -2480,6 +2472,7 @@ class StepWTest extends TestCase
      *          }>,
      *        } $seq
      */
+    #[DataProvider('stepW7DataProvider')]
     public function testStepW7(array $seq, mixed $expected): void
     {
         $stepw = new \Com\Tecnick\Unicode\Bidi\StepW($seq, false);

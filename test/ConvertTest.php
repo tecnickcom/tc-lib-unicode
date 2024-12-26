@@ -186,7 +186,7 @@ class ConvertTest extends TestCase
     }
 
     #[DataProvider('toUTF8DataProvider')]
-    public function testToUTF8(string $str, mixed $exp, string $enc = null): void
+    public function testToUTF8(string $str, mixed $exp, ?string $enc = null): void
     {
         $convert = $this->getTestObject();
         $res = $convert->toUTF8($str, $enc);

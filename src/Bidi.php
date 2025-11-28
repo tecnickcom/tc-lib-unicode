@@ -168,11 +168,13 @@ class Bidi
         string $forcedir = ''
     ): void {
         if ($str === null) {
+            $str = '';
             if (($chrarr === null || $chrarr === []) && ($ordarr !== null && $ordarr !== [])) {
                 $chrarr = $this->conv->ordArrToChrArr($ordarr);
             }
-
-            $str = implode('', $chrarr);
+            if (!empty($chrarr)) {
+                $str = implode('', $chrarr);
+            }
         }
 
         if ($chrarr === null || $chrarr === []) {

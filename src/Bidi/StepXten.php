@@ -126,6 +126,8 @@ class StepXten
 
     /**
      * Set level Isolated Level Run Sequences
+     *
+     * @SuppressWarnings("PHPMD.CyclomaticComplexity")
      */
     protected function setIsolatedLevelRunSequences(): void
     {
@@ -170,9 +172,10 @@ class StepXten
 
             // For each level run in the paragraph whose first character is not a PDI,
             // or is a PDI that does not match any isolate initiator
-            if ($this->chardata[$seq['start']]['pdimatch'] >= 0) {
-                $parent = $this->chardata[$seq['start']]['pdimatch'];
-
+            if (
+                (($parent = $this->chardata[$seq['start']]['pdimatch']) >= 0)
+                && (!empty($this->ilrs[$parent]))
+            ) {
                 $this->ilrs[$parent]['item'] = array_merge(
                     $this->ilrs[$parent]['item'],
                     $isorun['item']
@@ -180,6 +183,7 @@ class StepXten
 
                 $this->ilrs[$parent]['length'] += $isorun['length'];
                 $this->ilrs[$parent]['end'] += $isorun['end'];
+
                 if ($pdimatch >= 0) {
                     $this->chardata[$pdimatch]['pdimatch'] = $parent;
                 }

@@ -119,7 +119,8 @@ class Encoding
             $chrenc = null;
         }
 
-        return mb_convert_encoding($str, 'UTF-8', $chrenc);
+        $result = mb_convert_encoding($str, 'UTF-8', $chrenc);
+        return $result === false ? '' : $result;
     }
 
     /**
@@ -131,6 +132,7 @@ class Encoding
      */
     public function toUTF16BE(string $str): string
     {
-        return mb_convert_encoding($str, 'UTF-16BE', 'UTF-8');
+        $result = mb_convert_encoding($str, 'UTF-16BE', 'UTF-8');
+        return $result === false ? '' : $result;
     }
 }

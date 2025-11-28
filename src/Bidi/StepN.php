@@ -191,6 +191,7 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
     protected function setBracketsType(int $open, int $close, string $type): void
     {
         $this->seq['item'][$open]['type'] = $type;
+        // @phpstan-ignore assign.propertyType
         $this->seq['item'][$close]['type'] = $type;
 
         // Any number of characters that had original bidirectional character type NSM
@@ -198,6 +199,7 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
         // changed to L or R under N0 should change to match the type of their preceding bracket.
         $next = ($close + 1);
         while (isset($this->seq['item'][$next]['otype']) && ($this->seq['item'][$next]['otype'] == 'NSM')) {
+            // @phpstan-ignore assign.propertyType
             $this->seq['item'][$next]['type'] = $type;
             ++$next;
         }
@@ -227,6 +229,7 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
 
             if ($next === $prev) {
                 for ($bdx = $idx; (($bdx < $jdx) && ($bdx < $this->seq['length'])); ++$bdx) {
+                    // @phpstan-ignore assign.propertyType
                     $this->seq['item'][$bdx]['type'] = $next;
                 }
             }

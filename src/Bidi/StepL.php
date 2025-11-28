@@ -151,14 +151,12 @@ class StepL
                         //     (b) the Bidi_Mirrored property value of that character is true.
                         $chardatum['char'] = UniMirror::UNI[$chardatum['char']];
                     }
-
                     $reversed[] = $chardatum;
                 } else {
                     if ($reversed !== []) {
                         $ordered = array_merge($ordered, array_reverse($reversed));
                         $reversed = [];
                     }
-
                     $ordered[] = $chardatum;
                 }
             }

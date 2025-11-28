@@ -79,7 +79,7 @@ class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
         $this->combineShadda();
         $this->removeDeletedChars();
         $this->seq['item'] = array_values($this->newchardata);
-        unset($this->newchardata);
+        $this->newchardata = []; // reset
     }
 
     /**
@@ -121,6 +121,7 @@ class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
                 && ($nxt >= 0) && (isset(UniArabic::DIACRITIC[$nxt]))
             ) {
                 $this->newchardata[$idx]['char'] = -1;
+                // @phpstan-ignore assign.propertyType
                 $this->newchardata[($idx + 1)]['char'] = UniArabic::DIACRITIC[$nxt];
             }
         }

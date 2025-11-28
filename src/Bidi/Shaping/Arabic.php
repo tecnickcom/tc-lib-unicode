@@ -212,8 +212,11 @@ abstract class Arabic
             && ($this->seq['item'][($idx - 2)]['char'] == UniArabic::LAM)
         ) {
             // Allah Word
+            // @phpstan-ignore assign.propertyType
             $this->newchardata[($idx - 2)]['char'] = -1;
+            // @phpstan-ignore assign.propertyType
             $this->newchardata[($idx - 1)]['char'] = -1;
+            // @phpstan-ignore assign.propertyType
             $this->newchardata[$idx]['char'] = UniArabic::LIGATURE_ALLAH_ISOLATED_FORM;
         } elseif (($prevchar !== null) && in_array($prevchar['char'], UniArabic::END)) {
             if (isset($arabicarr[$thischar['char']][0])) {

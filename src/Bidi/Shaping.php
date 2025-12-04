@@ -78,7 +78,7 @@ class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
 
         $this->combineShadda();
         $this->removeDeletedChars();
-        $this->seq['item'] = array_values($this->newchardata);
+        $this->seq['item'] = \array_values($this->newchardata);
         $this->newchardata = []; // reset
     }
 
@@ -95,7 +95,7 @@ class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
                 || ($this->seq['item'][$idx]['char'] == UniConstant::ZERO_WIDTH_NON_JOINER)
             ) {
                 $this->alchars[$this->numalchars]['i'] = $idx;
-                $this->alchars[$this->numalchars] = array_merge(
+                $this->alchars[$this->numalchars] = \array_merge(
                     $this->alchars[$this->numalchars],
                     $this->seq['item'][$idx]
                 );

@@ -44,7 +44,7 @@ class Encoding
         foreach ($ordarr as $chr) {
             if ($chr < 256) {
                 $latarr[] = $chr;
-            } elseif (array_key_exists($chr, Latin::SUBSTITUTE)) {
+            } elseif (\array_key_exists($chr, Latin::SUBSTITUTE)) {
                 $latarr[] = Latin::SUBSTITUTE[$chr];
             } elseif ($chr !== 0xFFFD) {
                 $latarr[] = 63; // '?' character
@@ -61,7 +61,7 @@ class Encoding
      */
     public function latinArrToStr(array $latarr): string
     {
-        return implode('', array_map('chr', $latarr));
+        return \implode('', \array_map('chr', $latarr));
     }
 
     /**
@@ -72,9 +72,9 @@ class Encoding
     public function strToHex(string $str): string
     {
         $hexstr = '';
-        $len = strlen($str);
+        $len = \strlen($str);
         for ($idx = 0; $idx < $len; ++$idx) {
-            $hexstr .= sprintf('%02s', dechex(ord($str[$idx])));
+            $hexstr .= \sprintf('%02s', \dechex(\ord($str[$idx])));
         }
 
         return $hexstr;
@@ -87,14 +87,14 @@ class Encoding
      */
     public function hexToStr(string $hex): string
     {
-        if (strlen($hex) == 0) {
+        if (\strlen($hex) == 0) {
             return '';
         }
 
         $str = '';
-        $bytes = str_split($hex, 2);
+        $bytes = \str_split($hex, 2);
         foreach ($bytes as $byte) {
-            $str .= chr((int) hexdec($byte));
+            $str .= \chr((int) \hexdec($byte));
         }
 
         return $str;
@@ -111,15 +111,15 @@ class Encoding
     public function toUTF8(string $str, null|string|array $enc = null): string
     {
         if ($enc === null) {
-            $enc = (array) mb_detect_order();
+            $enc = (array) \mb_detect_order();
         }
 
-        $chrenc = mb_detect_encoding($str, $enc);
+        $chrenc = \mb_detect_encoding($str, $enc);
         if ($chrenc === false) {
             $chrenc = null;
         }
 
-        $result = mb_convert_encoding($str, 'UTF-8', $chrenc);
+        $result = \mb_convert_encoding($str, 'UTF-8', $chrenc);
         return $result === false ? '' : $result;
     }
 
@@ -132,7 +132,7 @@ class Encoding
      */
     public function toUTF16BE(string $str): string
     {
-        $result = mb_convert_encoding($str, 'UTF-16BE', 'UTF-8');
+        $result = \mb_convert_encoding($str, 'UTF-16BE', 'UTF-8');
         return $result === false ? '' : $result;
     }
 }

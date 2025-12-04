@@ -117,11 +117,11 @@ class ConvertTest extends TestCase
     public function testUniArrToLatinArr(): void
     {
         $convert = $this->getTestObject();
-        $uniarr = array_keys(Latin::SUBSTITUTE);
+        $uniarr = \array_keys(Latin::SUBSTITUTE);
         $uniarr[] = 65533;  // 0xFFFD - character to ignore
         $uniarr[] = 123456; // undefined char
         $uniarr[] = 65;     // ASCII char
-        $latarr = array_values(Latin::SUBSTITUTE);
+        $latarr = \array_values(Latin::SUBSTITUTE);
         $latarr[] = 63;
         $latarr[] = 65;
         $res = $convert->uniArrToLatinArr($uniarr);
@@ -181,7 +181,7 @@ class ConvertTest extends TestCase
         return [
             ['', ''],
             ['ABC', '004100420043'],
-            [json_decode('"\u0010\uffff\u00ff\uff00"'), '0010ffff00ffff00'],
+            [\json_decode('"\u0010\uffff\u00ff\uff00"'), '0010ffff00ffff00'],
         ];
     }
 

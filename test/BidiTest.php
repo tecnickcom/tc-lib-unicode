@@ -102,7 +102,7 @@ class BidiTest extends TestUtil
                 'L',
             ],
             [
-                json_decode('"\u202EABC\u202C"'),
+                \json_decode('"\u202EABC\u202C"'),
                 'CBA',
                 '',
             ],
@@ -117,18 +117,18 @@ class BidiTest extends TestUtil
                 'R',
             ],
             [
-                json_decode('"smith (fabrikam \u0600\u0601\u0602) \u05de\u05d6\u05dc"'),
-                json_decode('"\u05dc\u05d6\u05de (\u0602\u0601\u0600 fabrikam) smith"'),
+                \json_decode('"smith (fabrikam \u0600\u0601\u0602) \u05de\u05d6\u05dc"'),
+                \json_decode('"\u05dc\u05d6\u05de (\u0602\u0601\u0600 fabrikam) smith"'),
                 'R',
             ],
             [
-                json_decode('"\u0600\u0601\u0602 book(s)"'),
-                json_decode('"book(s) \u0602\u0601\u0600"'),
+                \json_decode('"\u0600\u0601\u0602 book(s)"'),
+                \json_decode('"book(s) \u0602\u0601\u0600"'),
                 'R',
             ],
             [
-                json_decode('"\u0600\u0601(\u0602\u0603[&ef]!)gh"'),
-                json_decode('"gh(![ef&]\u0603\u0602)\u0601\u0600"'),
+                \json_decode('"\u0600\u0601(\u0602\u0603[&ef]!)gh"'),
+                \json_decode('"gh(![ef&]\u0603\u0602)\u0601\u0600"'),
                 'R',
             ],
             [
@@ -137,27 +137,27 @@ class BidiTest extends TestUtil
                 '',
             ],
             [
-                json_decode('"\u05de\u05d6\u05dc \u05d8\u05d5\u05d1"'),
-                json_decode('"\u05d1\u05d5\u05d8 \u05dc\u05d6\u05de"'),
+                \json_decode('"\u05de\u05d6\u05dc \u05d8\u05d5\u05d1"'),
+                \json_decode('"\u05d1\u05d5\u05d8 \u05dc\u05d6\u05de"'),
                 '',
             ],
             [
-                json_decode(
+                \json_decode(
                     '"\u0644\u0644\u0647 \u0600\u0601\u0602 \uFB50'
                     . ' \u0651\u064c\u0651\u064d\u0651\u064e\u0651\u064f\u0651\u0650'
                     . ' \u0644\u0622"'
                 ),
-                json_decode('"\ufef5\ufedf \ufc62\ufc61\ufc60\ufc5f\ufc5e \ufb50 \u0602\u0601\u0600 \ufdf2"'),
+                \json_decode('"\ufef5\ufedf \ufc62\ufc61\ufc60\ufc5f\ufc5e \ufb50 \u0602\u0601\u0600 \ufdf2"'),
                 '',
             ],
             [
-                json_decode('"A\u2067\u05d8\u2069B"'),
-                json_decode('"A\u2067\u05d8\u2069B"'),
+                \json_decode('"A\u2067\u05d8\u2069B"'),
+                \json_decode('"A\u2067\u05d8\u2069B"'),
                 '',
             ],
             [
                 // RLI + PDI
-                json_decode(
+                \json_decode(
                     '"The words \"\u2067\u05de\u05d6\u05dc [mazel] \u05d8\u05d5\u05d1 [tov]\u2069\"'
                     . ' mean \"Congratulations!\""'
                 ),
@@ -166,13 +166,13 @@ class BidiTest extends TestUtil
             ],
             [
                 // RLE + PDF
-                json_decode('"it is called \"\u202bAN INTRODUCTION TO java\u202c\" - $19.95 in hardcover."'),
+                \json_decode('"it is called \"\u202bAN INTRODUCTION TO java\u202c\" - $19.95 in hardcover."'),
                 'it is called "java TO INTRODUCTION AN" - $19.95 in hardcover.',
                 '',
             ],
             [
                 // RLI + PDI
-                json_decode('"it is called \"\u2067AN INTRODUCTION TO java\u2069\" - $19.95 in hardcover."'),
+                \json_decode('"it is called \"\u2067AN INTRODUCTION TO java\u2069\" - $19.95 in hardcover."'),
                 'it is called "⁧java TO INTRODUCTION AN⁩" - $19.95 in hardcover.',
                 '',
             ],

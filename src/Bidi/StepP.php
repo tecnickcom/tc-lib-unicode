@@ -84,6 +84,6 @@ class StepP
             --$isolate;
         }
 
-        return max(0, $isolate);
+        return \max(0, $isolate);
     }
 }

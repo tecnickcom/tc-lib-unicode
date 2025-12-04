@@ -91,7 +91,7 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
             // find matching opening bracket
             $tmpstack = $this->bstack;
             while ($tmpstack !== []) {
-                $item = array_pop($tmpstack);
+                $item = \array_pop($tmpstack);
                 if ($char == UniBracket::OPEN[$item[1]]) {
                     $this->brackets[$item[0]] = $idx;
                     $this->bstack = $tmpstack;
@@ -101,7 +101,7 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
 
         // Sort the list of pairs of text positions in ascending order
         // based on the text position of the opening paired bracket.
-        ksort($this->brackets);
+        \ksort($this->brackets);
     }
 
     /**
@@ -250,7 +250,7 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
             return $this->seq['sos'];
         }
 
-        if (in_array($this->seq['item'][$bdx]['type'], ['R', 'AN', 'EN'])) {
+        if (\in_array($this->seq['item'][$bdx]['type'], ['R', 'AN', 'EN'])) {
             return 'R';
         }
 
@@ -275,7 +275,7 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
             return $this->seq['eos'];
         }
 
-        if (in_array($this->seq['item'][$jdx]['type'], ['R', 'AN', 'EN'])) {
+        if (\in_array($this->seq['item'][$jdx]['type'], ['R', 'AN', 'EN'])) {
             return 'R';
         }
 

@@ -74,7 +74,7 @@ class StepXten
          */
         protected int $pel
     ) {
-        $this->numchars = count($chardata);
+        $this->numchars = \count($chardata);
         $this->setIsolatedLevelRunSequences();
     }
 
@@ -176,7 +176,7 @@ class StepXten
                 (($parent = $this->chardata[$seq['start']]['pdimatch']) >= 0)
                 && (!empty($this->ilrs[$parent]))
             ) {
-                $this->ilrs[$parent]['item'] = array_merge(
+                $this->ilrs[$parent]['item'] = \array_merge(
                     $this->ilrs[$parent]['item'],
                     $isorun['item']
                 );
@@ -214,13 +214,13 @@ class StepXten
                 $prev = $lastchr['level'];
             }
 
-            $this->ilrs[$key]['sos'] = $this->getEmbeddedDirection(max($prev, $lev));
+            $this->ilrs[$key]['sos'] = $this->getEmbeddedDirection(\max($prev, $lev));
 
             // For eos, compare the level of the last character in the sequence with the level of the character
             // following it in the paragraph (not counting characters removed by X9), and if there is none or the
             // last character of the sequence is an isolate initiator (lacking a matching PDI), with the paragraph
             // embedding level.
-            $lastchr = end($seq['item']);
+            $lastchr = \end($seq['item']);
             if ($lastchr === false) {
                 return;
             }
@@ -232,7 +232,7 @@ class StepXten
                 $next = $this->chardata[($seq['end'] + 1)]['level'];
             }
 
-            $this->ilrs[$key]['eos'] = $this->getEmbeddedDirection(max($next, $lev));
+            $this->ilrs[$key]['eos'] = $this->getEmbeddedDirection(\max($next, $lev));
 
             // If the higher level is odd, the sos or eos is R; otherwise, it is L.
         }

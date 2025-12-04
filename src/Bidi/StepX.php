@@ -155,7 +155,7 @@ class StepX
      */
     protected function processXcase(int $pos, int $ord): void
     {
-        $edss = end($this->dss);
+        $edss = \end($this->dss);
         if ($edss === false) {
             return;
         }
@@ -326,8 +326,8 @@ class StepX
         //       last entry from the directional status stack. (This PDF matches and terminates the scope
         //       of a valid embedding initiator. Since the stack has at least two entries, this pop does
         //       not leave the stack empty.)
-        if (($edss['dis'] === false) && (count($this->dss) > 1)) {
-            array_pop($this->dss);
+        if (($edss['dis'] === false) && (\count($this->dss) > 1)) {
+            \array_pop($this->dss);
         }
 
         //     - Otherwise, do nothing. (This PDF does not match any embedding initiator.)
@@ -371,11 +371,11 @@ class StepX
         //          status, i.e. represent the scope of the matched isolate initiator. This cannot be the
         //          stack's first entry, which always belongs to the paragraph level and has a false
         //          directional status, so there is at least one more entry below it on the stack.)
-        $count_dss = count($this->dss);
+        $count_dss = \count($this->dss);
         while (($edss['dis'] === false) && ($count_dss > 1)) {
-            array_pop($this->dss);
+            \array_pop($this->dss);
             --$count_dss;
-            $edss = end($this->dss);
+            $edss = \end($this->dss);
             if ($edss === false) {
                 break;
             }
@@ -385,10 +385,10 @@ class StepX
         //          count by one. (This terminates the scope of the matched isolate initiator. Since the
         //          preceding step left the stack with at least two entries, this pop does not leave the
         //          stack empty.)
-        array_pop($this->dss);
+        \array_pop($this->dss);
         --$this->vic;
 
-        $edss = end($this->dss);
+        $edss = \end($this->dss);
         if ($edss === false) {
             return;
         }
@@ -414,7 +414,7 @@ class StepX
         //      matching PDI, or if there is no matching PDI, the end of the paragraph, as if this sequence
         //      of characters were a paragraph. If these rules decide on paragraph embedding level 1, treat
         //      the FSI as an RLI in rule X5a. Otherwise, treat it as an LRI in rule X5b.
-        $stepp = new StepP(array_slice($this->ordarr, $pos));
+        $stepp = new StepP(\array_slice($this->ordarr, $pos));
         if ($stepp->getPel() == 0) {
             $this->setDss($this->getLEven($edss['cel']), UniConstant::LRI, 'NI', true, true, 1);
         } else {

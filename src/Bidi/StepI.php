@@ -66,6 +66,6 @@ class StepI extends \Com\Tecnick\Unicode\Bidi\StepBase
         }
 
         // update the maximum level
-        $this->seq['maxlevel'] = max($this->seq['maxlevel'], $this->seq['item'][$idx]['level']);
+        $this->seq['maxlevel'] = \max($this->seq['maxlevel'], $this->seq['item'][$idx]['level']);
     }
 }

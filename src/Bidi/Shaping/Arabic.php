@@ -170,7 +170,7 @@ abstract class Arabic
      */
     protected function setMiddleChar(int $idx, ?array $prevchar, array $thischar, array $arabicarr): void
     {
-        if (($prevchar != null) && in_array($prevchar['char'], UniArabic::END)) {
+        if (($prevchar != null) && \in_array($prevchar['char'], UniArabic::END)) {
             if (isset($arabicarr[$thischar['char']][2])) {
                 // initial
                 $this->newchardata[$idx]['char'] = $arabicarr[$thischar['char']][2];
@@ -218,7 +218,7 @@ abstract class Arabic
             $this->newchardata[($idx - 1)]['char'] = -1;
             // @phpstan-ignore assign.propertyType
             $this->newchardata[$idx]['char'] = UniArabic::LIGATURE_ALLAH_ISOLATED_FORM;
-        } elseif (($prevchar !== null) && in_array($prevchar['char'], UniArabic::END)) {
+        } elseif (($prevchar !== null) && \in_array($prevchar['char'], UniArabic::END)) {
             if (isset($arabicarr[$thischar['char']][0])) {
                 // isolated
                 $this->newchardata[$idx]['char'] = $arabicarr[$thischar['char']][0];

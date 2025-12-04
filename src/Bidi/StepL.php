@@ -65,12 +65,12 @@ class StepL
         protected int $maxlevel
     ) {
         // reorder chars by their original position
-        usort(
+        \usort(
             $chardata,
             static fn ($apos, $bpos): int => ($apos['pos'] - $bpos['pos'])
         );
         $this->chardata = $chardata;
-        $this->numchars = count($this->chardata);
+        $this->numchars = \count($this->chardata);
         $this->processL1();
         $this->processL2();
     }
@@ -154,7 +154,7 @@ class StepL
                     $reversed[] = $chardatum;
                 } else {
                     if ($reversed !== []) {
-                        $ordered = array_merge($ordered, array_reverse($reversed));
+                        $ordered = \array_merge($ordered, \array_reverse($reversed));
                         $reversed = [];
                     }
                     $ordered[] = $chardatum;
@@ -162,7 +162,7 @@ class StepL
             }
 
             if ($reversed !== []) {
-                $ordered = array_merge($ordered, array_reverse($reversed));
+                $ordered = \array_merge($ordered, \array_reverse($reversed));
             }
 
             $this->chardata = $ordered;

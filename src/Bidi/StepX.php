@@ -6,9 +6,9 @@
  * @since     2011-05-23
  * @category  Library
  * @package   Unicode
- * @author    Nicola Asuni <info@tecnick.com>
- * @copyright 2011-2024 Nicola Asuni - Tecnick.com LTD
- * @license   http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @author   2026 Nicola Asuni <info@tecnick.com>
+ * @copyright 2011-2026 Nicola Asuni - Tecnick.com LTD
+ * @license   https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link      https://github.com/tecnickcom/tc-lib-unicode
  *
  * This file is part of tc-lib-unicode software library.
@@ -25,9 +25,9 @@ use Com\Tecnick\Unicode\Data\Type as UniType;
  * @since     2015-07-13
  * @category  Library
  * @package   Unicode
- * @author    Nicola Asuni <info@tecnick.com>
- * @copyright 2011-2024 Nicola Asuni - Tecnick.com LTD
- * @license   http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @author   2026 Nicola Asuni <info@tecnick.com>
+ * @copyright 2011-2026 Nicola Asuni - Tecnick.com LTD
+ * @license   https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link      https://github.com/tecnickcom/tc-lib-unicode
  *
  * @phpstan-import-type SeqData from \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
@@ -43,7 +43,7 @@ use Com\Tecnick\Unicode\Data\Type as UniType;
 class StepX
 {
     /**
-     * Maximum embedding level
+     * Maximum embeding level
      */
     public const MAX_DEPTH = 125;
 
@@ -81,7 +81,7 @@ class StepX
      * Explicit Levels and Directions
      *
      * @param array<int> $ordarr Array of UTF-8 codepoints
-     * @param int   $pel    Paragraph embedding level
+     * @param int   $pel    Paragraph embeding level
      */
     public function __construct(
         /**
@@ -90,7 +90,7 @@ class StepX
         protected array $ordarr,
         int $pel
     ) {
-        //     - Push onto the stack an entry consisting of the paragraph embedding level,
+        //     - Push onto the stack an entry consisting of the paragraph embeding level,
         //       a neutral directional override status, and a false directional isolate status.
         $this->dss[] = [
             'ord' => -1, // dummy value, not used
@@ -99,9 +99,9 @@ class StepX
             'dis' => false,
         ];
         //     - Process each character iteratively, applying rules X2 through X8.
-        //       Only embedding levels from 0 through max_depth are valid in this phase.
+        //       Only embeding levels from 0 through max_depth are valid in this phase.
         //       (Note that in the resolution of levels in rules I1 and I2,
-        //       the maximum embedding level of max_depth+1 can be reached.)
+        //       the maximum embeding level of max_depth+1 can be reached.)
         $this->processX();
     }
 
@@ -226,14 +226,14 @@ class StepX
         int $ivic = 0
     ): void {
         // X2 to X5
-        //     - Compute the least odd|even embedding level greater than the embedding level of the last entry
+        //     - Compute the least odd|even embeding level greater than the embeding level of the last entry
         //       on the directional status stack.
-        //     - If this new level would be valid, and the overflow isolate count and overflow embedding
-        //       count are both zero, then this RLE is valid. Push an entry consisting of the new embedding
+        //     - If this new level would be valid, and the overflow isolate count and overflow embeding
+        //       count are both zero, then this RLE is valid. Push an entry consisting of the new embeding
         //       level, neutral|left|right directional override status, and false directional isolate status onto the
         //       directional status stack.
         //     - Otherwise, this is an overflow RLE. If the overflow isolate count is zero, increment the
-        //       overflow embedding|isolate count by one. Leave all other variables unchanged.
+        //       overflow embeding|isolate count by one. Leave all other variables unchanged.
         if (($cel >= self::MAX_DEPTH) || ($this->oic != 0) || ($this->oec != 0)) {
             if ($isolate) {
                 ++$this->oic;
@@ -285,7 +285,7 @@ class StepX
     protected function processChar(int $pos, int $ord, array $edss): void
     {
         // X6. For all types besides B, BN, RLE, LRE, RLO, LRO, PDF, RLI, LRI, FSI, and PDI:
-        //     - Set the current character’s embedding level to the embedding level
+        //     - Set the current character’s embeding level to the embeding level
         //       of the last entry on the directional status stack.
         //     - Whenever the directional override status of the last entry on the directional status stack
         //       is not neutral, reset the current character type according to the directional override
@@ -307,14 +307,14 @@ class StepX
         // X7. With each PDF, perform the following steps:
         //     - If the overflow isolate count is greater than zero, do nothing. (This PDF is within the
         //       scope of an overflow isolate initiator. It either matches and terminates the scope of an
-        //       overflow embedding initiator within that overflow isolate, or does not match any
-        //       embedding initiator.)
+        //       overflow embeding initiator within that overflow isolate, or does not match any
+        //       embeding initiator.)
         if ($this->oic > 0) {
             return;
         }
 
-        //     - Otherwise, if the overflow embedding count is greater than zero, decrement it by one.
-        //       (This PDF matches and terminates the scope of an overflow embedding initiator that is not
+        //     - Otherwise, if the overflow embeding count is greater than zero, decrement it by one.
+        //       (This PDF matches and terminates the scope of an overflow embeding initiator that is not
         //       within the scope of an overflow isolate initiator.)
         if ($this->oec > 0) {
             --$this->oec;
@@ -324,13 +324,13 @@ class StepX
         //     - Otherwise, if the directional isolate status of the last entry on the directional status
         //       stack is false, and the directional status stack contains at least two entries, pop the
         //       last entry from the directional status stack. (This PDF matches and terminates the scope
-        //       of a valid embedding initiator. Since the stack has at least two entries, this pop does
+        //       of a valid embeding initiator. Since the stack has at least two entries, this pop does
         //       not leave the stack empty.)
         if (($edss['dis'] === false) && (\count($this->dss) > 1)) {
             \array_pop($this->dss);
         }
 
-        //     - Otherwise, do nothing. (This PDF does not match any embedding initiator.)
+        //     - Otherwise, do nothing. (This PDF does not match any embeding initiator.)
     }
 
     /**
@@ -357,13 +357,13 @@ class StepX
         }
 
         //      - Otherwise, this PDI matches a valid isolate initiator. Perform the following steps:
-        //        - Reset the overflow embedding count to zero. (This terminates the scope of those overflow
-        //          embedding initiators within the scope of the matched isolate initiator whose scopes have
+        //        - Reset the overflow embeding count to zero. (This terminates the scope of those overflow
+        //          embeding initiators within the scope of the matched isolate initiator whose scopes have
         //          not been terminated by a matching PDF, and which thus lack a matching PDF.)
         $this->oec = 0;
         //        - While the directional isolate status of the last entry on the stack is false, pop the
         //          last entry from the directional status stack. (This terminates the scope of those valid
-        //          embedding initiators within the scope of the matched isolate initiator whose scopes have
+        //          embeding initiators within the scope of the matched isolate initiator whose scopes have
         //          not been terminated by a matching PDF, and which thus lack a matching PDF. Given that the
         //          valid isolate count is non-zero, the directional status stack before this step is
         //          executed must contain an entry with directional isolate status true, and thus after this
@@ -395,7 +395,7 @@ class StepX
 
         //      - In all cases, look up the last entry on the directional status stack left after the
         //        steps above and:
-        //        - Set the PDI’s level to the entry's embedding level.
+        //        - Set the PDI’s level to the entry's embeding level.
         //        - If the entry's directional override status is not neutral, reset the current character type
         //          from PDI to L if the override status is left-to-right, and to R if the override status is
         //          right-to-left.
@@ -412,7 +412,7 @@ class StepX
     {
         // X5c. With each FSI, apply rules P2 and P3 to the sequence of characters between the FSI and its
         //      matching PDI, or if there is no matching PDI, the end of the paragraph, as if this sequence
-        //      of characters were a paragraph. If these rules decide on paragraph embedding level 1, treat
+        //      of characters were a paragraph. If these rules decide on paragraph embeding level 1, treat
         //      the FSI as an RLI in rule X5a. Otherwise, treat it as an LRI in rule X5b.
         $stepp = new StepP(\array_slice($this->ordarr, $pos));
         if ($stepp->getPel() == 0) {

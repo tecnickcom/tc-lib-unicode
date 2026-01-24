@@ -6,9 +6,9 @@
  * @since     2011-05-23
  * @category  Library
  * @package   Unicode
- * @author    Nicola Asuni <info@tecnick.com>
- * @copyright 2011-2024 Nicola Asuni - Tecnick.com LTD
- * @license   http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @author   2026 Nicola Asuni <info@tecnick.com>
+ * @copyright 2011-2026 Nicola Asuni - Tecnick.com LTD
+ * @license   https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link      https://github.com/tecnickcom/tc-lib-unicode
  *
  * This file is part of tc-lib-unicode software library.
@@ -24,9 +24,9 @@ use Com\Tecnick\Unicode\Data\Constant as UniConstant;
  * @since     2015-07-13
  * @category  Library
  * @package   Unicode
- * @author    Nicola Asuni <info@tecnick.com>
- * @copyright 2011-2024 Nicola Asuni - Tecnick.com LTD
- * @license   http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @author   2026 Nicola Asuni <info@tecnick.com>
+ * @copyright 2011-2026 Nicola Asuni - Tecnick.com LTD
+ * @license   https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link      https://github.com/tecnickcom/tc-lib-unicode
  *
  * @phpstan-import-type SeqData from \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
@@ -89,7 +89,7 @@ class StepXten
     }
 
     /**
-     * Get the embedded direction (L or R)
+     * Get the embeded direction (L or R)
      */
     protected function getEmbeddedDirection(int $level): string
     {
@@ -137,7 +137,7 @@ class StepXten
             // Create a new level run sequence, and initialize it to contain just that level run
             $isorun = [
                 'e' => $seq['e'],
-                'edir' => $this->getEmbeddedDirection($seq['e']), // embedded direction
+                'edir' => $this->getEmbeddedDirection($seq['e']), // embeded direction
                 'start' => $seq['start'], // position of the first char
                 'end' => $seq['end'],  // position of the last char
                 'length' => ($seq['end'] - $seq['start'] + 1),
@@ -205,7 +205,7 @@ class StepXten
         foreach ($this->ilrs as $key => $seq) {
             // For sos, compare the level of the first character in the sequence with the level of the character
             // preceding it in the paragraph (not counting characters removed by X9), and if there is none,
-            // with the paragraph embedding level.
+            // with the paragraph embeding level.
             $lev = $seq['item'][0]['level'];
             if ($seq['start'] == 0) {
                 $prev = $this->pel;
@@ -219,7 +219,7 @@ class StepXten
             // For eos, compare the level of the last character in the sequence with the level of the character
             // following it in the paragraph (not counting characters removed by X9), and if there is none or the
             // last character of the sequence is an isolate initiator (lacking a matching PDI), with the paragraph
-            // embedding level.
+            // embeding level.
             $lastchr = \end($seq['item']);
             if ($lastchr === false) {
                 return;

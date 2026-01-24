@@ -6,9 +6,9 @@
  * @since     2011-05-23
  * @category  Library
  * @package   Unicode
- * @author    Nicola Asuni <info@tecnick.com>
- * @copyright 2011-2024 Nicola Asuni - Tecnick.com LTD
- * @license   http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @author   2026 Nicola Asuni <info@tecnick.com>
+ * @copyright 2011-2026 Nicola Asuni - Tecnick.com LTD
+ * @license   https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link      https://github.com/tecnickcom/tc-lib-unicode
  *
  * This file is part of tc-lib-unicode software library.
@@ -25,9 +25,9 @@ use Com\Tecnick\Unicode\Data\Mirror as UniMirror;
  * @since     2015-07-13
  * @category  Library
  * @package   Unicode
- * @author    Nicola Asuni <info@tecnick.com>
- * @copyright 2011-2024 Nicola Asuni - Tecnick.com LTD
- * @license   http://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @author   2026 Nicola Asuni <info@tecnick.com>
+ * @copyright 2011-2026 Nicola Asuni - Tecnick.com LTD
+ * @license   https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
  * @link      https://github.com/tecnickcom/tc-lib-unicode
  *
  * @phpstan-import-type CharData from \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
@@ -50,13 +50,13 @@ class StepL
      * L steps
      *
      * @param array<int, CharData> $chardata Array of characters data
-     * @param int   $pel      Paragraph embedding level
+     * @param int   $pel      Paragraph embeding level
      * @param int   $maxlevel Maximum level
      */
     public function __construct(
         array $chardata,
         /**
-         * Paragraph embedding level
+         * Paragraph embeding level
          */
         protected int $pel,
         /**
@@ -86,7 +86,7 @@ class StepL
     }
 
     /**
-     * L1. On each line, reset the embedding level of the following characters to the paragraph embedding level:
+     * L1. On each line, reset the embeding level of the following characters to the paragraph embeding level:
      *     1. Segment separators,
      *     2. Paragraph separators,
      *     3. Any sequence of whitespace characters and/or isolate formatting characters (FSI, LRI, RLI, and PDI)

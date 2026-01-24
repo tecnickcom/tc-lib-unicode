@@ -89,7 +89,7 @@ class StepXten
     }
 
     /**
-     * Get the embeded direction (L or R)
+     * Get the embedded direction (L or R)
      */
     protected function getEmbeddedDirection(int $level): string
     {
@@ -137,7 +137,7 @@ class StepXten
             // Create a new level run sequence, and initialize it to contain just that level run
             $isorun = [
                 'e' => $seq['e'],
-                'edir' => $this->getEmbeddedDirection($seq['e']), // embeded direction
+                'edir' => $this->getEmbeddedDirection($seq['e']), // embedded direction
                 'start' => $seq['start'], // position of the first char
                 'end' => $seq['end'],  // position of the last char
                 'length' => ($seq['end'] - $seq['start'] + 1),

@@ -205,7 +205,7 @@ class StepXten
         foreach ($this->ilrs as $key => $seq) {
             // For sos, compare the level of the first character in the sequence with the level of the character
             // preceding it in the paragraph (not counting characters removed by X9), and if there is none,
-            // with the paragraph embeding level.
+            // with the paragraph embedding level.
             $lev = $seq['item'][0]['level'];
             if ($seq['start'] == 0) {
                 $prev = $this->pel;
@@ -219,7 +219,7 @@ class StepXten
             // For eos, compare the level of the last character in the sequence with the level of the character
             // following it in the paragraph (not counting characters removed by X9), and if there is none or the
             // last character of the sequence is an isolate initiator (lacking a matching PDI), with the paragraph
-            // embeding level.
+            // embedding level.
             $lastchr = \end($seq['item']);
             if ($lastchr === false) {
                 return;

@@ -335,7 +335,7 @@ class Bidi
     }
 
     /**
-     * Get the paragraph embeding level
+     * Get the paragraph embedding level
      *
      * @param array<int> $par Paragraph
      */

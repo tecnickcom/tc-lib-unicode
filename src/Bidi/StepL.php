@@ -50,13 +50,13 @@ class StepL
      * L steps
      *
      * @param array<int, CharData> $chardata Array of characters data
-     * @param int   $pel      Paragraph embeding level
+     * @param int   $pel      Paragraph embedding level
      * @param int   $maxlevel Maximum level
      */
     public function __construct(
         array $chardata,
         /**
-         * Paragraph embeding level
+         * Paragraph embedding level
          */
         protected int $pel,
         /**
@@ -86,7 +86,7 @@ class StepL
     }
 
     /**
-     * L1. On each line, reset the embeding level of the following characters to the paragraph embeding level:
+     * L1. On each line, reset the embedding level of the following characters to the paragraph embedding level:
      *     1. Segment separators,
      *     2. Paragraph separators,
      *     3. Any sequence of whitespace characters and/or isolate formatting characters (FSI, LRI, RLI, and PDI)

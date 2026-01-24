@@ -51,7 +51,7 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
      *
      * Neutral and isolate formatting (i.e. NI) characters are resolved one isolating run sequence at a time.
      * Its results are that all NIs become either R or L. Generally, NIs take on the direction of the surrounding text.
-     * In case of a conflict, they take on the embeding direction.
+     * In case of a conflict, they take on the embedding direction.
      * At isolating run sequence boundaries where the type of the character on the other side of the boundary
      * is required, the type assigned to sos or eos is used.
      *
@@ -128,12 +128,12 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
                 for ($jdx = ($open - 1); $jdx >= 0; --$jdx) {
                     $btype = $this->getN0Type($this->seq['item'][$jdx]['type']);
                     if ($btype == $odir) {
-                        // 1. If the preceding strong type is also opposite the embeding direction,
+                        // 1. If the preceding strong type is also opposite the embedding direction,
                         //    context is established, so set the type for both brackets in the pair to that direction.
                         $this->setBracketsType($open, $close, $odir);
                         break;
                     } elseif ($btype == $this->seq['edir']) {
-                        // 2. Otherwise set the type for both brackets in the pair to the embeding direction.
+                        // 2. Otherwise set the type for both brackets in the pair to the embedding direction.
                         $this->setBracketsType($open, $close, $this->seq['edir']);
                         break;
                     }
@@ -165,13 +165,13 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
         // a. Inspect the bidirectional types of the characters enclosed within the bracket pair.
         for ($jdx = ($open + 1); $jdx < $close; ++$jdx) {
             $btype = $this->getN0Type($this->seq['item'][$jdx]['type']);
-            // b. If any strong type (either L or R) matching the embeding direction is found,
-            // set the type for both brackets in the pair to match the embeding direction.
+            // b. If any strong type (either L or R) matching the embedding direction is found,
+            // set the type for both brackets in the pair to match the embedding direction.
             if ($btype == $this->seq['edir']) {
                 $this->setBracketsType($open, $close, $this->seq['edir']);
                 break;
             } elseif ($btype === $odir) {
-                // c. Otherwise, if there is a strong type it must be opposite the embeding direction.
+                // c. Otherwise, if there is a strong type it must be opposite the embedding direction.
                 $opposite = true;
             }
         }
@@ -302,7 +302,7 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
     }
 
     /**
-     * N2. Any remaining NIs take the embeding direction.
+     * N2. Any remaining NIs take the embedding direction.
      *
      * @param int $idx Current character position
      */

@@ -54,7 +54,7 @@ class StepP
         //     while skipping over any characters between an isolate initiator and its matching PDI or,
         //     if it has no matching PDI, the end of the paragraph.
         // P3. If a character is found in P2 and it is of type AL or R,
-        //     then set the paragraph embeding level to one; otherwise, set it to zero.
+        //     then set the paragraph embedding level to one; otherwise, set it to zero.
         $isolate = 0;
         foreach ($this->ordarr as $ord) {
             $isolate = $this->getIsolateLevel($ord, $isolate);

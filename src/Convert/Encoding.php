@@ -57,7 +57,7 @@ class Encoding
     /**
      * Converts an array of Latin1 code points to a string
      *
-     * @param array<int> $latarr Array of Latin1 code points
+     * @param array<int<0, 255>> $latarr Array of Latin1 code points
      */
     public function latinArrToStr(array $latarr): string
     {

@@ -43,9 +43,9 @@ class Encoding
         $latarr = [];
         foreach ($ordarr as $chr) {
             if ($chr < 256) {
-                $latarr[] = $chr;
+                $latarr[] = $chr & 0xFF;
             } elseif (\array_key_exists($chr, Latin::SUBSTITUTE)) {
-                $latarr[] = Latin::SUBSTITUTE[$chr];
+                $latarr[] = Latin::SUBSTITUTE[$chr] & 0xFF;
             } elseif ($chr !== 0xFFFD) {
                 $latarr[] = 63; // '?' character
             }
@@ -94,7 +94,7 @@ class Encoding
         $str = '';
         $bytes = \str_split($hex, 2);
         foreach ($bytes as $byte) {
-            $str .= \chr((int) \hexdec($byte));
+            $str .= \chr(((int) \hexdec($byte)) & 0xFF);
         }
 
         return $str;

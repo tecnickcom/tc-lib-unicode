@@ -18,6 +18,8 @@ If this library helps your multilingual stack, please consider [supporting devel
 
 `tc-lib-unicode` provides Unicode conversion helpers and bidirectional algorithm support for robust multilingual text processing.
 
+It is built to handle multilingual text paths where normalization, code-point handling, and bidirectional ordering directly affect rendering quality. By isolating Unicode-heavy operations, dependent libraries can keep text processing accurate and easier to audit.
+
 | | |
 |---|---|
 | **Namespace** | `\Com\Tecnick\Unicode` |

@@ -156,9 +156,10 @@ class StepX
     protected function processXcase(int $pos, int $ord): void
     {
         $edss = \end($this->dss);
-        if ($edss === false) {
-            return;
-        }
+
+    // $this->dss always has the paragraph-level entry pushed in __construct and
+    // is never fully emptied (pop guards require count > 1), so end() is not false.
+        assert($edss !== false);
 
         switch ($ord) {
             case UniConstant::RLE:
@@ -376,9 +377,8 @@ class StepX
             \array_pop($this->dss);
             --$count_dss;
             $edss = \end($this->dss);
-            if ($edss === false) {
-                break;
-            }
+            // Loop guard $count_dss > 1 ensures the array has at least 1 entry after pop.
+            assert($edss !== false);
         }
 
         //        - Pop the last entry from the directional status stack and decrement the valid isolate
@@ -389,9 +389,6 @@ class StepX
         --$this->vic;
 
         $edss = \end($this->dss);
-        if ($edss === false) {
-            return;
-        }
 
         //      - In all cases, look up the last entry on the directional status stack left after the
         //        steps above and:
@@ -399,6 +396,10 @@ class StepX
         //        - If the entry's directional override status is not neutral, reset the current character type
         //          from PDI to L if the override status is left-to-right, and to R if the override status is
         //          right-to-left.
+        // UAX#9 §X6a guarantees the preceding step left >= 2 entries, so this pop
+        // does not empty the stack.
+        assert($edss !== false);
+
         $this->pushChar($pos, $ord, $edss);
     }
 

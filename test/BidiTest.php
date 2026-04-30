@@ -176,6 +176,45 @@ class BidiTest extends TestUtil
                 'it is called "⁧java TO INTRODUCTION AN⁩" - $19.95 in hardcover.',
                 '',
             ],
+            [
+                // Hebrew with embedded paragraph separator (covers getParagraphs() splitting and re-insertion)
+                    \json_decode('"\u05de\u05d6\u05dc \u05d8\u05d5\u05d1"')
+                        . "\n"
+                        . \json_decode('"\u05de\u05d6\u05dc \u05d8\u05d5\u05d1"'),
+                    \json_decode('"\u05d1\u05d5\u05d8 \u05dc\u05d6\u05de"')
+                        . "\n"
+                        . \json_decode('"\u05d1\u05d5\u05d8 \u05dc\u05d6\u05de"'),
+                '',
+            ],
+            [
+                // Hebrew ending with paragraph separator (covers empty last paragraph handling)
+                \json_decode('"\u05de\u05d6\u05dc \u05d8\u05d5\u05d1"') . "\n",
+                \json_decode('"\u05d1\u05d5\u05d8 \u05dc\u05d6\u05de"') . "\n",
+                '',
+            ],
+            [
+                // Arabic with forced LTR direction (covers getPel() returning 0 for forcedir='L')
+                'تشكيل اختبار',
+                \json_decode('"\ufede\ufef4\ufedc\ufeb8\ufe97\u0020\ufead\ufe8e\ufe92\ufe98\ufea7\ufe8d"'),
+                'L',
+            ],
         ];
+    }
+
+    /**
+     * Test Bidi with edge-case ordarr inputs (negative codepoints and unknown-type codepoints).
+     * These cover the defensive continue-branches in process() when the last char of a paragraph
+     * is negative (line 322) or not present in the bidi type table (line 326).
+     */
+    public function testBidiWithSpecialOrdarr(): void
+    {
+        // Negative codepoint as last char: covers the $lastchar < 0 branch
+        $bidi1 = new \Com\Tecnick\Unicode\Bidi(null, null, [0x05D0, -1], 'R', false);
+        $this->assertEquals([-1, 1488], $bidi1->getOrdArray());
+
+        // Codepoint 0xE001 (Private Use Area, not in the bidi type table):
+        // covers the !isset(UniType::UNI[$lastchar]) branch
+        $bidi2 = new \Com\Tecnick\Unicode\Bidi(null, null, [0x05D0, 0xE001], 'R', false);
+        $this->assertEquals([57345, 1488], $bidi2->getOrdArray());
     }
 }

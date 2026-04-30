@@ -221,9 +221,9 @@ class StepXten
             // last character of the sequence is an isolate initiator (lacking a matching PDI), with the paragraph
             // embedding level.
             $lastchr = \end($seq['item']);
-            if ($lastchr === false) {
-                return;
-            }
+
+            // A level run always contains at least one character, so end() is not false.
+            assert($lastchr !== false);
 
             $lev = $lastchr['level'];
             if ((! isset($this->chardata[($seq['end'] + 1)]['level'])) || $this->isIsolateInitiator($lastchr['char'])) {

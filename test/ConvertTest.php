@@ -204,4 +204,32 @@ class ConvertTest extends TestCase
             ['òèìòù', 'Ã²Ã¨Ã¬Ã²Ã¹', 'ISO-8859-1'],
         ];
     }
+
+    public function testToUTF8WithUndetectableEncoding(): void
+    {
+        // BASE64 and HTML-ENTITIES cannot detect a plain ASCII string,
+        // causing mb_detect_encoding() to return false; the method must
+        // handle this gracefully by falling back to a null source encoding.
+        $convert = $this->getTestObject();
+        $res = $convert->toUTF8('abc', ['BASE64', 'HTML-ENTITIES']);
+        $this->assertEquals('abc', $res);
+    }
+
+    public function testOrdException(): void
+    {
+        $this->expectException(\Com\Tecnick\Unicode\Exception::class);
+        $convert = $this->getTestObject();
+        // An empty string produces a zero-length UCS-4BE buffer,
+        // making unpack() fail and triggering the exception.
+        $convert->ord('');
+    }
+
+    public function testStrToChrArrException(): void
+    {
+        $this->expectException(\Com\Tecnick\Unicode\Exception::class);
+        $convert = $this->getTestObject();
+        // Invalid UTF-8 bytes cause preg_split() with the /u flag to return
+        // false, triggering the exception.
+        $convert->strToChrArr("\xff\xfe");
+    }
 }

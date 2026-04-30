@@ -42,6 +42,12 @@ It is built to handle multilingual text paths where normalization, code-point ha
 - Right-to-left and mixed-direction text processing
 - Supporting shaping/step logic for complex scripts
 
+### Character Substitution
+- Context-sensitive codepoint-level substitution via `Substitution::replaceChars()`
+- **Thai** — repositions leading vowels (Sara E/AE/O/AI, U+0E40–U+0E44, U+0E4D) to follow their base consonant, matching PDF visual-order glyph streams
+- **Devanagari** — moves left-positional matras (U+093F) to precede their base consonant cluster, including conjuncts joined by Virama (U+094D)
+- **Hangul** — composes Hangul Jamo sequences (U+1100–U+11FF, U+A960–U+A97F, U+D7B0–U+D7FF) into precomposed syllables (U+AC00–U+D7A3) per Unicode Standard §3.12
+
 ---
 
 ## Requirements
@@ -70,6 +76,47 @@ require_once __DIR__ . '/vendor/autoload.php';
 $bidi = new \Com\Tecnick\Unicode\Bidi('hello ', null, null, 'R', false);
 echo $bidi->getString();
 ```
+
+---
+
+## Character substitution
+
+`Substitution::replaceChars()` takes an array of Unicode codepoints and returns a transformed array with script-specific substitutions applied. It is a pure codepoint-level transform with no font or PDF dependency.
+
+```php
+<?php
+
+require_once __DIR__ . '/vendor/autoload.php';
+
+$sub = new \Com\Tecnick\Unicode\Substitution();
+
+// Thai: leading vowel repositioned after its base consonant
+// Logical order:  [U+0E40 SARA E, U+0E01 KO KAI]
+// Visual order:   [U+0E01 KO KAI, U+0E40 SARA E]
+$result = $sub->replaceChars([0x0E40, 0x0E01]);
+// $result === [0x0E01, 0x0E40]
+
+// Devanagari: left matra repositioned before its base consonant cluster
+// Logical order:  [U+0915 KA, U+093F VOWEL SIGN I]
+// Visual order:   [U+093F VOWEL SIGN I, U+0915 KA]
+$result = $sub->replaceChars([0x0915, 0x093F]);
+// $result === [0x093F, 0x0915]
+
+// Hangul: Jamo composed into a precomposed syllable
+// [U+1100 KIYEOK, U+1161 JUNGSEONG A, U+11A8 JONGSEONG KIYEOK] → [U+AC01 각]
+$result = $sub->replaceChars([0x1100, 0x1161, 0x11A8]);
+// $result === [0xAC01]
+```
+
+### Supported scripts and Unicode ranges
+
+| Script | Unicode range(s) | Transformation |
+|---|---|---|
+| Thai | U+0E00–U+0E7F | Leading vowels repositioned after base consonant |
+| Devanagari | U+0900–U+097F | Left matras repositioned before consonant cluster |
+| Hangul Jamo | U+1100–U+11FF, U+A960–U+A97F, U+D7B0–U+D7FF | Jamo composed to precomposed syllables (U+AC00–U+D7A3) |
+
+Codepoints belonging to unsupported scripts are passed through unchanged.
 
 ---
 

@@ -52,7 +52,12 @@ class Convert extends \Com\Tecnick\Unicode\Convert\Encoding
      */
     public function ord(string $chr): int
     {
-        $uni = \unpack('N', \mb_convert_encoding($chr, 'UCS-4BE', 'UTF-8'));
+        $ucs = \mb_convert_encoding($chr, 'UCS-4BE', 'UTF-8');
+        if (\strlen($ucs) < 4) {
+            throw new UniException('Error converting string');
+        }
+
+        $uni = \unpack('N', $ucs);
         if (($uni === false) || (!isset($uni[1])) || (!\is_int($uni[1]))) {
             throw new UniException('Error converting string');
         }

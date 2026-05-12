@@ -336,7 +336,12 @@ abstract class Arabic
             $laaChar = $this->alchars[$pos - 1] ?? null;
             assert($laaChar !== null, 'Expected previous lam character while composing lam-alef ligature');
             $deleteIdx = $this->getNewCharIndexBySourceIndex($laaChar['i']);
-            $item = $deleteIdx !== null ? $this->newchardata[$deleteIdx] ?? null : null;
+            if ($deleteIdx === null) {
+                assert(false, 'Expected shaped lam-alef source item before marking it for deletion');
+                return;
+            }
+
+            $item = $this->newchardata[$deleteIdx] ?? null;
             assert($item !== null, 'Expected shaped lam-alef source item before marking it for deletion');
             $item['char'] = -1;
             $this->newchardata[$deleteIdx] = $item;

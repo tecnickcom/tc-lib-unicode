@@ -2,7 +2,7 @@
 
 Thank you for your interest in contributing to **tc-lib-unicode**.  
 Contributions of all kinds are welcome: bug reports, bug fixes, documentation improvements, new features, and refactors.
-
+ 
 Please take a moment to read this guide before opening an issue or pull request.
 
 ---

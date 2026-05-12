@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Convert.php
  *
@@ -37,10 +39,17 @@ class Convert extends \Com\Tecnick\Unicode\Convert\Encoding
      * @param int $ord Unicode character value to convert
      *
      * @return string Returns the unicode string
+     *
+     * @throws UniException
      */
     public function chr(int $ord): string
     {
-        return \mb_convert_encoding(\pack('N', $ord), 'UTF-8', 'UCS-4BE');
+        $result = \mb_convert_encoding(\pack('N', $ord), 'UTF-8', 'UCS-4BE');
+        if ($result === false) {
+            throw new UniException('Error converting character');
+        }
+
+        return $result;
     }
 
     /**
@@ -49,18 +58,17 @@ class Convert extends \Com\Tecnick\Unicode\Convert\Encoding
      * @param string $chr Unicode character
      *
      * @return int Returns the unicode value
+     *
+     * @throws UniException
      */
     public function ord(string $chr): int
     {
         $ucs = \mb_convert_encoding($chr, 'UCS-4BE', 'UTF-8');
-        if (\strlen($ucs) < 4) {
+        if ($ucs === false || \strlen($ucs) < 4) {
             throw new UniException('Error converting string');
         }
 
         $uni = \unpack('N', $ucs);
-        if (($uni === false) || (!isset($uni[1])) || (!\is_int($uni[1]))) {
-            throw new UniException('Error converting string');
-        }
 
         return $uni[1];
     }
@@ -71,6 +79,8 @@ class Convert extends \Com\Tecnick\Unicode\Convert\Encoding
      * @param string $str String to convert
      *
      * @return array<int, string>
+     *
+     * @throws UniException
      */
     public function strToChrArr(string $str): array
     {
@@ -91,7 +101,7 @@ class Convert extends \Com\Tecnick\Unicode\Convert\Encoding
      */
     public function chrArrToOrdArr(array $chars): array
     {
-        return \array_map(fn (string $chr): int => $this->ord($chr), $chars);
+        return \array_map($this->ord(...), $chars);
     }
 
     /**
@@ -103,7 +113,7 @@ class Convert extends \Com\Tecnick\Unicode\Convert\Encoding
      */
     public function ordArrToChrArr(array $ords): array
     {
-        return \array_map(fn (int $ord): string => $this->chr($ord), $ords);
+        return \array_map($this->chr(...), $ords);
     }
 
     /**
@@ -112,6 +122,8 @@ class Convert extends \Com\Tecnick\Unicode\Convert\Encoding
      * @param string $str Convert to convert
      *
      * @return array<int>
+     *
+     * @throws UniException
      */
     public function strToOrdArr(string $str): array
     {
@@ -131,6 +143,6 @@ class Convert extends \Com\Tecnick\Unicode\Convert\Encoding
             $end = \count($uniarr);
         }
 
-        return \implode('', \array_slice($uniarr, $start, ($end - $start)));
+        return \implode('', \array_slice($uniarr, $start, $end - $start));
     }
 }

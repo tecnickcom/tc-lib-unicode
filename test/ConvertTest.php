@@ -17,8 +17,8 @@
 namespace Test;
 
 use Com\Tecnick\Unicode\Data\Latin;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Convert Test
@@ -38,6 +38,15 @@ class ConvertTest extends TestCase
         return new \Com\Tecnick\Unicode\Convert();
     }
 
+    private static function decodeJsonString(string $json): string
+    {
+        /** @var string */
+        return \json_decode($json);
+    }
+
+    /**
+     * @throws \Com\Tecnick\Unicode\Exception
+     */
     #[DataProvider('chrDataProvider')]
     public function testChr(int $ord, mixed $expected): void
     {
@@ -46,6 +55,9 @@ class ConvertTest extends TestCase
         $this->assertEquals($expected, $chr);
     }
 
+    /**
+     * @throws \Com\Tecnick\Unicode\Exception
+     */
     #[DataProvider('chrDataProvider')]
     public function testOrd(mixed $expected, string $chr): void
     {
@@ -76,6 +88,9 @@ class ConvertTest extends TestCase
         ];
     }
 
+    /**
+     * @throws \Com\Tecnick\Unicode\Exception
+     */
     public function testStrToChrArr(): void
     {
         $convert = $this->getTestObject();
@@ -97,6 +112,9 @@ class ConvertTest extends TestCase
         $this->assertEquals(['0', 'A', '¶', 'ÿ', 'Ā', 'Ƞ', 'Δ', 'א', '台', '서'], $res);
     }
 
+    /**
+     * @throws \Com\Tecnick\Unicode\Exception
+     */
     public function testStrToOrdArr(): void
     {
         $convert = $this->getTestObject();
@@ -118,9 +136,9 @@ class ConvertTest extends TestCase
     {
         $convert = $this->getTestObject();
         $uniarr = \array_keys(Latin::SUBSTITUTE);
-        $uniarr[] = 65533;  // 0xFFFD - character to ignore
+        $uniarr[] = 65533; // 0xFFFD - character to ignore
         $uniarr[] = 123456; // undefined char
-        $uniarr[] = 65;     // ASCII char
+        $uniarr[] = 65; // ASCII char
         $latarr = \array_values(Latin::SUBSTITUTE);
         $latarr[] = 63;
         $latarr[] = 65;
@@ -181,7 +199,7 @@ class ConvertTest extends TestCase
         return [
             ['', ''],
             ['ABC', '004100420043'],
-            [\json_decode('"\u0010\uffff\u00ff\uff00"'), '0010ffff00ffff00'],
+            [self::decodeJsonString('"\u0010\uffff\u00ff\uff00"'), '0010ffff00ffff00'],
         ];
     }
 
@@ -215,6 +233,9 @@ class ConvertTest extends TestCase
         $this->assertEquals('abc', $res);
     }
 
+    /**
+     * @throws \Com\Tecnick\Unicode\Exception
+     */
     public function testOrdException(): void
     {
         $this->expectException(\Com\Tecnick\Unicode\Exception::class);
@@ -224,6 +245,9 @@ class ConvertTest extends TestCase
         $convert->ord('');
     }
 
+    /**
+     * @throws \Com\Tecnick\Unicode\Exception
+     */
     public function testStrToChrArrException(): void
     {
         $this->expectException(\Com\Tecnick\Unicode\Exception::class);

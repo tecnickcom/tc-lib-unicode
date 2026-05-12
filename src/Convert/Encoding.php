@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Encoding.php
  *
@@ -44,9 +46,16 @@ class Encoding
         foreach ($ordarr as $chr) {
             if ($chr < 256) {
                 $latarr[] = $chr & 0xFF;
-            } elseif (\array_key_exists($chr, Latin::SUBSTITUTE)) {
-                $latarr[] = Latin::SUBSTITUTE[$chr] & 0xFF;
-            } elseif ($chr !== 0xFFFD) {
+                continue;
+            }
+
+            $substitute = Latin::SUBSTITUTE[$chr] ?? null;
+            if (\is_int($substitute)) {
+                $latarr[] = $substitute & 0xFF;
+                continue;
+            }
+
+            if ($chr !== 0xFFFD) {
                 $latarr[] = 63; // '?' character
             }
         }
@@ -87,14 +96,14 @@ class Encoding
      */
     public function hexToStr(string $hex): string
     {
-        if (\strlen($hex) == 0) {
+        if (\strlen($hex) === 0) {
             return '';
         }
 
         $str = '';
         $bytes = \str_split($hex, 2);
         foreach ($bytes as $byte) {
-            $str .= \chr(((int) \hexdec($byte)) & 0xFF);
+            $str .= \chr((int) \hexdec($byte) & 0xFF);
         }
 
         return $str;
@@ -111,7 +120,7 @@ class Encoding
     public function toUTF8(string $str, null|string|array $enc = null): string
     {
         if ($enc === null) {
-            $enc = (array) \mb_detect_order();
+            $enc = \mb_detect_order();
         }
 
         $chrenc = \mb_detect_encoding($str, $enc);

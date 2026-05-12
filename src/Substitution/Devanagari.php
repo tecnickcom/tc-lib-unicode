@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Devanagari.php
  *
@@ -48,7 +50,7 @@ final class Devanagari
     /**
      * Transformed codepoint array.
      *
-     * @var array<int, int>
+     * @var list<int>
      */
     private array $ordarr;
 
@@ -57,14 +59,14 @@ final class Devanagari
      */
     public function __construct(array $ordarr)
     {
-        $this->ordarr = $ordarr;
+        $this->ordarr = array_values($ordarr);
         $this->process();
     }
 
     /**
      * Returns the transformed codepoint array.
      *
-     * @return array<int, int>
+     * @return list<int>
      */
     public function getOrdarr(): array
     {
@@ -81,12 +83,19 @@ final class Devanagari
         $result = [];
         $idx = 0;
         while ($idx < $len) {
-            if ($this->isBaseConsonant($this->ordarr[$idx])) {
-                $idx = $this->processConsonantCluster($idx, $len, $result);
-            } else {
-                $result[] = $this->ordarr[$idx];
+            $cp = $this->ordarr[$idx] ?? null;
+            if ($cp === null) {
                 ++$idx;
+                continue;
             }
+
+            if ($this->isBaseConsonant($cp)) {
+                $idx = $this->processConsonantCluster($idx, $len, $result);
+                continue;
+            }
+
+            $result[] = $cp;
+            ++$idx;
         }
 
         $this->ordarr = array_values($result);
@@ -99,25 +108,25 @@ final class Devanagari
      *
      * @param int             $idx    Current index in $this->ordarr.
      * @param int             $len    Length of $this->ordarr.
-     * @param array<int, int> $result Result accumulator (passed by reference).
+     * @param list<int> $result Result accumulator (passed by reference).
      *
      * @return int Updated index after all consumed codepoints.
      */
-    private function processConsonantCluster(
-        int $idx,
-        int $len,
-        array &$result
-    ): int {
+    private function processConsonantCluster(int $idx, int $len, array &$result): int
+    {
         $cluster = $this->collectCluster($idx, $len);
         $endIdx = $idx + count($cluster);
 
-        if ($endIdx < $len && $this->isLeftMatra($this->ordarr[$endIdx])) {
-            $result[] = $this->ordarr[$endIdx];
-            foreach ($cluster as $codepoint) {
-                $result[] = $codepoint;
-            }
+        if ($endIdx < $len) {
+            $matra = $this->ordarr[$endIdx] ?? null;
+            if ($matra !== null && $this->isLeftMatra($matra)) {
+                $result[] = $matra;
+                foreach ($cluster as $codepoint) {
+                    $result[] = $codepoint;
+                }
 
-            return $endIdx + 1;
+                return $endIdx + 1;
+            }
         }
 
         foreach ($cluster as $codepoint) {
@@ -133,19 +142,27 @@ final class Devanagari
      * @param int $idx Starting index of the cluster head.
      * @param int $len Length of $this->ordarr.
      *
-     * @return array<int, int> Collected cluster codepoints.
+     * @return list<int> Collected cluster codepoints.
      */
     private function collectCluster(int $idx, int $len): array
     {
-        $cluster = [$this->ordarr[$idx]];
+        $first = $this->ordarr[$idx] ?? null;
+        if ($first === null) {
+            return [];
+        }
+
+        $cluster = [$first];
         $pos = $idx + 1;
-        while (
-            ($pos + 1) < $len
-            && $this->ordarr[$pos] === DevanagariData::VIRAMA
-            && $this->isBaseConsonant($this->ordarr[$pos + 1])
-        ) {
-            $cluster[] = $this->ordarr[$pos];
-            $cluster[] = $this->ordarr[$pos + 1];
+        while (($pos + 1) < $len) {
+            $virama = $this->ordarr[$pos] ?? null;
+            $baseConsonant = $this->ordarr[$pos + 1] ?? null;
+            assert($baseConsonant !== null, 'Expected Devanagari base consonant after virama candidate');
+            if ($virama !== DevanagariData::VIRAMA || !$this->isBaseConsonant($baseConsonant)) {
+                break;
+            }
+
+            $cluster[] = $virama;
+            $cluster[] = $baseConsonant;
             $pos += 2;
         }
 
@@ -157,8 +174,7 @@ final class Devanagari
      */
     private function isBaseConsonant(int $codepoint): bool
     {
-        return $this->isInStandardRange($codepoint)
-            || $this->isInExtendedRange($codepoint);
+        return $this->isInStandardRange($codepoint) || $this->isInExtendedRange($codepoint);
     }
 
     /**
@@ -167,8 +183,7 @@ final class Devanagari
      */
     private function isInStandardRange(int $codepoint): bool
     {
-        return $codepoint >= DevanagariData::BASE_CONSONANT_FIRST
-            && $codepoint <= DevanagariData::BASE_CONSONANT_LAST;
+        return $codepoint >= DevanagariData::BASE_CONSONANT_FIRST && $codepoint <= DevanagariData::BASE_CONSONANT_LAST;
     }
 
     /**
@@ -177,8 +192,10 @@ final class Devanagari
      */
     private function isInExtendedRange(int $codepoint): bool
     {
-        return $codepoint >= DevanagariData::BASE_CONSONANT_EXT_FIRST
-            && $codepoint <= DevanagariData::BASE_CONSONANT_EXT_LAST;
+        return (
+            $codepoint >= DevanagariData::BASE_CONSONANT_EXT_FIRST
+            && $codepoint <= DevanagariData::BASE_CONSONANT_EXT_LAST
+        );
     }
 
     /**
@@ -186,6 +203,6 @@ final class Devanagari
      */
     private function isLeftMatra(int $codepoint): bool
     {
-        return isset(DevanagariData::LEFT_MATRAS[$codepoint]);
+        return array_key_exists($codepoint, DevanagariData::LEFT_MATRAS);
     }
 }

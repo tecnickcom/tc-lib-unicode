@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Thai.php
  *
@@ -43,7 +45,7 @@ final class Thai
     /**
      * Transformed codepoint array.
      *
-     * @var array<int, int>
+     * @var list<int>
      */
     private array $ordarr;
 
@@ -52,14 +54,14 @@ final class Thai
      */
     public function __construct(array $ordarr)
     {
-        $this->ordarr = $ordarr;
+        $this->ordarr = array_values($ordarr);
         $this->process();
     }
 
     /**
      * Returns the transformed codepoint array.
      *
-     * @return array<int, int>
+     * @return list<int>
      */
     public function getOrdarr(): array
     {
@@ -76,12 +78,19 @@ final class Thai
         $result = [];
         $idx = 0;
         while ($idx < $len) {
-            if ($this->isLeadingVowel($this->ordarr[$idx])) {
-                $idx = $this->processVowelCluster($idx, $len, $result);
-            } else {
-                $result[] = $this->ordarr[$idx];
+            $cp = $this->ordarr[$idx] ?? null;
+            if ($cp === null) {
                 ++$idx;
+                continue;
             }
+
+            if ($this->isLeadingVowel($cp)) {
+                $idx = $this->processVowelCluster($idx, $len, $result);
+                continue;
+            }
+
+            $result[] = $cp;
+            ++$idx;
         }
 
         $this->ordarr = array_values($result);
@@ -94,7 +103,7 @@ final class Thai
      *
      * @param int             $idx    Current index in $this->ordarr.
      * @param int             $len    Length of $this->ordarr.
-     * @param array<int, int> $result Result accumulator (passed by reference).
+     * @param list<int> $result Result accumulator (passed by reference).
      *
      * @return int Updated index after all consumed codepoints.
      */
@@ -103,13 +112,16 @@ final class Thai
         $vowels = $this->collectLeadingVowels($idx, $len);
         $nextIdx = $idx + count($vowels);
 
-        if ($nextIdx < $len && $this->isBaseConsonant($this->ordarr[$nextIdx])) {
-            $result[] = $this->ordarr[$nextIdx];
-            foreach ($vowels as $vowel) {
-                $result[] = $vowel;
-            }
+        if ($nextIdx < $len) {
+            $nextCp = $this->ordarr[$nextIdx] ?? null;
+            if ($nextCp !== null && $this->isBaseConsonant($nextCp)) {
+                $result[] = $nextCp;
+                foreach ($vowels as $vowel) {
+                    $result[] = $vowel;
+                }
 
-            return $nextIdx + 1;
+                return $nextIdx + 1;
+            }
         }
 
         foreach ($vowels as $vowel) {
@@ -125,13 +137,18 @@ final class Thai
      * @param int $idx Starting index.
      * @param int $len Length of $this->ordarr.
      *
-     * @return array<int, int> Collected vowel codepoints.
+     * @return list<int> Collected vowel codepoints.
      */
     private function collectLeadingVowels(int $idx, int $len): array
     {
         $vowels = [];
-        while ($idx < $len && $this->isLeadingVowel($this->ordarr[$idx])) {
-            $vowels[] = $this->ordarr[$idx];
+        while ($idx < $len) {
+            $cp = $this->ordarr[$idx] ?? null;
+            if ($cp === null || !$this->isLeadingVowel($cp)) {
+                break;
+            }
+
+            $vowels[] = $cp;
             ++$idx;
         }
 
@@ -143,7 +160,7 @@ final class Thai
      */
     private function isLeadingVowel(int $codepoint): bool
     {
-        return isset(ThaiData::LEADING_VOWELS[$codepoint]);
+        return array_key_exists($codepoint, ThaiData::LEADING_VOWELS);
     }
 
     /**
@@ -151,7 +168,6 @@ final class Thai
      */
     private function isBaseConsonant(int $codepoint): bool
     {
-        return $codepoint >= ThaiData::BASE_CONSONANT_FIRST
-            && $codepoint <= ThaiData::BASE_CONSONANT_LAST;
+        return $codepoint >= ThaiData::BASE_CONSONANT_FIRST && $codepoint <= ThaiData::BASE_CONSONANT_LAST;
     }
 }

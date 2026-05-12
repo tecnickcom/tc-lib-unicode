@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * StepL.php
  *
@@ -62,13 +64,10 @@ class StepL
         /**
          * Maximum level
          */
-        protected int $maxlevel
+        protected int $maxlevel,
     ) {
         // reorder chars by their original position
-        \usort(
-            $chardata,
-            static fn ($apos, $bpos): int => ($apos['pos'] - $bpos['pos'])
-        );
+        \usort($chardata, static fn($apos, $bpos): int => $apos['pos'] - $bpos['pos']);
         $this->chardata = $chardata;
         $this->numchars = \count($this->chardata);
         $this->processL1();
@@ -113,23 +112,30 @@ class StepL
             return;
         }
 
+        $current = $this->chardata[$jdx] ?? null;
+        $target = $this->chardata[$idx] ?? null;
+        assert($current !== null, 'Expected StepL current character data at current index');
+        assert($target !== null, 'Expected StepL target character data at main index');
+
         if (
-            (($this->chardata[$jdx]['otype'] == 'S') || ($this->chardata[$jdx]['otype'] == 'B'))
-            || (($jdx === $this->numchars - 1) && ($this->chardata[$jdx]['otype'] == 'WS'))
+            $current['otype'] === 'S'
+            || $current['otype'] === 'B'
+            || $jdx === ($this->numchars - 1) && $current['otype'] === 'WS'
         ) {
-            $this->chardata[$idx]['level'] = $this->pel;
+            $target['level'] = $this->pel;
+            $this->chardata[$idx] = $target;
             return;
         }
 
-        if ($this->chardata[$jdx]['otype'] == 'WS') {
+        if ($current['otype'] === 'WS') {
             return;
         }
 
-        if ($this->chardata[$idx]['char'] >= UniConstant::LRI && $this->chardata[$idx]['char'] <= UniConstant::PDI) {
+        if ($target['char'] >= UniConstant::LRI && $target['char'] <= UniConstant::PDI) {
             return;
         }
 
-        $this->processL1b($idx, ($jdx + 1));
+        $this->processL1b($idx, $jdx + 1);
     }
 
     /**
@@ -145,20 +151,25 @@ class StepL
             $reversed = [];
             foreach ($this->chardata as $chardatum) {
                 if ($chardatum['level'] >= $level) {
-                    if (($chardatum['type'] == 'R') && (isset(UniMirror::UNI[$chardatum['char']]))) {
+                    if ($chardatum['type'] === 'R' && array_key_exists($chardatum['char'], UniMirror::UNI)) {
                         // L4. A character is depicted by a mirrored glyph if and only if
                         //     (a) the resolved directionality of that character is R, and
                         //     (b) the Bidi_Mirrored property value of that character is true.
-                        $chardatum['char'] = UniMirror::UNI[$chardatum['char']];
+                        $mirror = UniMirror::UNI[$chardatum['char']] ?? null;
+                        assert($mirror !== null, 'Expected mirrored glyph for mirrored RTL character');
+                        $chardatum['char'] = $mirror;
                     }
                     $reversed[] = $chardatum;
-                } else {
-                    if ($reversed !== []) {
-                        $ordered = \array_merge($ordered, \array_reverse($reversed));
-                        $reversed = [];
-                    }
-                    $ordered[] = $chardatum;
+
+                    continue;
                 }
+
+                if ($reversed !== []) {
+                    $ordered = \array_merge($ordered, \array_reverse($reversed));
+                    $reversed = [];
+                }
+
+                $ordered[] = $chardatum;
             }
 
             if ($reversed !== []) {

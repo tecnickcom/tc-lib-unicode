@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * StepN.php
  *
@@ -46,6 +48,24 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
     protected array $bstack = [];
 
     /**
+     * @return array{char: int, i: int, level: int, otype: string, pdimatch: int, pos: int, type: string, x: int}
+     */
+    private function getItem(int $idx): array
+    {
+        $item = $this->seq['item'][$idx] ?? null;
+        assert($item !== null, 'Expected StepN sequence item at the requested index');
+
+        return $item;
+    }
+
+    private function setItemType(int $idx, string $type): void
+    {
+        $item = $this->getItem($idx);
+        $item['type'] = $type;
+        $this->seq['item'][$idx] = $item;
+    }
+
+    /**
      * Process N steps
      * Resolving Neutral and Isolate Formatting Types
      *
@@ -63,10 +83,10 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
      */
     protected function process(): void
     {
-        $this->processStep('getBracketPairs');
+        $this->processStep($this->getBracketPairs(...));
         $this->processN0();
-        $this->processStep('processN1');
-        $this->processStep('processN2');
+        $this->processStep($this->processN1(...));
+        $this->processStep($this->processN2(...));
     }
 
     /**
@@ -74,17 +94,20 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
      */
     protected function getBracketPairs(int $idx): void
     {
-        $char = $this->seq['item'][$idx]['char'];
-        if (isset(UniBracket::OPEN[$char])) {
+        $char = $this->getItem($idx)['char'];
+        if (array_key_exists($char, UniBracket::OPEN)) {
             // process open bracket
-            if ($char == 0x3008) {
+            if ($char === 0x3008) {
                 $char = 0x2329;
             }
 
-            $this->bstack[] = [$idx, $char];
-        } elseif (isset(UniBracket::CLOSE[$char])) {
+            $this->bstack[] = [$idx, (int) $char];
+            return;
+        }
+
+        if (array_key_exists($char, UniBracket::CLOSE)) {
             // process closign bracket
-            if ($char == 0x3009) {
+            if ($char === 0x3009) {
                 $char = 0x232A;
             }
 
@@ -92,7 +115,8 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
             $tmpstack = $this->bstack;
             while ($tmpstack !== []) {
                 $item = \array_pop($tmpstack);
-                if ($char == UniBracket::OPEN[$item[1]]) {
+                $openBracket = UniBracket::OPEN[$item[1]] ?? null;
+                if ($openBracket !== null && $char === $openBracket) {
                     $this->brackets[$item[0]] = $idx;
                     $this->bstack = $tmpstack;
                 }
@@ -112,7 +136,7 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
      */
     protected function getN0Type(string $type): string
     {
-        return ((($type == 'AN') || ($type == 'EN')) ? 'R' : $type);
+        return $type === 'AN' || $type === 'EN' ? 'R' : $type;
     }
 
     /**
@@ -121,27 +145,31 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
      */
     protected function processN0(): void
     {
-        $odir = (($this->seq['edir'] == 'L') ? 'R' : 'L');
+        $odir = $this->seq['edir'] === 'L' ? 'R' : 'L';
         // For each bracket-pair element in the list of pairs of text positions
         foreach ($this->brackets as $open => $close) {
-            if ($this->processInsideBrackets($open, $close, $odir)) {
-                for ($jdx = ($open - 1); $jdx >= 0; --$jdx) {
-                    $btype = $this->getN0Type($this->seq['item'][$jdx]['type']);
-                    if ($btype == $odir) {
-                        // 1. If the preceding strong type is also opposite the embedding direction,
-                        //    context is established, so set the type for both brackets in the pair to that direction.
-                        $this->setBracketsType($open, $close, $odir);
-                        break;
-                    } elseif ($btype == $this->seq['edir']) {
-                        // 2. Otherwise set the type for both brackets in the pair to the embedding direction.
-                        $this->setBracketsType($open, $close, $this->seq['edir']);
-                        break;
-                    }
+            if (!$this->processInsideBrackets($open, $close, $odir)) {
+                continue;
+            }
+
+            for ($jdx = $open - 1; $jdx >= 0; --$jdx) {
+                $btype = $this->getN0Type($this->getItem($jdx)['type']);
+                if ($btype === $odir) {
+                    // 1. If the preceding strong type is also opposite the embedding direction,
+                    //    context is established, so set the type for both brackets in the pair to that direction.
+                    $this->setBracketsType($open, $close, $odir);
+                    break;
                 }
 
-                if ($jdx < 0) {
-                    $this->setBracketsType($open, $close, $this->seq['sos']);
+                if ($btype === $this->seq['edir']) {
+                    // 2. Otherwise set the type for both brackets in the pair to the embedding direction.
+                    $this->setBracketsType($open, $close, $this->seq['edir']);
+                    break;
                 }
+            }
+
+            if ($jdx < 0) {
+                $this->setBracketsType($open, $close, $this->seq['sos']);
             }
 
             // d. Otherwise, there are no strong types within the bracket pair. Therefore, do not set the type for that
@@ -163,14 +191,16 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
     {
         $opposite = false;
         // a. Inspect the bidirectional types of the characters enclosed within the bracket pair.
-        for ($jdx = ($open + 1); $jdx < $close; ++$jdx) {
-            $btype = $this->getN0Type($this->seq['item'][$jdx]['type']);
+        for ($jdx = $open + 1; $jdx < $close; ++$jdx) {
+            $btype = $this->getN0Type($this->getItem($jdx)['type']);
             // b. If any strong type (either L or R) matching the embedding direction is found,
             // set the type for both brackets in the pair to match the embedding direction.
-            if ($btype == $this->seq['edir']) {
+            if ($btype === $this->seq['edir']) {
                 $this->setBracketsType($open, $close, $this->seq['edir']);
                 break;
-            } elseif ($btype === $odir) {
+            }
+
+            if ($btype === $odir) {
                 // c. Otherwise, if there is a strong type it must be opposite the embedding direction.
                 $opposite = true;
             }
@@ -178,7 +208,7 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
 
         // Therefore, test for an established context with a preceding strong type by checking backwards before
         // the opening paired bracket until the first strong type (L, R, or sos) is found.
-        return (($jdx === $close) && $opposite);
+        return $jdx === $close && $opposite;
     }
 
     /**
@@ -190,17 +220,20 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
      */
     protected function setBracketsType(int $open, int $close, string $type): void
     {
-        $this->seq['item'][$open]['type'] = $type;
-        // @phpstan-ignore assign.propertyType
-        $this->seq['item'][$close]['type'] = $type;
+        $this->setItemType($open, $type);
+        $this->setItemType($close, $type);
 
         // Any number of characters that had original bidirectional character type NSM
         // prior to the application of W1 that immediately follow a paired bracket which
         // changed to L or R under N0 should change to match the type of their preceding bracket.
-        $next = ($close + 1);
-        while (isset($this->seq['item'][$next]['otype']) && ($this->seq['item'][$next]['otype'] == 'NSM')) {
-            // @phpstan-ignore assign.propertyType
-            $this->seq['item'][$next]['type'] = $type;
+        $next = $close + 1;
+        while ($next < $this->seq['length']) {
+            $item = $this->getItem($next);
+            if ($item['otype'] !== 'NSM') {
+                break;
+            }
+
+            $this->setItemType($next, $type);
             ++$next;
         }
     }
@@ -214,24 +247,25 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
      */
     protected function processN1(int $idx): void
     {
-        if ($this->seq['item'][$idx]['type'] == 'NI') {
-            $bdx = ($idx - 1);
-            $prev = $this->processN1prev($bdx);
-            if ($prev === '') {
-                return;
-            }
+        if ($this->getItem($idx)['type'] !== 'NI') {
+            return;
+        }
 
-            $jdx = $this->getNextN1Char($idx);
-            $next = $this->processN1next($jdx);
-            if ($next === '') {
-                return;
-            }
+        $bdx = $idx - 1;
+        $prev = $this->processN1prev($bdx);
+        if ($prev === '') {
+            return;
+        }
 
-            if ($next === $prev) {
-                for ($bdx = $idx; (($bdx < $jdx) && ($bdx < $this->seq['length'])); ++$bdx) {
-                    // @phpstan-ignore assign.propertyType
-                    $this->seq['item'][$bdx]['type'] = $next;
-                }
+        $jdx = $this->getNextN1Char($idx);
+        $next = $this->processN1next($jdx);
+        if ($next === '') {
+            return;
+        }
+
+        if ($next === $prev) {
+            for ($bdx = $idx; $bdx < $jdx && $bdx < $this->seq['length']; ++$bdx) {
+                $this->setItemType($bdx, $next);
             }
         }
     }
@@ -250,11 +284,12 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
             return $this->seq['sos'];
         }
 
-        if (\in_array($this->seq['item'][$bdx]['type'], ['R', 'AN', 'EN'])) {
+        $item = $this->getItem($bdx);
+        if (\in_array($item['type'], ['R', 'AN', 'EN'], true)) {
             return 'R';
         }
 
-        if ($this->seq['item'][$bdx]['type'] == 'L') {
+        if ($item['type'] === 'L') {
             return 'L';
         }
 
@@ -275,11 +310,12 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
             return $this->seq['eos'];
         }
 
-        if (\in_array($this->seq['item'][$jdx]['type'], ['R', 'AN', 'EN'])) {
+        $item = $this->getItem($jdx);
+        if (\in_array($item['type'], ['R', 'AN', 'EN'], true)) {
             return 'R';
         }
 
-        if ($this->seq['item'][$jdx]['type'] == 'L') {
+        if ($item['type'] === 'L') {
             return 'L';
         }
 
@@ -293,8 +329,8 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
      */
     protected function getNextN1Char(int $idx): int
     {
-        $jdx = ($idx + 1);
-        while (($jdx < $this->seq['length']) && ($this->seq['item'][$jdx]['type'] == 'NI')) {
+        $jdx = $idx + 1;
+        while ($jdx < $this->seq['length'] && $this->getItem($jdx)['type'] === 'NI') {
             ++$jdx;
         }
 
@@ -306,10 +342,10 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
      *
      * @param int $idx Current character position
      */
-    protected function processN2($idx): void
+    protected function processN2(int $idx): void
     {
-        if ($this->seq['item'][$idx]['type'] == 'NI') {
-            $this->seq['item'][$idx]['type'] = $this->seq['edir'];
+        if ($this->getItem($idx)['type'] === 'NI') {
+            $this->setItemType($idx, $this->seq['edir']);
         }
     }
 }

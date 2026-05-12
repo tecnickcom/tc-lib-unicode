@@ -17,8 +17,8 @@
 namespace Test\Bidi;
 
 use Com\Tecnick\Unicode\Bidi\StepW;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Bidi Test

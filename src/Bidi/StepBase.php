@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * StepBase.php
  *
@@ -42,7 +44,7 @@ abstract class StepBase
          * Sequence to process and return
          */
         protected array $seq,
-        $process = true
+        bool $process = true,
     ) {
         if ($process) {
             $this->process();
@@ -67,12 +69,16 @@ abstract class StepBase
     /**
      * Generic step
      *
-     * @param string $method Processing methos
+     * @param callable(int): void|string $processor Processing callback or method name
      */
-    public function processStep($method): void
+    public function processStep(callable|string $processor): void
     {
+        if (\is_string($processor)) {
+            $processor = [$this, $processor];
+        }
+
         for ($idx = 0; $idx < $this->seq['length']; ++$idx) {
-            $this->$method($idx);
+            $processor($idx);
         }
     }
 }

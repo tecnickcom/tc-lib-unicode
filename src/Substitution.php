@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Substitution.php
  *
@@ -62,15 +64,18 @@ final class Substitution
         $scripts = $this->detectScripts($ordarr);
 
         if ($scripts['thai']) {
-            $ordarr = (new ThaiHandler($ordarr))->getOrdarr();
+            $subobj = new ThaiHandler($ordarr);
+            $ordarr = $subobj->getOrdarr();
         }
 
         if ($scripts['devanagari']) {
-            $ordarr = (new DevanagariHandler($ordarr))->getOrdarr();
+            $subobj = new DevanagariHandler($ordarr);
+            $ordarr = $subobj->getOrdarr();
         }
 
         if ($scripts['hangul']) {
-            $ordarr = (new HangulHandler($ordarr))->getOrdarr();
+            $subobj = new HangulHandler($ordarr);
+            $ordarr = $subobj->getOrdarr();
         }
 
         return $ordarr;
@@ -91,10 +96,7 @@ final class Substitution
                 $scripts['thai'] = true;
             }
 
-            if (
-                !$scripts['devanagari']
-                && $this->isInRange($codepoint, ScriptRanges::DEVANAGARI)
-            ) {
+            if (!$scripts['devanagari'] && $this->isInRange($codepoint, ScriptRanges::DEVANAGARI)) {
                 $scripts['devanagari'] = true;
             }
 
@@ -111,9 +113,11 @@ final class Substitution
      */
     private function isHangulJamo(int $codepoint): bool
     {
-        return $this->isInRange($codepoint, ScriptRanges::HANGUL_JAMO)
+        return (
+            $this->isInRange($codepoint, ScriptRanges::HANGUL_JAMO)
             || $this->isInRange($codepoint, ScriptRanges::HANGUL_JAMO_EXT_A)
-            || $this->isInRange($codepoint, ScriptRanges::HANGUL_JAMO_EXT_B);
+            || $this->isInRange($codepoint, ScriptRanges::HANGUL_JAMO_EXT_B)
+        );
     }
 
     /**

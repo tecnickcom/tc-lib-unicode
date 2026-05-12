@@ -32,9 +32,18 @@ use PHPUnit\Framework\Attributes\DataProvider;
  */
 class BidiTest extends TestUtil
 {
+    private static function decodeJsonString(string $json): string
+    {
+        /** @var string */
+        return \json_decode($json);
+    }
+
+    /**
+     * @throws \Com\Tecnick\Unicode\Exception
+     */
     public function testException(): void
     {
-        $this->bcExpectException('\\' . \Com\Tecnick\Unicode\Exception::class);
+        $this->bcExpectException(\Com\Tecnick\Unicode\Exception::class);
         new \Com\Tecnick\Unicode\Bidi();
     }
 
@@ -44,6 +53,8 @@ class BidiTest extends TestUtil
      * @param ?array<int>  $ordarr   Array of UTF-8 codepoints (if empty it will be generated from $str or $chrarr)
      * @param string $forcedir If 'R' forces RTL, if 'L' forces LTR
      * @param bool   $shaping  If true enable the shaping algorithm
+     *
+     * @throws \Com\Tecnick\Unicode\Exception
      */
     #[DataProvider('inputDataProvider')]
     public function testStr(
@@ -51,17 +62,20 @@ class BidiTest extends TestUtil
         ?array $chrarr = null,
         ?array $ordarr = null,
         string $forcedir = '',
-        bool $shaping = true
+        bool $shaping = true,
     ): void {
         $bidi = new Bidi($str, $chrarr, $ordarr, $forcedir, $shaping);
         $this->assertEquals('test', $bidi->getString());
         $this->assertEquals(['t', 'e', 's', 't'], $bidi->getChrArray());
         $this->assertEquals([116, 101, 115, 116], $bidi->getOrdArray());
-        $this->assertEquals([
-            116 => true,
-            101 => true,
-            115 => true,
-        ], $bidi->getCharKeys());
+        $this->assertEquals(
+            [
+                116 => true,
+                101 => true,
+                115 => true,
+            ],
+            $bidi->getCharKeys(),
+        );
         $this->assertEquals(4, $bidi->getNumChars());
     }
 
@@ -83,6 +97,9 @@ class BidiTest extends TestUtil
         ];
     }
 
+    /**
+     * @throws \Com\Tecnick\Unicode\Exception
+     */
     #[DataProvider('bidiStrDataProvider')]
     public function testBidiStr(string $str, mixed $expected, string $forcedir = ''): void
     {
@@ -102,7 +119,7 @@ class BidiTest extends TestUtil
                 'L',
             ],
             [
-                \json_decode('"\u202EABC\u202C"'),
+                self::decodeJsonString('"\u202EABC\u202C"'),
                 'CBA',
                 '',
             ],
@@ -117,18 +134,18 @@ class BidiTest extends TestUtil
                 'R',
             ],
             [
-                \json_decode('"smith (fabrikam \u0600\u0601\u0602) \u05de\u05d6\u05dc"'),
-                \json_decode('"\u05dc\u05d6\u05de (\u0602\u0601\u0600 fabrikam) smith"'),
+                self::decodeJsonString('"smith (fabrikam \u0600\u0601\u0602) \u05de\u05d6\u05dc"'),
+                self::decodeJsonString('"\u05dc\u05d6\u05de (\u0602\u0601\u0600 fabrikam) smith"'),
                 'R',
             ],
             [
-                \json_decode('"\u0600\u0601\u0602 book(s)"'),
-                \json_decode('"book(s) \u0602\u0601\u0600"'),
+                self::decodeJsonString('"\u0600\u0601\u0602 book(s)"'),
+                self::decodeJsonString('"book(s) \u0602\u0601\u0600"'),
                 'R',
             ],
             [
-                \json_decode('"\u0600\u0601(\u0602\u0603[&ef]!)gh"'),
-                \json_decode('"gh(![ef&]\u0603\u0602)\u0601\u0600"'),
+                self::decodeJsonString('"\u0600\u0601(\u0602\u0603[&ef]!)gh"'),
+                self::decodeJsonString('"gh(![ef&]\u0603\u0602)\u0601\u0600"'),
                 'R',
             ],
             [
@@ -137,65 +154,65 @@ class BidiTest extends TestUtil
                 '',
             ],
             [
-                \json_decode('"\u05de\u05d6\u05dc \u05d8\u05d5\u05d1"'),
-                \json_decode('"\u05d1\u05d5\u05d8 \u05dc\u05d6\u05de"'),
+                self::decodeJsonString('"\u05de\u05d6\u05dc \u05d8\u05d5\u05d1"'),
+                self::decodeJsonString('"\u05d1\u05d5\u05d8 \u05dc\u05d6\u05de"'),
                 '',
             ],
             [
-                \json_decode(
+                self::decodeJsonString(
                     '"\u0644\u0644\u0647 \u0600\u0601\u0602 \uFB50'
                     . ' \u0651\u064c\u0651\u064d\u0651\u064e\u0651\u064f\u0651\u0650'
-                    . ' \u0644\u0622"'
+                    . ' \u0644\u0622"',
                 ),
-                \json_decode('"\ufef5\ufedf \ufc62\ufc61\ufc60\ufc5f\ufc5e \ufb50 \u0602\u0601\u0600 \ufdf2"'),
+                self::decodeJsonString(
+                    '"\ufef5\ufedf \ufc62\ufc61\ufc60\ufc5f\ufc5e \ufb50 \u0602\u0601\u0600 \ufdf2"',
+                ),
                 '',
             ],
             [
-                \json_decode('"A\u2067\u05d8\u2069B"'),
-                \json_decode('"A\u2067\u05d8\u2069B"'),
+                self::decodeJsonString('"A\u2067\u05d8\u2069B"'),
+                self::decodeJsonString('"A\u2067\u05d8\u2069B"'),
                 '',
             ],
             [
                 // RLI + PDI
-                \json_decode(
-                    '"The words \"\u2067\u05de\u05d6\u05dc [mazel] \u05d8\u05d5\u05d1 [tov]\u2069\"'
-                    . ' mean \"Congratulations!\""'
-                ),
+                self::decodeJsonString('"The words \"\u2067\u05de\u05d6\u05dc [mazel] \u05d8\u05d5\u05d1 [tov]\u2069\"'
+                . ' mean \"Congratulations!\""'),
                 'The words "⁧[tov] בוט [mazel] לזמ⁩" mean "Congratulations!"',
                 '',
             ],
             [
                 // RLE + PDF
-                \json_decode('"it is called \"\u202bAN INTRODUCTION TO java\u202c\" - $19.95 in hardcover."'),
+                self::decodeJsonString('"it is called \"\u202bAN INTRODUCTION TO java\u202c\" - $19.95 in hardcover."'),
                 'it is called "java TO INTRODUCTION AN" - $19.95 in hardcover.',
                 '',
             ],
             [
                 // RLI + PDI
-                \json_decode('"it is called \"\u2067AN INTRODUCTION TO java\u2069\" - $19.95 in hardcover."'),
+                self::decodeJsonString('"it is called \"\u2067AN INTRODUCTION TO java\u2069\" - $19.95 in hardcover."'),
                 'it is called "⁧java TO INTRODUCTION AN⁩" - $19.95 in hardcover.',
                 '',
             ],
             [
                 // Hebrew with embedded paragraph separator (covers getParagraphs() splitting and re-insertion)
-                    \json_decode('"\u05de\u05d6\u05dc \u05d8\u05d5\u05d1"')
-                        . "\n"
-                        . \json_decode('"\u05de\u05d6\u05dc \u05d8\u05d5\u05d1"'),
-                    \json_decode('"\u05d1\u05d5\u05d8 \u05dc\u05d6\u05de"')
-                        . "\n"
-                        . \json_decode('"\u05d1\u05d5\u05d8 \u05dc\u05d6\u05de"'),
+                self::decodeJsonString('"\u05de\u05d6\u05dc \u05d8\u05d5\u05d1"')
+                    . "\n"
+                    . self::decodeJsonString('"\u05de\u05d6\u05dc \u05d8\u05d5\u05d1"'),
+                self::decodeJsonString('"\u05d1\u05d5\u05d8 \u05dc\u05d6\u05de"')
+                    . "\n"
+                    . self::decodeJsonString('"\u05d1\u05d5\u05d8 \u05dc\u05d6\u05de"'),
                 '',
             ],
             [
                 // Hebrew ending with paragraph separator (covers empty last paragraph handling)
-                \json_decode('"\u05de\u05d6\u05dc \u05d8\u05d5\u05d1"') . "\n",
-                \json_decode('"\u05d1\u05d5\u05d8 \u05dc\u05d6\u05de"') . "\n",
+                self::decodeJsonString('"\u05de\u05d6\u05dc \u05d8\u05d5\u05d1"') . "\n",
+                self::decodeJsonString('"\u05d1\u05d5\u05d8 \u05dc\u05d6\u05de"') . "\n",
                 '',
             ],
             [
                 // Arabic with forced LTR direction (covers getPel() returning 0 for forcedir='L')
                 'تشكيل اختبار',
-                \json_decode('"\ufede\ufef4\ufedc\ufeb8\ufe97\u0020\ufead\ufe8e\ufe92\ufe98\ufea7\ufe8d"'),
+                self::decodeJsonString('"\ufede\ufef4\ufedc\ufeb8\ufe97\u0020\ufead\ufe8e\ufe92\ufe98\ufea7\ufe8d"'),
                 'L',
             ],
         ];
@@ -205,6 +222,9 @@ class BidiTest extends TestUtil
      * Test Bidi with edge-case ordarr inputs (negative codepoints and unknown-type codepoints).
      * These cover the defensive continue-branches in process() when the last char of a paragraph
      * is negative (line 322) or not present in the bidi type table (line 326).
+     */
+    /**
+     * @throws \Com\Tecnick\Unicode\Exception
      */
     public function testBidiWithSpecialOrdarr(): void
     {

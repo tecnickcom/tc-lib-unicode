@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * StepXten.php
  *
@@ -59,6 +61,77 @@ class StepXten
     protected array $ilrs = [];
 
     /**
+     * @return CharData
+     */
+    private function getCharData(int $idx): array
+    {
+        $charData = $this->chardata[$idx] ?? null;
+        assert($charData !== null, 'Expected StepXten character data at the requested index');
+
+        return $charData;
+    }
+
+    /**
+     * @return array{start: int, end: int, e: int}
+     */
+    private function getRunSequence(int $idx): array
+    {
+        $runSequence = $this->runseq[$idx] ?? null;
+        assert($runSequence !== null, 'Expected StepXten level run sequence at the requested index');
+
+        return $runSequence;
+    }
+
+    /**
+     * @param SeqData $isorun
+     */
+    private function findMatchingPdiStart(int $idx, array $isorun, int $numiso): int
+    {
+        $endItem = $isorun['item'][$isorun['length'] - 1] ?? null;
+        assert($endItem !== null, 'Expected final StepXten isolate-run item');
+        if (!$this->isIsolateInitiator($endItem['char'])) {
+            return -1;
+        }
+
+        for ($kdx = $idx + 1; $kdx < $this->numrunseq; ++$kdx) {
+            $runSequence = $this->getRunSequence($kdx);
+            if ($runSequence['e'] !== $isorun['e']) {
+                continue;
+            }
+
+            $startChar = $this->getCharData($runSequence['start']);
+            if ($startChar['char'] !== UniConstant::PDI) {
+                continue;
+            }
+
+            $pdimatch = $runSequence['start'];
+            $this->chardata[$pdimatch]['pdimatch'] = $numiso;
+
+            return $pdimatch;
+        }
+
+        return -1;
+    }
+
+    /**
+     * @param SeqData $isorun
+     */
+    private function appendToParentRun(int $parent, array $isorun, int $pdimatch): void
+    {
+        $parentRun = $this->ilrs[$parent] ?? null;
+        assert($parentRun !== null, 'Expected parent isolate-run sequence before appending');
+
+        $parentRun['item'] = \array_merge($parentRun['item'], $isorun['item']);
+        $parentRun['length'] += $isorun['length'];
+        $parentRun['end'] += $isorun['end'];
+        $this->ilrs[$parent] = $parentRun;
+
+        if ($pdimatch >= 0) {
+            $this->chardata[$pdimatch]['pdimatch'] = $parent;
+        }
+    }
+
+    /**
      * X Steps for Bidirectional algorithm
      *
      * @param array<int, CharData> $chardata Array of UTF-8 codepoints
@@ -72,7 +145,7 @@ class StepXten
         /**
          * Paragraph Embedding Level
          */
-        protected int $pel
+        protected int $pel,
     ) {
         $this->numchars = \count($chardata);
         $this->setIsolatedLevelRunSequences();
@@ -93,15 +166,21 @@ class StepXten
      */
     protected function getEmbeddedDirection(int $level): string
     {
-        return ((($level % 2) == 0) ? 'L' : 'R');
+        return ($level % 2) === 0 ? 'L' : 'R';
     }
 
     protected function setLevelRunSequences(): void
     {
         $start = 0;
         while ($start < $this->numchars) {
-            $end = ($start + 1);
-            while (($end < $this->numchars) && ($this->chardata[$end]['level'] == $this->chardata[$start]['level'])) {
+            $level = $this->getCharData($start)['level'];
+            $end = $start + 1;
+            while ($end < $this->numchars) {
+                $charData = $this->chardata[$end] ?? null;
+                if ($charData === null || $charData['level'] !== $level) {
+                    break;
+                }
+
                 ++$end;
             }
 
@@ -109,10 +188,10 @@ class StepXten
             $this->runseq[] = [
                 'start' => $start,
                 'end' => $end,
-                'e' => $this->chardata[$start]['level'],
+                'e' => $level,
             ];
             ++$this->numrunseq;
-            $start = ($end + 1);
+            $start = $end + 1;
         }
     }
 
@@ -121,7 +200,7 @@ class StepXten
      */
     protected function isIsolateInitiator(int $ord): bool
     {
-        return (($ord == UniConstant::RLI) || ($ord == UniConstant::LRI) || ($ord == UniConstant::FSI));
+        return $ord === UniConstant::RLI || $ord === UniConstant::LRI || $ord === UniConstant::FSI;
     }
 
     /**
@@ -139,58 +218,32 @@ class StepXten
                 'e' => $seq['e'],
                 'edir' => $this->getEmbeddedDirection($seq['e']), // embedded direction
                 'start' => $seq['start'], // position of the first char
-                'end' => $seq['end'],  // position of the last char
-                'length' => ($seq['end'] - $seq['start'] + 1),
-                'sos' => '',  // start-of-sequence
-                'eos' => '',  // end-of-sequence
+                'end' => $seq['end'], // position of the last char
+                'length' => $seq['end'] - $seq['start'] + 1,
+                'sos' => '', // start-of-sequence
+                'eos' => '', // end-of-sequence
                 'maxlevel' => 0,
                 'item' => [],
             ];
             for ($jdx = 0; $jdx < $isorun['length']; ++$jdx) {
-                $isorun['item'][$jdx] = $this->chardata[($seq['start'] + $jdx)];
+                $isorun['item'][$jdx] = $this->getCharData($seq['start'] + $jdx);
             }
-
-            $endchar = $isorun['item'][($jdx - 1)]['char'];
 
             // While the level run currently last in the sequence ends with an isolate initiator that has a
             // matching PDI, append the level run containing the matching PDI to the sequence.
             // (Note that this matching PDI must be the first character of its level run.)
-            $pdimatch = -1;
-            if ($this->isIsolateInitiator($endchar)) {
-                // find the next sequence with the same level that starts with a PDI
-                for ($kdx = ($idx + 1); $kdx < $this->numrunseq; ++$kdx) {
-                    if (
-                        ($this->runseq[$kdx]['e'] == $isorun['e'])
-                        && ($this->chardata[$this->runseq[$kdx]['start']]['char'] == UniConstant::PDI)
-                    ) {
-                        $pdimatch = $this->runseq[$kdx]['start'];
-                        $this->chardata[$pdimatch]['pdimatch'] = $numiso;
-                        break;
-                    }
-                }
-            }
+            $pdimatch = $this->findMatchingPdiStart($idx, $isorun, $numiso);
 
             // For each level run in the paragraph whose first character is not a PDI,
             // or is a PDI that does not match any isolate initiator
-            if (
-                (($parent = $this->chardata[$seq['start']]['pdimatch']) >= 0)
-                && (!empty($this->ilrs[$parent]))
-            ) {
-                $this->ilrs[$parent]['item'] = \array_merge(
-                    $this->ilrs[$parent]['item'],
-                    $isorun['item']
-                );
-
-                $this->ilrs[$parent]['length'] += $isorun['length'];
-                $this->ilrs[$parent]['end'] += $isorun['end'];
-
-                if ($pdimatch >= 0) {
-                    $this->chardata[$pdimatch]['pdimatch'] = $parent;
-                }
-            } else {
-                $this->ilrs[$numiso] = $isorun;
-                ++$numiso;
+            $parent = $this->getCharData($seq['start'])['pdimatch'];
+            if ($parent >= 0 && array_key_exists($parent, $this->ilrs)) {
+                $this->appendToParentRun($parent, $isorun, $pdimatch);
+                continue;
             }
+
+            $this->ilrs[$numiso] = $isorun;
+            ++$numiso;
         }
 
         $this->setStartEndOfSequence();
@@ -206,15 +259,15 @@ class StepXten
             // For sos, compare the level of the first character in the sequence with the level of the character
             // preceding it in the paragraph (not counting characters removed by X9), and if there is none,
             // with the paragraph embedding level.
-            $lev = $seq['item'][0]['level'];
-            if ($seq['start'] == 0) {
-                $prev = $this->pel;
-            } else {
-                $lastchr = $this->chardata[($seq['start'] - 1)];
-                $prev = $lastchr['level'];
+            $firstChar = $seq['item'][0] ?? null;
+            assert($firstChar !== null, 'Expected first character for StepXten isolate-run sequence');
+            $lev = $firstChar['level'];
+            $prev = $this->pel;
+            if ($seq['start'] !== 0) {
+                $prev = $this->getCharData($seq['start'] - 1)['level'];
             }
 
-            $this->ilrs[$key]['sos'] = $this->getEmbeddedDirection(\max($prev, $lev));
+            $this->ilrs[$key]['sos'] = $this->getEmbeddedDirection((int) \max($prev, $lev));
 
             // For eos, compare the level of the last character in the sequence with the level of the character
             // following it in the paragraph (not counting characters removed by X9), and if there is none or the
@@ -223,16 +276,16 @@ class StepXten
             $lastchr = \end($seq['item']);
 
             // A level run always contains at least one character, so end() is not false.
-            assert($lastchr !== false);
+            assert($lastchr !== false, 'Expected final character for StepXten isolate-run sequence');
 
             $lev = $lastchr['level'];
-            if ((! isset($this->chardata[($seq['end'] + 1)]['level'])) || $this->isIsolateInitiator($lastchr['char'])) {
-                $next = $this->pel;
-            } else {
-                $next = $this->chardata[($seq['end'] + 1)]['level'];
+            $next = $this->pel;
+            $nextChar = $this->chardata[$seq['end'] + 1] ?? null;
+            if ($nextChar !== null && !$this->isIsolateInitiator($lastchr['char'])) {
+                $next = $nextChar['level'];
             }
 
-            $this->ilrs[$key]['eos'] = $this->getEmbeddedDirection(\max($next, $lev));
+            $this->ilrs[$key]['eos'] = $this->getEmbeddedDirection((int) \max($next, $lev));
 
             // If the higher level is odd, the sos or eos is R; otherwise, it is L.
         }

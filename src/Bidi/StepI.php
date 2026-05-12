@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * StepI.php
  *
@@ -35,7 +37,7 @@ class StepI extends \Com\Tecnick\Unicode\Bidi\StepBase
     protected function process(): void
     {
         $this->seq['maxlevel'] = 0;
-        $this->processStep('processI');
+        $this->processStep($this->processI(...));
     }
 
     /**
@@ -47,25 +49,32 @@ class StepI extends \Com\Tecnick\Unicode\Bidi\StepBase
      */
     protected function processI(int $idx): void
     {
-        $odd = ($this->seq['item'][$idx]['level'] % 2);
+        $item = $this->seq['item'][$idx] ?? null;
+        assert($item !== null, 'Expected StepI sequence item at current index');
+
+        $odd = $item['level'] % 2;
         if ($odd !== 0) {
-            if (
-                ($this->seq['item'][$idx]['type'] == 'L')
-                || ($this->seq['item'][$idx]['type'] == 'EN')
-                || ($this->seq['item'][$idx]['type'] == 'AN')
-            ) {
-                ++$this->seq['item'][$idx]['level'];
+            if ($item['type'] === 'L' || $item['type'] === 'EN' || $item['type'] === 'AN') {
+                ++$item['level'];
             }
-        } elseif ($this->seq['item'][$idx]['type'] == 'R') {
-            ++$this->seq['item'][$idx]['level'];
-        } elseif (
-            ($this->seq['item'][$idx]['type'] == 'AN')
-            || ($this->seq['item'][$idx]['type'] == 'EN')
-        ) {
-            $this->seq['item'][$idx]['level'] += 2;
+
+            $this->seq['item'][$idx] = $item;
+            $this->seq['maxlevel'] = (int) \max($this->seq['maxlevel'], $item['level']);
+
+            return;
         }
 
+        if ($item['type'] === 'R') {
+            ++$item['level'];
+        }
+
+        if ($item['type'] === 'AN' || $item['type'] === 'EN') {
+            $item['level'] += 2;
+        }
+
+        $this->seq['item'][$idx] = $item;
+
         // update the maximum level
-        $this->seq['maxlevel'] = \max($this->seq['maxlevel'], $this->seq['item'][$idx]['level']);
+        $this->seq['maxlevel'] = (int) \max($this->seq['maxlevel'], $item['level']);
     }
 }

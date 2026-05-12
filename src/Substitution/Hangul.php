@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hangul.php
  *
@@ -54,7 +56,7 @@ final class Hangul
     /**
      * Transformed codepoint array.
      *
-     * @var array<int, int>
+     * @var list<int>
      */
     private array $ordarr;
 
@@ -63,14 +65,14 @@ final class Hangul
      */
     public function __construct(array $ordarr)
     {
-        $this->ordarr = $ordarr;
+        $this->ordarr = array_values($ordarr);
         $this->process();
     }
 
     /**
      * Returns the transformed codepoint array.
      *
-     * @return array<int, int>
+     * @return list<int>
      */
     public function getOrdarr(): array
     {
@@ -86,13 +88,19 @@ final class Hangul
         $result = [];
         $idx = 0;
         while ($idx < $len) {
-            $codepoint = $this->ordarr[$idx];
+            $codepoint = $this->ordarr[$idx] ?? null;
+            if ($codepoint === null) {
+                ++$idx;
+                continue;
+            }
+
             if ($this->isLeadingConsonant($codepoint) && ($idx + 1) < $len) {
                 $idx = $this->composeLV($idx, $len, $result);
-            } else {
-                $result[] = $codepoint;
-                ++$idx;
+                continue;
             }
+
+            $result[] = $codepoint;
+            ++$idx;
         }
 
         $this->ordarr = array_values($result);
@@ -105,16 +113,20 @@ final class Hangul
      *
      * @param int             $idx    Current index (L position).
      * @param int             $len    Length of $this->ordarr.
-     * @param array<int, int> $result Result accumulator (passed by reference).
+     * @param list<int> $result Result accumulator (passed by reference).
      *
      * @return int Updated index after all consumed codepoints.
      */
     private function composeLV(int $idx, int $len, array &$result): int
     {
-        $lChar = $this->ordarr[$idx];
-        $vChar = $this->ordarr[$idx + 1];
+        $lChar = $this->ordarr[$idx] ?? null;
+        $vChar = $this->ordarr[$idx + 1] ?? null;
 
-        if (!$this->isVowel($vChar)) {
+        if ($lChar === null) {
+            return $idx + 1;
+        }
+
+        if ($vChar === null || !$this->isVowel($vChar)) {
             $result[] = $lChar;
             return $idx + 1;
         }
@@ -122,9 +134,12 @@ final class Hangul
         $lvSyllable = $this->buildLVSyllable($lChar, $vChar);
         $nextIdx = $idx + 2;
 
-        if ($nextIdx < $len && $this->isTrailingConsonant($this->ordarr[$nextIdx])) {
-            $result[] = $lvSyllable + ($this->ordarr[$nextIdx] - HangulData::TBASE);
-            return $nextIdx + 1;
+        if ($nextIdx < $len) {
+            $tChar = $this->ordarr[$nextIdx] ?? null;
+            if ($tChar !== null && $this->isTrailingConsonant($tChar)) {
+                $result[] = $lvSyllable + ($tChar - HangulData::TBASE);
+                return $nextIdx + 1;
+            }
         }
 
         $result[] = $lvSyllable;
@@ -141,9 +156,7 @@ final class Hangul
     {
         $lIndex = $lChar - HangulData::LBASE;
         $vIndex = $vChar - HangulData::VBASE;
-        return HangulData::SBASE
-            + $lIndex * HangulData::NCOUNT
-            + $vIndex * HangulData::TCOUNT;
+        return HangulData::SBASE + ($lIndex * HangulData::NCOUNT) + ($vIndex * HangulData::TCOUNT);
     }
 
     /**
@@ -153,8 +166,7 @@ final class Hangul
      */
     private function isLeadingConsonant(int $codepoint): bool
     {
-        return $codepoint >= HangulData::LBASE
-            && $codepoint < HangulData::LBASE + HangulData::LCOUNT;
+        return $codepoint >= HangulData::LBASE && $codepoint < (HangulData::LBASE + HangulData::LCOUNT);
     }
 
     /**
@@ -164,8 +176,7 @@ final class Hangul
      */
     private function isVowel(int $codepoint): bool
     {
-        return $codepoint >= HangulData::VBASE
-            && $codepoint < HangulData::VBASE + HangulData::VCOUNT;
+        return $codepoint >= HangulData::VBASE && $codepoint < (HangulData::VBASE + HangulData::VCOUNT);
     }
 
     /**
@@ -176,7 +187,6 @@ final class Hangul
      */
     private function isTrailingConsonant(int $codepoint): bool
     {
-        return $codepoint > HangulData::TBASE
-            && $codepoint < HangulData::TBASE + HangulData::TCOUNT;
+        return $codepoint > HangulData::TBASE && $codepoint < (HangulData::TBASE + HangulData::TCOUNT);
     }
 }

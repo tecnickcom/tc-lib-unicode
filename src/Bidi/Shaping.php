@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Shaping.php
  *
@@ -35,6 +37,17 @@ use Com\Tecnick\Unicode\Data\Constant as UniConstant;
 class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
 {
     /**
+     * @return array{char: int, i: int, level: int, otype: string, pdimatch: int, pos: int, type: string, x: int}
+     */
+    private function getSeqItem(int $idx): array
+    {
+        $item = $this->seq['item'][$idx] ?? null;
+        assert($item !== null, 'Expected shaping sequence item at the requested index');
+
+        return $item;
+    }
+
+    /**
      * Shaping
      * Cursively connected scripts, such as Arabic or Syriac,
      * require the selection of positional character shapes that depend on adjacent characters.
@@ -67,13 +80,15 @@ class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
     {
         $this->setAlChars();
         for ($idx = 0; $idx < $this->seq['length']; ++$idx) {
-            if ($this->seq['item'][$idx]['otype'] == 'AL') {
-                $thischar = $this->seq['item'][$idx];
-                $pos = $thischar['x'];
-                $prevchar = (($pos > 0) ? $this->alchars[($pos - 1)] : null);
-                $nextchar = ((($pos + 1) < $this->numalchars) ? $this->alchars[($pos + 1)] : null);
-                $this->processAlChar($idx, $pos, $prevchar, $thischar, $nextchar);
+            $thischar = $this->getSeqItem($idx);
+            if ($thischar['otype'] !== 'AL') {
+                continue;
             }
+
+            $pos = $thischar['x'];
+            $prevchar = $pos > 0 ? $this->alchars[$pos - 1] ?? null : null;
+            $nextchar = ($pos + 1) < $this->numalchars ? $this->alchars[$pos + 1] ?? null : null;
+            $this->processAlChar($idx, $pos, $prevchar, $thischar, $nextchar);
         }
 
         $this->combineShadda();
@@ -89,17 +104,16 @@ class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
     {
         $this->numalchars = 0;
         for ($idx = 0; $idx < $this->seq['length']; ++$idx) {
+            $item = $this->seq['item'][$idx] ?? null;
+            assert($item !== null, 'Expected sequence item while building Arabic shaping cache');
             if (
-                ($this->seq['item'][$idx]['otype'] == 'AL')
-                || ($this->seq['item'][$idx]['char'] == UniConstant::SPACE)
-                || ($this->seq['item'][$idx]['char'] == UniConstant::ZERO_WIDTH_NON_JOINER)
+                $item['otype'] === 'AL'
+                || $item['char'] === UniConstant::SPACE
+                || $item['char'] === UniConstant::ZERO_WIDTH_NON_JOINER
             ) {
-                $this->alchars[$this->numalchars]['i'] = $idx;
-                $this->alchars[$this->numalchars] = \array_merge(
-                    $this->alchars[$this->numalchars],
-                    $this->seq['item'][$idx]
-                );
-                $this->seq['item'][$idx]['x'] = $this->numalchars;
+                $this->alchars[$this->numalchars] = $item;
+                $item['x'] = $this->numalchars;
+                $this->seq['item'][$idx] = $item;
                 ++$this->numalchars;
             }
         }
@@ -112,17 +126,23 @@ class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
      */
     protected function combineShadda(): void
     {
-        $last = ($this->seq['length'] - 1);
+        $last = $this->seq['length'] - 1;
         for ($idx = 0; $idx < $last; ++$idx) {
-            $cur = $this->newchardata[$idx]['char'];
-            $nxt = $this->newchardata[($idx + 1)]['char'];
-            if (
-                ($cur == UniArabic::SHADDA)
-                && ($nxt >= 0) && (isset(UniArabic::DIACRITIC[$nxt]))
-            ) {
-                $this->newchardata[$idx]['char'] = -1;
-                // @phpstan-ignore assign.propertyType
-                $this->newchardata[($idx + 1)]['char'] = UniArabic::DIACRITIC[$nxt];
+            $currentItem = $this->newchardata[$idx] ?? null;
+            $nextItem = $this->newchardata[$idx + 1] ?? null;
+            assert(
+                $currentItem !== null && $nextItem !== null,
+                'Expected adjacent chars while combining Arabic shadda',
+            );
+
+            $cur = $currentItem['char'];
+            $nxt = $nextItem['char'];
+            $diacritic = $nxt >= 0 ? UniArabic::DIACRITIC[$nxt] ?? null : null;
+            if ($cur === UniArabic::SHADDA && $diacritic !== null) {
+                $currentItem['char'] = -1;
+                $nextItem['char'] = $diacritic;
+                $this->newchardata[$idx] = $currentItem;
+                $this->newchardata[$idx + 1] = $nextItem;
             }
         }
     }
@@ -133,9 +153,11 @@ class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
     protected function removeDeletedChars(): void
     {
         foreach ($this->newchardata as $key => $value) {
-            if ($value['char'] < 0) {
-                unset($this->newchardata[$key]);
+            if ($value['char'] >= 0) {
+                continue;
             }
+
+            unset($this->newchardata[$key]);
         }
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * StepX.php
  *
@@ -88,7 +90,7 @@ class StepX
          * Array of UTF-8 codepoints
          */
         protected array $ordarr,
-        int $pel
+        int $pel,
     ) {
         //     - Push onto the stack an entry consisting of the paragraph embedding level,
         //       a neutral directional override status, and a false directional isolate status.
@@ -116,13 +118,36 @@ class StepX
     }
 
     /**
+     * Returns the last directional status stack entry.
+     *
+     * @return DssData
+     */
+    protected function getLastDss(): array
+    {
+        $lastKey = \array_key_last($this->dss);
+        assert($lastKey !== null, 'Expected at least one directional stack entry');
+
+        $item = $this->dss[$lastKey] ?? null;
+        assert($item !== null, 'Expected directional stack entry at the last key');
+
+        return $item;
+    }
+
+    protected function popDss(): void
+    {
+        $lastKey = \array_key_last($this->dss);
+        assert($lastKey !== null, 'Expected at least one directional stack entry before pop');
+        unset($this->dss[$lastKey]);
+    }
+
+    /**
      * Calculate the Least Even
      *
      * @param int $num Number to process
      */
     protected function getLEven(int $num): int
     {
-        return (2 + $num - ($num % 2));
+        return 2 + $num - ($num % 2);
     }
 
     /**
@@ -132,7 +157,7 @@ class StepX
      */
     protected function getLOdd(int $num): int
     {
-        return (1 + $num + ($num % 2));
+        return 1 + $num + ($num % 2);
     }
 
     /**
@@ -141,7 +166,7 @@ class StepX
     protected function processX(): void
     {
         foreach ($this->ordarr as $key => $ord) {
-            $this->processXcase($key, $ord);
+            $this->processXcase((int) $key, $ord);
         }
     }
 
@@ -155,11 +180,7 @@ class StepX
      */
     protected function processXcase(int $pos, int $ord): void
     {
-        $edss = \end($this->dss);
-
-    // $this->dss always has the paragraph-level entry pushed in __construct and
-    // is never fully emptied (pop guards require count > 1), so end() is not false.
-        assert($edss !== false);
+        $edss = $this->getLastDss();
 
         switch ($ord) {
             case UniConstant::RLE:
@@ -181,12 +202,12 @@ class StepX
             case UniConstant::RLI:
                 // X5a
                 $this->processChar($pos, $ord, $edss);
-                $this->setDss($this->getLOdd($edss['cel']), UniConstant::RLI, 'NI', true, true, 1);
+                $this->setDss($this->getLOdd($edss['cel']), UniConstant::RLI, 'NI', true);
                 break;
             case UniConstant::LRI:
                 // X5b
                 $this->processChar($pos, $ord, $edss);
-                $this->setDss($this->getLEven($edss['cel']), UniConstant::LRI, 'NI', true, true, 1);
+                $this->setDss($this->getLEven($edss['cel']), UniConstant::LRI, 'NI', true);
                 break;
             case UniConstant::FSI:
                 // X5c
@@ -214,18 +235,12 @@ class StepX
      * @param int         $cel     Embedding Level
      * @param int         $ord     Char code
      * @param string      $dos     Directional override status
-     * @param bool        $dis     Directional isolate status
-     * @param bool $isolate True if Isolate initiator
-     * @param int         $ivic    increment for the valid isolate count
+     * @param bool        $isolate True if Isolate initiator
      */
-    protected function setDss(
-        int $cel,
-        int $ord,
-        string $dos,
-        bool $dis = false,
-        bool $isolate = false,
-        int $ivic = 0
-    ): void {
+    protected function setDss(int $cel, int $ord, string $dos, bool $isolate = false): void
+    {
+        $dis = $isolate;
+        $ivic = $isolate ? 1 : 0;
         // X2 to X5
         //     - Compute the least odd|even embedding level greater than the embedding level of the last entry
         //       on the directional status stack.
@@ -235,10 +250,13 @@ class StepX
         //       directional status stack.
         //     - Otherwise, this is an overflow RLE. If the overflow isolate count is zero, increment the
         //       overflow embedding|isolate count by one. Leave all other variables unchanged.
-        if (($cel >= self::MAX_DEPTH) || ($this->oic != 0) || ($this->oec != 0)) {
+        if ($cel >= self::MAX_DEPTH || $this->oic !== 0 || $this->oec !== 0) {
             if ($isolate) {
                 ++$this->oic;
-            } elseif ($this->oic == 0) {
+                return;
+            }
+
+            if ($this->oic === 0) {
                 ++$this->oec;
             }
 
@@ -263,7 +281,7 @@ class StepX
      */
     protected function pushChar(int $pos, int $ord, array $edss): void
     {
-        $unitype = (UniType::UNI[$ord] ?? $edss['dos']);
+        $unitype = UniType::UNI[$ord] ?? $edss['dos'];
         $this->chardata[] = [
             'char' => $ord,
             'i' => -1,
@@ -271,7 +289,7 @@ class StepX
             'otype' => $unitype,
             'pdimatch' => -1,
             'pos' => $pos,
-            'type' => (($edss['dos'] !== 'NI') ? $edss['dos'] : $unitype),
+            'type' => $edss['dos'] !== 'NI' ? $edss['dos'] : $unitype,
             'x' => -1,
         ];
     }
@@ -291,7 +309,8 @@ class StepX
         //     - Whenever the directional override status of the last entry on the directional status stack
         //       is not neutral, reset the current character type according to the directional override
         //       status of the last entry on the directional status stack.
-        if (isset(UniType::UNI[$ord]) && ((UniType::UNI[$ord] == 'B') || (UniType::UNI[$ord] == 'BN'))) {
+        $charType = UniType::UNI[$ord] ?? null;
+        if ($charType === 'B' || $charType === 'BN') {
             return;
         }
 
@@ -327,8 +346,8 @@ class StepX
         //       last entry from the directional status stack. (This PDF matches and terminates the scope
         //       of a valid embedding initiator. Since the stack has at least two entries, this pop does
         //       not leave the stack empty.)
-        if (($edss['dis'] === false) && (\count($this->dss) > 1)) {
-            \array_pop($this->dss);
+        if (!$edss['dis'] && \count($this->dss) > 1) {
+            $this->popDss();
         }
 
         //     - Otherwise, do nothing. (This PDF does not match any embedding initiator.)
@@ -353,7 +372,7 @@ class StepX
 
         //      - Otherwise, if the valid isolate count is zero, this PDI does not match any isolate
         //        initiator, valid or overflow. Do nothing.
-        if ($this->vic == 0) {
+        if ($this->vic === 0) {
             return;
         }
 
@@ -373,22 +392,20 @@ class StepX
         //          stack's first entry, which always belongs to the paragraph level and has a false
         //          directional status, so there is at least one more entry below it on the stack.)
         $count_dss = \count($this->dss);
-        while (($edss['dis'] === false) && ($count_dss > 1)) {
-            \array_pop($this->dss);
+        while (!$edss['dis'] && $count_dss > 1) {
+            $this->popDss();
             --$count_dss;
-            $edss = \end($this->dss);
-            // Loop guard $count_dss > 1 ensures the array has at least 1 entry after pop.
-            assert($edss !== false);
+            $edss = $this->getLastDss();
         }
 
         //        - Pop the last entry from the directional status stack and decrement the valid isolate
         //          count by one. (This terminates the scope of the matched isolate initiator. Since the
         //          preceding step left the stack with at least two entries, this pop does not leave the
         //          stack empty.)
-        \array_pop($this->dss);
+        $this->popDss();
         --$this->vic;
 
-        $edss = \end($this->dss);
+        $edss = $this->getLastDss();
 
         //      - In all cases, look up the last entry on the directional status stack left after the
         //        steps above and:
@@ -396,10 +413,6 @@ class StepX
         //        - If the entry's directional override status is not neutral, reset the current character type
         //          from PDI to L if the override status is left-to-right, and to R if the override status is
         //          right-to-left.
-        // UAX#9 §X6a guarantees the preceding step left >= 2 entries, so this pop
-        // does not empty the stack.
-        assert($edss !== false);
-
         $this->pushChar($pos, $ord, $edss);
     }
 
@@ -416,10 +429,11 @@ class StepX
         //      of characters were a paragraph. If these rules decide on paragraph embedding level 1, treat
         //      the FSI as an RLI in rule X5a. Otherwise, treat it as an LRI in rule X5b.
         $stepp = new StepP(\array_slice($this->ordarr, $pos));
-        if ($stepp->getPel() == 0) {
-            $this->setDss($this->getLEven($edss['cel']), UniConstant::LRI, 'NI', true, true, 1);
-        } else {
-            $this->setDss($this->getLOdd($edss['cel']), UniConstant::RLI, 'NI', true, true, 1);
+        if ($stepp->getPel() === 0) {
+            $this->setDss($this->getLEven($edss['cel']), UniConstant::LRI, 'NI', true);
+            return;
         }
+
+        $this->setDss($this->getLOdd($edss['cel']), UniConstant::RLI, 'NI', true);
     }
 }

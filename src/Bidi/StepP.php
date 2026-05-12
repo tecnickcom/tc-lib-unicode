@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * StepP.php
  *
@@ -37,13 +39,11 @@ class StepP
      *
      * @param array<int> $ordarr Array of UTF-8 codepoints
      */
-    public function __construct(
-        /**
-         * Array of UTF-8 codepoints
-         */
-        protected array $ordarr
-    ) {
-    }
+    public function __construct(/**
+     * Array of UTF-8 codepoints
+     */
+        protected array $ordarr,
+    ) {}
 
     /**
      * Get the Paragraph Embedding Level
@@ -58,15 +58,17 @@ class StepP
         $isolate = 0;
         foreach ($this->ordarr as $ord) {
             $isolate = $this->getIsolateLevel($ord, $isolate);
-            if (($isolate == 0) && isset(UniType::UNI[$ord])) {
-                $type = UniType::UNI[$ord];
-                if ($type === 'L') {
-                    return 0;
-                }
+            $type = UniType::UNI[$ord] ?? null;
+            if ($isolate !== 0 || $type === null) {
+                continue;
+            }
 
-                if (($type === 'R') || ($type === 'AL')) {
-                    return 1;
-                }
+            if ($type === 'L') {
+                return 0;
+            }
+
+            if ($type === 'R' || $type === 'AL') {
+                return 1;
             }
         }
 
@@ -78,9 +80,11 @@ class StepP
      */
     protected function getIsolateLevel(int $ord, int $isolate): int
     {
-        if (($ord == UniConstant::LRI) || ($ord == UniConstant::RLI) || ($ord == UniConstant::FSI)) {
+        if ($ord === UniConstant::LRI || $ord === UniConstant::RLI || $ord === UniConstant::FSI) {
             ++$isolate;
-        } elseif ($ord == UniConstant::PDI) {
+        }
+
+        if ($ord === UniConstant::PDI) {
             --$isolate;
         }
 

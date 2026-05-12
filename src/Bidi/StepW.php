@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * StepW.php
  *
@@ -32,18 +34,38 @@ use Com\Tecnick\Unicode\Data\Constant as UniConstant;
 class StepW extends \Com\Tecnick\Unicode\Bidi\StepBase
 {
     /**
+     * Returns the sequence item at the given index.
+     *
+     * @return array{char: int, i: int, level: int, otype: string, pdimatch: int, pos: int, type: string, x: int}
+     */
+    private function getItem(int $idx): array
+    {
+        $item = $this->seq['item'][$idx] ?? null;
+        assert($item !== null, 'Expected StepW sequence item at the requested index');
+
+        return $item;
+    }
+
+    private function setItemType(int $idx, string $type): void
+    {
+        $item = $this->getItem($idx);
+        $item['type'] = $type;
+        $this->seq['item'][$idx] = $item;
+    }
+
+    /**
      * Process W steps
      * Resolving Weak Types
      */
     protected function process(): void
     {
-        $this->processStep('processW1');
-        $this->processStep('processW2');
-        $this->processStep('processW3');
-        $this->processStep('processW4');
-        $this->processStep('processW5');
-        $this->processStep('processW6');
-        $this->processStep('processW7');
+        $this->processStep($this->processW1(...));
+        $this->processStep($this->processW2(...));
+        $this->processStep($this->processW3(...));
+        $this->processStep($this->processW4(...));
+        $this->processStep($this->processW5(...));
+        $this->processStep($this->processW6(...));
+        $this->processStep($this->processW7(...));
     }
 
     /**
@@ -58,19 +80,24 @@ class StepW extends \Com\Tecnick\Unicode\Bidi\StepBase
      */
     protected function processW1(int $idx): void
     {
-        if ($this->seq['item'][$idx]['type'] == 'NSM') {
-            $jdx = ($idx - 1);
-            if ($jdx < 0) {
-                $this->seq['item'][$idx]['type'] = $this->seq['sos'];
-            } elseif (
-                ($this->seq['item'][$jdx]['char'] >= UniConstant::LRI)
-                && ($this->seq['item'][$jdx]['char'] <= UniConstant::PDI)
-            ) {
-                $this->seq['item'][$idx]['type'] = 'ON';
-            } else {
-                $this->seq['item'][$idx]['type'] = $this->seq['item'][$jdx]['type'];
-            }
+        $item = $this->getItem($idx);
+        if ($item['type'] !== 'NSM') {
+            return;
         }
+
+        $jdx = $idx - 1;
+        if ($jdx < 0) {
+            $this->setItemType($idx, $this->seq['sos']);
+            return;
+        }
+
+        $prevItem = $this->getItem($jdx);
+        if ($prevItem['char'] >= UniConstant::LRI && $prevItem['char'] <= UniConstant::PDI) {
+            $this->setItemType($idx, 'ON');
+            return;
+        }
+
+        $this->setItemType($idx, $prevItem['type']);
     }
 
     /**
@@ -81,18 +108,24 @@ class StepW extends \Com\Tecnick\Unicode\Bidi\StepBase
      */
     protected function processW2(int $idx): void
     {
-        if ($this->seq['item'][$idx]['type'] == 'EN') {
-            $jdx = ($idx - 1);
-            while ($jdx >= 0) {
-                if ($this->seq['item'][$jdx]['type'] == 'AL') {
-                    $this->seq['item'][$idx]['type'] = 'AN';
-                    break;
-                } elseif (\in_array($this->seq['item'][$jdx]['type'], ['R', 'L'])) {
-                    break;
-                }
+        $item = $this->getItem($idx);
+        if ($item['type'] !== 'EN') {
+            return;
+        }
 
-                --$jdx;
+        $jdx = $idx - 1;
+        while ($jdx >= 0) {
+            $prevItem = $this->getItem($jdx);
+            if ($prevItem['type'] === 'AL') {
+                $this->setItemType($idx, 'AN');
+                break;
             }
+
+            if (\in_array($prevItem['type'], ['R', 'L'], true)) {
+                break;
+            }
+
+            --$jdx;
         }
     }
 
@@ -103,8 +136,8 @@ class StepW extends \Com\Tecnick\Unicode\Bidi\StepBase
      */
     protected function processW3(int $idx): void
     {
-        if ($this->seq['item'][$idx]['type'] == 'AL') {
-            $this->seq['item'][$idx]['type'] = 'R';
+        if ($this->getItem($idx)['type'] === 'AL') {
+            $this->setItemType($idx, 'R');
         }
     }
 
@@ -116,17 +149,21 @@ class StepW extends \Com\Tecnick\Unicode\Bidi\StepBase
      */
     protected function processW4(int $idx): void
     {
-        if (\in_array($this->seq['item'][$idx]['type'], ['ES', 'CS'])) {
-            $bdx = ($idx - 1);
-            $fdx = ($idx + 1);
-            if (
-                ($bdx >= 0)
-                && ($fdx < $this->seq['length'])
-                    && $this->seq['item'][$bdx]['type'] == $this->seq['item'][$fdx]['type']
-                    && \in_array($this->seq['item'][$bdx]['type'], ['EN', 'AN'])
-            ) {
-                $this->seq['item'][$idx]['type'] = $this->seq['item'][$bdx]['type'];
-            }
+        $item = $this->getItem($idx);
+        if (!\in_array($item['type'], ['ES', 'CS'], true)) {
+            return;
+        }
+
+        $bdx = $idx - 1;
+        $fdx = $idx + 1;
+        if ($bdx < 0 || $fdx >= $this->seq['length']) {
+            return;
+        }
+
+        $prevItem = $this->getItem($bdx);
+        $nextItem = $this->getItem($fdx);
+        if ($prevItem['type'] === $nextItem['type'] && \in_array($prevItem['type'], ['EN', 'AN'], true)) {
+            $this->setItemType($idx, $prevItem['type']);
         }
     }
 
@@ -137,10 +174,12 @@ class StepW extends \Com\Tecnick\Unicode\Bidi\StepBase
      */
     protected function processW5(int $idx): void
     {
-        if ($this->seq['item'][$idx]['type'] == 'ET') {
-            $this->processW5a($idx);
-            $this->processW5b($idx);
+        if ($this->getItem($idx)['type'] !== 'ET') {
+            return;
         }
+
+        $this->processW5a($idx);
+        $this->processW5b($idx);
     }
 
     /**
@@ -150,12 +189,12 @@ class StepW extends \Com\Tecnick\Unicode\Bidi\StepBase
      */
     protected function processW5a(int $idx): void
     {
-        for ($jdx = ($idx - 1); $jdx >= 0; --$jdx) {
-            if ($this->seq['item'][$jdx]['type'] == 'EN') {
-                $this->seq['item'][$idx]['type'] = 'EN';
-            } else {
+        for ($jdx = $idx - 1; $jdx >= 0; --$jdx) {
+            if ($this->getItem($jdx)['type'] !== 'EN') {
                 break;
             }
+
+            $this->setItemType($idx, 'EN');
         }
     }
 
@@ -166,13 +205,19 @@ class StepW extends \Com\Tecnick\Unicode\Bidi\StepBase
      */
     protected function processW5b(int $idx): void
     {
-        if ($this->seq['item'][$idx]['type'] == 'ET') {
-            for ($jdx = ($idx + 1); $jdx < $this->seq['length']; ++$jdx) {
-                if ($this->seq['item'][$jdx]['type'] == 'EN') {
-                    $this->seq['item'][$idx]['type'] = 'EN';
-                } elseif ($this->seq['item'][$jdx]['type'] != 'ET') {
-                    break;
-                }
+        if ($this->getItem($idx)['type'] !== 'ET') {
+            return;
+        }
+
+        for ($jdx = $idx + 1; $jdx < $this->seq['length']; ++$jdx) {
+            $nextItem = $this->getItem($jdx);
+            if ($nextItem['type'] === 'EN') {
+                $this->setItemType($idx, 'EN');
+                continue;
+            }
+
+            if ($nextItem['type'] !== 'ET') {
+                break;
             }
         }
     }
@@ -184,8 +229,8 @@ class StepW extends \Com\Tecnick\Unicode\Bidi\StepBase
      */
     protected function processW6(int $idx): void
     {
-        if (\in_array($this->seq['item'][$idx]['type'], ['ET', 'ES', 'CS', 'ON'])) {
-            $this->seq['item'][$idx]['type'] = 'ON';
+        if (\in_array($this->getItem($idx)['type'], ['ET', 'ES', 'CS', 'ON'], true)) {
+            $this->setItemType($idx, 'ON');
         }
     }
 
@@ -197,19 +242,24 @@ class StepW extends \Com\Tecnick\Unicode\Bidi\StepBase
      */
     protected function processW7(int $idx): void
     {
-        if ($this->seq['item'][$idx]['type'] == 'EN') {
-            for ($jdx = ($idx - 1); $jdx >= 0; --$jdx) {
-                if ($this->seq['item'][$jdx]['type'] == 'L') {
-                    $this->seq['item'][$idx]['type'] = 'L';
-                    break;
-                } elseif ($this->seq['item'][$jdx]['type'] == 'R') {
-                    break;
-                }
+        if ($this->getItem($idx)['type'] !== 'EN') {
+            return;
+        }
+
+        for ($jdx = $idx - 1; $jdx >= 0; --$jdx) {
+            $prevItem = $this->getItem($jdx);
+            if ($prevItem['type'] === 'L') {
+                $this->setItemType($idx, 'L');
+                break;
             }
 
-            if (($this->seq['sos'] == 'L') && ($jdx < 0)) {
-                $this->seq['item'][$idx]['type'] = 'L';
+            if ($prevItem['type'] === 'R') {
+                break;
             }
+        }
+
+        if ($this->seq['sos'] === 'L' && $jdx < 0) {
+            $this->setItemType($idx, 'L');
         }
     }
 }

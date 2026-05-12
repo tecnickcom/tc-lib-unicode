@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Bidi.php
  *
@@ -90,11 +92,6 @@ class Bidi
     protected bool $shaping = true;
 
     /**
-     * True if the string contains arabic characters
-     */
-    protected bool $arabic = false;
-
-    /**
      * Array of character data
      *
      * @var array<int, array{
@@ -124,29 +121,31 @@ class Bidi
      * @param ?array<int>  $ordarr   Array of UTF-8 codepoints (if empty it will be generated from $str or $chrarr)
      * @param string $forcedir If 'R' forces RTL, if 'L' forces LTR
      * @param bool   $shaping  If true enable the shaping algorithm
+     *
+     * @throws UnicodeException
      */
     public function __construct(
         ?string $str = null,
         ?array $chrarr = null,
         ?array $ordarr = null,
         string $forcedir = '',
-        bool $shaping = true
+        bool $shaping = true,
     ) {
-        if (($str === null) && ($chrarr === null || $chrarr === []) && ($ordarr === null || $ordarr === [])) {
+        if ($str === null && ($chrarr === null || $chrarr === []) && ($ordarr === null || $ordarr === [])) {
             throw new UnicodeException('empty input');
         }
 
         $this->conv = new Convert();
         $this->setInput($str, $chrarr, $ordarr, $forcedir);
 
-        if (! $this->isRtlMode()) {
+        if (!$this->isRtlMode()) {
             $this->bidistr = $this->str;
             $this->bidichrarr = $this->chrarr;
             $this->bidiordarr = $this->ordarr;
             return;
         }
 
-        $this->shaping = ($shaping && $this->arabic);
+        $this->shaping = $shaping && $this->isArabic();
 
         $this->process();
     }
@@ -159,20 +158,21 @@ class Bidi
      * @param ?array<int>  $ordarr   Array of UTF-8 codepoints (if empty it will be generated from $str or $chrarr)
      * @param string $forcedir If 'R' forces RTL, if 'L' forces LTR
      *
+     * @throws UnicodeException
      * @SuppressWarnings("PHPMD.CyclomaticComplexity")
      */
     protected function setInput(
         ?string $str = null,
         ?array $chrarr = null,
         ?array $ordarr = null,
-        string $forcedir = ''
+        string $forcedir = '',
     ): void {
         if ($str === null) {
             $str = '';
             if (($chrarr === null || $chrarr === []) && ($ordarr !== null && $ordarr !== [])) {
                 $chrarr = $this->conv->ordArrToChrArr($ordarr);
             }
-            if (!empty($chrarr)) {
+            if ($chrarr !== null && $chrarr !== []) {
                 $str = \implode('', $chrarr);
             }
         }
@@ -262,7 +262,8 @@ class Bidi
         $pdx = 0; // paragraphs index
         foreach ($this->ordarr as $ord) {
             $paragraph[$pdx][] = $ord;
-            if (isset(UniType::UNI[$ord]) && (UniType::UNI[$ord] == 'B')) {
+            $charType = UniType::UNI[$ord] ?? null;
+            if ($charType === 'B') {
                 ++$pdx;
                 $paragraph[$pdx] = [];
             }
@@ -322,11 +323,8 @@ class Bidi
                 continue;
             }
 
-            if (! isset(UniType::UNI[$lastchar])) {
-                continue;
-            }
-
-            if (UniType::UNI[$lastchar] != 'B') {
+            $lastCharType = UniType::UNI[$lastchar] ?? null;
+            if ($lastCharType !== 'B') {
                 continue;
             }
 
@@ -339,7 +337,7 @@ class Bidi
      *
      * @param array<int> $par Paragraph
      */
-    protected function getPel($par): int
+    protected function getPel(array $par): int
     {
         if ($this->forcedir === 'R') {
             return 1;
@@ -354,11 +352,18 @@ class Bidi
     }
 
     /**
+     * Check if the input string contains Arabic characters
+     */
+    protected function isArabic(): bool
+    {
+        return (bool) \preg_match(UniPattern::ARABIC, $this->str);
+    }
+
+    /**
      * Check if the input string contains RTL characters to process
      */
     protected function isRtlMode(): bool
     {
-        $this->arabic = (bool) \preg_match(UniPattern::ARABIC, $this->str);
-        return (($this->forcedir === 'R') || $this->arabic || \preg_match(UniPattern::RTL, $this->str));
+        return $this->forcedir === 'R' || $this->isArabic() || (bool) \preg_match(UniPattern::RTL, $this->str);
     }
 }

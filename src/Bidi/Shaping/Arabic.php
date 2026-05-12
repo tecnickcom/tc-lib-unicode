@@ -118,6 +118,17 @@ abstract class Arabic
         $this->newchardata[$idx] = $item;
     }
 
+    private function getNewCharIndexBySourceIndex(int $sourceIndex): ?int
+    {
+        foreach ($this->newchardata as $idx => $item) {
+            if ($item['i'] === $sourceIndex) {
+                return $idx;
+            }
+        }
+
+        return null;
+    }
+
     /**
      * Check if it is a LAA LETTER
      *
@@ -324,10 +335,11 @@ abstract class Arabic
             // mark characters to delete
             $laaChar = $this->alchars[$pos - 1] ?? null;
             assert($laaChar !== null, 'Expected previous lam character while composing lam-alef ligature');
-            $item = $this->newchardata[$laaChar['i']] ?? null;
+            $deleteIdx = $this->getNewCharIndexBySourceIndex($laaChar['i']);
+            $item = $deleteIdx !== null ? $this->newchardata[$deleteIdx] ?? null : null;
             assert($item !== null, 'Expected shaped lam-alef source item before marking it for deletion');
             $item['char'] = -1;
-            $this->newchardata[$laaChar['i']] = $item;
+            $this->newchardata[$deleteIdx] = $item;
         }
     }
 }

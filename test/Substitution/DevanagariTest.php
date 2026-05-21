@@ -171,4 +171,10 @@ class DevanagariTest extends TestUtil
             ],
         ];
     }
+
+    public function testNormalizesSparseIndexes(): void
+    {
+        $obj = new Devanagari([5 => 0x0915, 9 => 0x093F]);
+        $this->assertSame([0x093F, 0x0915], $obj->getOrdarr());
+    }
 }

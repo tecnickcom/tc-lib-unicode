@@ -1,4 +1,5 @@
 <?php
+
 /**
  * index.php
  *
@@ -16,8 +17,10 @@
 // NOTE: run make deps fonts in the project root to generate the dependencies and example fonts.
 
 // autoloader when using Composer
-require ('../vendor/autoload.php');
+require '../vendor/autoload.php';
 
 use \Com\Tecnick\Unicode\Bidi as Bidi;
 
-echo (new Bidi('hello ', null, null, 'R', false))->getString()."\n";
+$bidi = new Bidi(str: 'hello ', chrarr: null, ordarr: null, forcedir: 'R', shaping: false);
+
+echo $bidi->getString() . "\n";

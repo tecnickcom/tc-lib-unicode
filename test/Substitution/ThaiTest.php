@@ -153,4 +153,10 @@ class ThaiTest extends TestUtil
             ],
         ];
     }
+
+    public function testNormalizesSparseIndexes(): void
+    {
+        $obj = new Thai([3 => 0x0E40, 7 => 0x0E01]);
+        $this->assertSame([0x0E01, 0x0E40], $obj->getOrdarr());
+    }
 }

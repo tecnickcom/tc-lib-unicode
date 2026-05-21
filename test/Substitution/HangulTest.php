@@ -202,4 +202,10 @@ class HangulTest extends TestUtil
             ],
         ];
     }
+
+    public function testNormalizesSparseIndexes(): void
+    {
+        $obj = new Hangul([10 => 0x1100, 20 => 0x1161]);
+        $this->assertSame([0xAC00], $obj->getOrdarr());
+    }
 }

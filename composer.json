@@ -28,7 +28,7 @@
         "php": ">=8.2",
         "ext-mbstring": "*",
         "ext-pcre": "*",
-        "tecnickcom/tc-lib-unicode-data": "^2.2"
+        "tecnickcom/tc-lib-unicode-data": "^2.3"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,

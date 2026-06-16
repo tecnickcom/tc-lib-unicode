@@ -39,9 +39,10 @@ class StepP
      *
      * @param array<int> $ordarr Array of UTF-8 codepoints
      */
-    public function __construct(/**
-     * Array of UTF-8 codepoints
-     */
+    public function __construct(
+        /**
+         * Array of UTF-8 codepoints
+         */
         protected array $ordarr,
     ) {}
 

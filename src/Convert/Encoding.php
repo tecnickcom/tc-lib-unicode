@@ -117,7 +117,7 @@ class Encoding
      *
      * @return string UTF-8 encoded string
      */
-    public function toUTF8(string $str, null|string|array $enc = null): string
+    public function toUTF8(string $str, string|array|null $enc = null): string
     {
         if ($enc === null) {
             $enc = \mb_detect_order();

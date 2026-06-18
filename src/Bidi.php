@@ -208,6 +208,8 @@ class Bidi
      * Returns the processed array of UTF-8 chars
      *
      * @return array<string>
+     *
+     * @throws UnicodeException
      */
     public function getChrArray(): array
     {
@@ -220,6 +222,8 @@ class Bidi
 
     /**
      * Returns the number of characters in the processed string
+     *
+     * @throws UnicodeException
      */
     public function getNumChars(): int
     {
@@ -228,6 +232,8 @@ class Bidi
 
     /**
      * Returns the processed string
+     *
+     * @throws UnicodeException
      */
     public function getString(): string
     {

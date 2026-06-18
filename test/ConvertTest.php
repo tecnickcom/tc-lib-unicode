@@ -98,6 +98,9 @@ class ConvertTest extends TestCase
         $this->assertEquals(['0', 'A', '¶', 'ÿ', 'Ā', 'Ƞ', 'Δ', 'א', '台', '서'], $res);
     }
 
+    /**
+     * @throws \Com\Tecnick\Unicode\Exception
+     */
     public function testChrArrToOrdArr(): void
     {
         $convert = $this->getTestObject();
@@ -105,6 +108,9 @@ class ConvertTest extends TestCase
         $this->assertEquals([48, 65, 182, 255, 256, 544, 916, 1488, 21488, 49436], $res);
     }
 
+    /**
+     * @throws \Com\Tecnick\Unicode\Exception
+     */
     public function testOrdArrToChrArr(): void
     {
         $convert = $this->getTestObject();
@@ -120,6 +126,50 @@ class ConvertTest extends TestCase
         $convert = $this->getTestObject();
         $res = $convert->strToOrdArr('0A¶ÿĀȠΔא台서');
         $this->assertEquals([48, 65, 182, 255, 256, 544, 916, 1488, 21488, 49436], $res);
+    }
+
+    /**
+     * Empty inputs must short-circuit to an empty array in every direction.
+     *
+     * @throws \Com\Tecnick\Unicode\Exception
+     */
+    public function testConvertArrEmpty(): void
+    {
+        $convert = $this->getTestObject();
+        $this->assertSame([], $convert->strToOrdArr(''));
+        $this->assertSame([], $convert->ordArrToChrArr([]));
+        $this->assertSame([], $convert->chrArrToOrdArr([]));
+    }
+
+    /**
+     * Supplementary-plane (4-byte) code points must round-trip through every conversion.
+     *
+     * @throws \Com\Tecnick\Unicode\Exception
+     */
+    public function testConvertArrSupplementaryPlane(): void
+    {
+        $convert = $this->getTestObject();
+        // Includes two supplementary-plane (4-byte UTF-8) code points: U+11197 and U+2A600.
+        $str = "A\u{11197}\u{00B6}\u{2A600}\u{53F0}";
+        $ords = [65, 70039, 182, 173568, 21488];
+        $chrs = ['A', "\u{11197}", "\u{00B6}", "\u{2A600}", "\u{53F0}"];
+
+        $this->assertSame($ords, $convert->strToOrdArr($str));
+        $this->assertSame($chrs, $convert->ordArrToChrArr($ords));
+        $this->assertSame($ords, $convert->chrArrToOrdArr($chrs));
+        $this->assertSame($str, \implode('', $convert->ordArrToChrArr($convert->strToOrdArr($str))));
+    }
+
+    /**
+     * Malformed UTF-8 is substituted with U+003F rather than throwing, matching mbstring's
+     * default substitution for the bulk conversion.
+     *
+     * @throws \Com\Tecnick\Unicode\Exception
+     */
+    public function testStrToOrdArrSubstitutesMalformed(): void
+    {
+        $convert = $this->getTestObject();
+        $this->assertSame([63, 63], $convert->strToOrdArr("\xff\xfe"));
     }
 
     public function testGetSubUniArrStr(): void

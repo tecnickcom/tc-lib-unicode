@@ -101,10 +101,16 @@ class Convert extends \Com\Tecnick\Unicode\Convert\Encoding
      * @param array<string> $chars Array of UTF-8 chars
      *
      * @return array<int>
+     *
+     * @throws UniException
      */
     public function chrArrToOrdArr(array $chars): array
     {
-        return \array_map($this->ord(...), $chars);
+        if ($chars === []) {
+            return [];
+        }
+
+        return $this->strToOrdArr(\implode('', $chars));
     }
 
     /**
@@ -122,20 +128,18 @@ class Convert extends \Com\Tecnick\Unicode\Convert\Encoding
             return [];
         }
 
-        // Vectorized: pack all codepoints to UCS-4BE and convert once, instead of calling
-        // chr() (pack + mb_convert_encoding) per codepoint.
         $str = \mb_convert_encoding(\pack('N*', ...$ords), 'UTF-8', 'UCS-4BE');
         if ($str === false) {
             throw new UniException('Error converting code points');
         }
 
-        return $this->strToChrArr($str);
+        return \mb_str_split($str, 1, 'UTF-8');
     }
 
     /**
      * Converts an UTF-8 string to an array of UTF-8 codepoints (integer values)
      *
-     * @param string $str Convert to convert
+     * @param string $str String to convert
      *
      * @return array<int>
      *
@@ -147,8 +151,6 @@ class Convert extends \Com\Tecnick\Unicode\Convert\Encoding
             return [];
         }
 
-        // Vectorized: convert the whole string to UCS-4BE (4 bytes/char) and unpack every
-        // codepoint at once, instead of splitting it and calling ord() per character.
         $ucs = \mb_convert_encoding($str, 'UCS-4BE', 'UTF-8');
         if ($ucs === false) {
             throw new UniException('Error converting string');

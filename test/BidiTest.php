@@ -175,6 +175,19 @@ class BidiTest extends TestUtil
                 '',
             ],
             [
+                // Unterminated isolate: RLI with no matching PDI. Exercises StepXten's
+                // findMatchingPdiStart() returning -1 and the eos-from-paragraph-level fallback.
+                self::decodeJsonString('"\u05d0\u2067\u05d1"'),
+                self::decodeJsonString('"\u05d1\u2067\u05d0"'),
+                '',
+            ],
+            [
+                // Unterminated FSI wrapping LTR text: covers FSI auto-direction with no matching PDI.
+                self::decodeJsonString('"\u05d0\u2068ab\u05d1"'),
+                self::decodeJsonString('"ab\u05d1\u2068\u05d0"'),
+                '',
+            ],
+            [
                 // RLI + PDI
                 self::decodeJsonString('"The words \"\u2067\u05de\u05d6\u05dc [mazel] \u05d8\u05d5\u05d1 [tov]\u2069\"'
                 . ' mean \"Congratulations!\""'),

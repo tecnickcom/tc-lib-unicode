@@ -65,6 +65,47 @@ class StepNTest extends TestCase
     }
 
     /**
+     * BD16 regression: a closing bracket pairs with the nearest matching opening bracket.
+     * For nested same-type brackets "(())" the pairs must be (1,2) and (0,3); the previous
+     * implementation produced a spurious (0,2) pair and dropped the outer (0,3) pair.
+     *
+     * @throws \ReflectionException
+     */
+    public function testBracketPairsNestedSameType(): void
+    {
+        $items = [];
+        foreach ([0x28, 0x28, 0x29, 0x29] as $pos => $char) {
+            $items[] = [
+                'x' => 0,
+                'pos' => $pos,
+                'char' => $char,
+                'i' => -1,
+                'level' => 0,
+                'pdimatch' => -1,
+                'type' => 'ON',
+                'otype' => 'ON',
+            ];
+        }
+
+        $stepn = new StepN([
+            'e' => 0,
+            'edir' => 'L',
+            'start' => 0,
+            'end' => 3,
+            'length' => 4,
+            'maxlevel' => 0,
+            'sos' => 'L',
+            'eos' => 'L',
+            'item' => $items,
+        ], false);
+        $stepn->processStep('getBracketPairs');
+
+        $property = new \ReflectionProperty(StepN::class, 'brackets');
+
+        $this->assertEquals([1 => 2, 0 => 3], $property->getValue($stepn));
+    }
+
+    /**
      * @return array<int,  array<int, array{
      *        'e': int,
      *        'edir': string,

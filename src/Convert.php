@@ -69,6 +69,9 @@ class Convert extends \Com\Tecnick\Unicode\Convert\Encoding
         }
 
         $uni = \unpack('N', $ucs);
+        if ($uni === false) {
+            throw new UniException('Error converting string');
+        }
 
         return $uni[1];
     }

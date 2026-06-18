@@ -203,7 +203,7 @@ endif
 ## Format the source code
 .PHONY: format
 format:
-	./vendor/bin/mago fmt src test examples
+	./vendor/bin/mago fmt src test example
 
 ## Analyze and Lint the source code
 .PHONY: lint
@@ -262,7 +262,7 @@ tag:
 test:
 	cp phpunit.xml.dist phpunit.xml
 	#./vendor/bin/phpunit --migrate-configuration || true
-	XDEBUG_MODE=coverage ./vendor/bin/phpunit --stderr test
+	XDEBUG_MODE=coverage $(PHP) -d zend.assertions=1 -d assert.exception=1 ./vendor/bin/phpunit --stderr test
 
 ## Remove all installed files
 .PHONY: uninstall

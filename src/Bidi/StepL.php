@@ -72,6 +72,7 @@ class StepL
         $this->numchars = \count($this->chardata);
         $this->processL1();
         $this->processL2();
+        $this->processL4();
     }
 
     /**
@@ -85,6 +86,29 @@ class StepL
     }
 
     /**
+     * Reset the embedding level of the character at the given index to the paragraph embedding level.
+     *
+     * @param int $idx Character index
+     */
+    private function resetLevel(int $idx): void
+    {
+        $item = $this->chardata[$idx] ?? null;
+        assert($item !== null, 'Expected StepL character data at the index to reset');
+        $item['level'] = $this->pel;
+        $this->chardata[$idx] = $item;
+    }
+
+    /**
+     * Returns true when the codepoint is an isolate formatting character (FSI, LRI, RLI, or PDI).
+     *
+     * @param int $char Codepoint
+     */
+    private function isIsolateFormat(int $char): bool
+    {
+        return $char >= UniConstant::LRI && $char <= UniConstant::PDI;
+    }
+
+    /**
      * L1. On each line, reset the embedding level of the following characters to the paragraph embedding level:
      *     1. Segment separators,
      *     2. Paragraph separators,
@@ -92,50 +116,43 @@ class StepL
      *        preceding a segment separator or paragraph separator, and
      *     4. Any sequence of whitespace characters and/or isolate formatting characters (FSI, LRI, RLI, and PDI)
      *        at the end of the line.
+     *
+     * This rule is applied using the original character types, not the resolved ones.
      */
     protected function processL1(): void
     {
+        // Indexes of the current pending run of whitespace and/or isolate formatting characters.
+        $pending = [];
         for ($idx = 0; $idx < $this->numchars; ++$idx) {
-            $this->processL1b($idx, $idx);
-        }
-    }
+            $item = $this->chardata[$idx] ?? null;
+            assert($item !== null, 'Expected StepL character data at the current index');
 
-    /**
-     * Internal L1 step
-     *
-     * @param int $idx Main character index
-     * @param int $jdx Current index
-     */
-    protected function processL1b(int $idx, int $jdx): void
-    {
-        if ($jdx >= ($this->numchars - 1)) {
-            return;
-        }
+            // L1.1 / L1.2: reset segment and paragraph separators and, with them (L1.3),
+            // any immediately preceding run of whitespace / isolate formatting characters.
+            if ($item['otype'] === 'S' || $item['otype'] === 'B') {
+                foreach ($pending as $pidx) {
+                    $this->resetLevel($pidx);
+                }
 
-        $current = $this->chardata[$jdx] ?? null;
-        $target = $this->chardata[$idx] ?? null;
-        assert($current !== null, 'Expected StepL current character data at current index');
-        assert($target !== null, 'Expected StepL target character data at main index');
+                $this->resetLevel($idx);
+                $pending = [];
+                continue;
+            }
 
-        if (
-            $current['otype'] === 'S'
-            || $current['otype'] === 'B'
-            || $jdx === ($this->numchars - 1) && $current['otype'] === 'WS'
-        ) {
-            $target['level'] = $this->pel;
-            $this->chardata[$idx] = $target;
-            return;
+            // Accumulate whitespace and isolate formatting characters as a candidate run.
+            if ($item['otype'] === 'WS' || $this->isIsolateFormat($item['char'])) {
+                $pending[] = $idx;
+                continue;
+            }
+
+            // Any other character breaks (and discards) the pending run.
+            $pending = [];
         }
 
-        if ($current['otype'] === 'WS') {
-            return;
+        // L1.4: reset a run of whitespace / isolate formatting characters at the end of the line.
+        foreach ($pending as $pidx) {
+            $this->resetLevel($pidx);
         }
-
-        if ($target['char'] >= UniConstant::LRI && $target['char'] <= UniConstant::PDI) {
-            return;
-        }
-
-        $this->processL1b($idx, $jdx + 1);
     }
 
     /**
@@ -151,14 +168,6 @@ class StepL
             $reversed = [];
             foreach ($this->chardata as $chardatum) {
                 if ($chardatum['level'] >= $level) {
-                    if ($chardatum['type'] === 'R' && array_key_exists($chardatum['char'], UniMirror::UNI)) {
-                        // L4. A character is depicted by a mirrored glyph if and only if
-                        //     (a) the resolved directionality of that character is R, and
-                        //     (b) the Bidi_Mirrored property value of that character is true.
-                        $mirror = UniMirror::UNI[$chardatum['char']] ?? null;
-                        assert($mirror !== null, 'Expected mirrored glyph for mirrored RTL character');
-                        $chardatum['char'] = $mirror;
-                    }
                     $reversed[] = $chardatum;
 
                     continue;
@@ -177,6 +186,32 @@ class StepL
             }
 
             $this->chardata = $ordered;
+        }
+    }
+
+    /**
+     * L4. A character is depicted by a mirrored glyph if and only if
+     *     (a) the resolved directionality of that character is R, and
+     *     (b) the Bidi_Mirrored property value of that character is true.
+     *
+     * The resolved directionality is R exactly when the embedding level is odd, which also covers
+     * neutral mirrored characters (brackets, guillemets) resolved into an RTL run — not only
+     * strong-R types. Each eligible character is mirrored exactly once, after reordering (L2).
+     */
+    protected function processL4(): void
+    {
+        foreach ($this->chardata as $idx => $chardatum) {
+            if (($chardatum['level'] % 2) !== 1) {
+                continue;
+            }
+
+            $mirror = UniMirror::UNI[$chardatum['char']] ?? null;
+            if ($mirror === null) {
+                continue;
+            }
+
+            $chardatum['char'] = $mirror;
+            $this->chardata[$idx] = $chardatum;
         }
     }
 }

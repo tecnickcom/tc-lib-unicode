@@ -123,7 +123,9 @@ class StepXten
 
         $parentRun['item'] = \array_merge($parentRun['item'], $isorun['item']);
         $parentRun['length'] += $isorun['length'];
-        $parentRun['end'] += $isorun['end'];
+        // The merged sequence now ends where the appended (child) run ends; 'end' is an
+        // absolute position in the paragraph, so it is replaced, not accumulated.
+        $parentRun['end'] = $isorun['end'];
         $this->ilrs[$parent] = $parentRun;
 
         if ($pdimatch >= 0) {

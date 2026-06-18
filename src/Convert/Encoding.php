@@ -83,7 +83,7 @@ class Encoding
         $hexstr = '';
         $len = \strlen($str);
         for ($idx = 0; $idx < $len; ++$idx) {
-            $hexstr .= \sprintf('%02s', \dechex(\ord($str[$idx])));
+            $hexstr .= \sprintf('%02x', \ord($str[$idx]));
         }
 
         return $hexstr;

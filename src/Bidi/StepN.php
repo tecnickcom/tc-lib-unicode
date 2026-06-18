@@ -111,7 +111,10 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
                 $char = 0x232A;
             }
 
-            // find matching opening bracket
+            // Find the matching opening bracket: scan the stack from the top and stop at the
+            // first (nearest) match, popping through and including the matched entry. Per BD16
+            // a closing bracket pairs with the nearest opener; without stopping here, multiple
+            // openers of the same type would be paired to the same closer and the stack emptied.
             $tmpstack = $this->bstack;
             while ($tmpstack !== []) {
                 $item = \array_pop($tmpstack);
@@ -119,13 +122,10 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
                 if ($openBracket !== null && $char === $openBracket) {
                     $this->brackets[$item[0]] = $idx;
                     $this->bstack = $tmpstack;
+                    break;
                 }
             }
         }
-
-        // Sort the list of pairs of text positions in ascending order
-        // based on the text position of the opening paired bracket.
-        \ksort($this->brackets);
     }
 
     /**
@@ -145,6 +145,10 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
      */
     protected function processN0(): void
     {
+        // Sort the list of bracket pairs in ascending order based on the text position
+        // of the opening paired bracket (done once, after all pairs have been collected).
+        \ksort($this->brackets);
+
         $odir = $this->seq['edir'] === 'L' ? 'R' : 'L';
         // For each bracket-pair element in the list of pairs of text positions
         foreach ($this->brackets as $open => $close) {

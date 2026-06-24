@@ -94,6 +94,8 @@ class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
         $this->combineShadda();
         $this->removeDeletedChars();
         $this->seq['item'] = \array_values($this->newchardata);
+        // Keep 'length' consistent with 'item': removeDeletedChars() may have dropped entries.
+        $this->seq['length'] = \count($this->seq['item']);
         $this->newchardata = []; // reset
     }
 

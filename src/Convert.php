@@ -53,7 +53,8 @@ class Convert extends \Com\Tecnick\Unicode\Convert\Encoding
     }
 
     /**
-     * Returns the unicode value of the specified character
+     * Returns the unicode value of the specified character.
+     * If more than one character is given, only the first codepoint is returned.
      *
      * @param string $chr Unicode character
      *
@@ -77,7 +78,7 @@ class Convert extends \Com\Tecnick\Unicode\Convert\Encoding
     }
 
     /**
-     * Converts an UTF-8 string to an array of UTF-8 codepoints (integer values)
+     * Converts an UTF-8 string to an array of UTF-8 characters
      *
      * @param string $str String to convert
      *
@@ -170,6 +171,8 @@ class Convert extends \Com\Tecnick\Unicode\Convert\Encoding
      * @param array<string> $uniarr The input array of characters
      * @param int   $start  The position of the starting element
      * @param int|null   $end    The position of the first element that will not be returned.
+     *
+     * @return string
      */
     public function getSubUniArrStr(array $uniarr, int $start = 0, ?int $end = null): string
     {

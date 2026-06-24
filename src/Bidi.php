@@ -290,6 +290,12 @@ class Bidi
 
         // Within each paragraph, apply all the other rules of this algorithm.
         foreach ($paragraph as $par) {
+            // A trailing paragraph separator produces an empty final paragraph; it contributes
+            // nothing and would otherwise run through the full Step* pipeline for no result.
+            if ($par === []) {
+                continue;
+            }
+
             $pel = $this->getPel($par);
             $stepx = new StepX($par, $pel);
             $stepx10 = new StepXten($stepx->getChrData(), $pel);
@@ -319,12 +325,8 @@ class Bidi
                 $this->bidiordarr[] = $chardatum['char'];
             }
 
-            // add back the paragraph separators
+            // add back the paragraph separators ($par is non-empty, so end() returns a codepoint)
             $lastchar = \end($par);
-            if ($lastchar === false) {
-                continue;
-            }
-
             if ($lastchar < 0) {
                 continue;
             }

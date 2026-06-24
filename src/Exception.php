@@ -7,11 +7,11 @@ declare(strict_types=1);
  *
  * @since     2015-07-28
  * @category  Library
- * @package   File
+ * @package   Unicode
  * @author    Nicola Asuni <info@tecnick.com>
  * @copyright 2015-2026 Nicola Asuni - Tecnick.com LTD
  * @license   https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
- * @link      https://github.com/tecnickcom/tc-lib-file
+ * @link      https://github.com/tecnickcom/tc-lib-unicode
  *
  * This file is part of tc-lib-unicode software library.
  */
@@ -25,10 +25,10 @@ namespace Com\Tecnick\Unicode;
  *
  * @since     2015-07-28
  * @category  Library
- * @package   File
+ * @package   Unicode
  * @author    Nicola Asuni <info@tecnick.com>
  * @copyright 2015-2026 Nicola Asuni - Tecnick.com LTD
  * @license   https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
- * @link      https://github.com/tecnickcom/tc-lib-file
+ * @link      https://github.com/tecnickcom/tc-lib-unicode
  */
 class Exception extends \Exception {}

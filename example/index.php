@@ -14,7 +14,7 @@
  * This file is part of tc-lib-unicode software library.
  */
 
-// NOTE: run make deps fonts in the project root to generate the dependencies and example fonts.
+// NOTE: run "make deps" in the project root to install the dependencies before running this example.
 
 // autoloader when using Composer
 require '../vendor/autoload.php';

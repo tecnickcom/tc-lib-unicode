@@ -80,13 +80,7 @@ class Encoding
      */
     public function strToHex(string $str): string
     {
-        $hexstr = '';
-        $len = \strlen($str);
-        for ($idx = 0; $idx < $len; ++$idx) {
-            $hexstr .= \sprintf('%02x', \ord($str[$idx]));
-        }
-
-        return $hexstr;
+        return \bin2hex($str);
     }
 
     /**

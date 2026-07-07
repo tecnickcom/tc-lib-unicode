@@ -53,7 +53,7 @@ It is built to handle multilingual text paths where normalization, code-point ha
 ## Requirements
 
 - PHP 8.2 or later
-- Extensions: `mbstring`, `pcre`
+- Extension: `mbstring`
 - Composer
 
 ---

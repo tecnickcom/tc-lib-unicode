@@ -119,7 +119,7 @@ class Bidi
      * @param ?string $str      String to convert (if null it will be generated from $chrarr or $ordarr)
      * @param ?array<string>  $chrarr   Array of UTF-8 chars (if empty it will be generated from $str or $ordarr)
      * @param ?array<int>  $ordarr   Array of UTF-8 codepoints (if empty it will be generated from $str or $chrarr)
-     * @param string $forcedir If 'R' forces RTL, if 'L' forces LTR
+     * @param string|TextDirection $forcedir If 'R' forces RTL, if 'L' forces LTR ('' auto), or a TextDirection case
      * @param bool   $shaping  If true enable the shaping algorithm
      *
      * @throws UnicodeException
@@ -128,7 +128,7 @@ class Bidi
         ?string $str = null,
         ?array $chrarr = null,
         ?array $ordarr = null,
-        string $forcedir = '',
+        string|TextDirection $forcedir = '',
         bool $shaping = true,
     ) {
         if ($str === null && ($chrarr === null || $chrarr === []) && ($ordarr === null || $ordarr === [])) {
@@ -156,7 +156,7 @@ class Bidi
      * @param ?string $str      String to convert (if null it will be generated from $chrarr or $ordarr)
      * @param ?array<string>  $chrarr   Array of UTF-8 chars (if empty it will be generated from $str or $ordarr)
      * @param ?array<int>  $ordarr   Array of UTF-8 codepoints (if empty it will be generated from $str or $chrarr)
-     * @param string $forcedir If 'R' forces RTL, if 'L' forces LTR
+     * @param string|TextDirection $forcedir If 'R' forces RTL, if 'L' forces LTR ('' auto), or a TextDirection case
      *
      * @throws UnicodeException
      * @SuppressWarnings("PHPMD.CyclomaticComplexity")
@@ -165,7 +165,7 @@ class Bidi
         ?string $str = null,
         ?array $chrarr = null,
         ?array $ordarr = null,
-        string $forcedir = '',
+        string|TextDirection $forcedir = '',
     ): void {
         if ($str === null) {
             $str = '';
@@ -188,10 +188,7 @@ class Bidi
         $this->str = $str;
         $this->chrarr = $chrarr;
         $this->ordarr = $ordarr;
-        $this->forcedir = '';
-        if ($forcedir !== '') {
-            $this->forcedir = \strtoupper($forcedir[0]);
-        }
+        $this->forcedir = TextDirection::fromLoose($forcedir)->value;
     }
 
     /**

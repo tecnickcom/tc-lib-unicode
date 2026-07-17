@@ -10,7 +10,7 @@ declare(strict_types=1);
  * @package   Unicode
  * @author    Nicola Asuni <info@tecnick.com>
  * @copyright 2011-2026 Nicola Asuni - Tecnick.com LTD
- * @license   https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @license   https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE)
  * @link      https://github.com/tecnickcom/tc-lib-unicode
  *
  * This file is part of tc-lib-unicode software library.
@@ -38,7 +38,7 @@ use Com\Tecnick\Unicode\Exception as UnicodeException;
  * @package   Unicode
  * @author    Nicola Asuni <info@tecnick.com>
  * @copyright 2011-2026 Nicola Asuni - Tecnick.com LTD
- * @license   https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE.TXT)
+ * @license   https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE)
  * @link      https://github.com/tecnickcom/tc-lib-unicode
  */
 class Bidi
@@ -113,7 +113,7 @@ class Bidi
     protected Convert $conv;
 
     /**
-     * Reverse the RLT substrings using the Bidirectional Algorithm
+     * Reverse the RTL substrings using the Bidirectional Algorithm
      * http://unicode.org/reports/tr9/
      *
      * @param ?string $str      String to convert (if null it will be generated from $chrarr or $ordarr)

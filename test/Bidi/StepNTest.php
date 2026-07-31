@@ -3169,7 +3169,7 @@ class StepNTest extends TestCase
                             'i' => -1,
                             'level' => 0,
                             'pdimatch' => -1,
-                            'type' => 'ON',
+                            'type' => 'L',
                             'otype' => 'ON',
                         ],
                         [

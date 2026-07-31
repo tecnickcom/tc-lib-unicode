@@ -124,13 +124,17 @@ class BidiTest extends TestUtil
                 '',
             ],
             [
+                // Forced RTL on all-Latin: N1 resolves spaces to L, so L2's level-2 then
+                // level-1 reverses cancel and the logical order is preserved.
                 'left to right',
-                'right to left',
+                'left to right',
                 'R',
             ],
             [
+                // Trailing WS is reset to the paragraph level (L1) and ends up leading
+                // after the RTL reordering pass.
                 'left to right ',
-                ' right to left',
+                ' left to right',
                 'R',
             ],
             [
@@ -195,15 +199,16 @@ class BidiTest extends TestUtil
                 '',
             ],
             [
-                // RLE + PDF
+                // RLE + PDF: embeddings are not isolated, so neutrals/numbers after PDF
+                // stick to the RTL embedding (UAX #9 §6.3). Prefer RLI/PDI to avoid this.
                 self::decodeJsonString('"it is called \"\u202bAN INTRODUCTION TO java\u202c\" - $19.95 in hardcover."'),
-                'it is called "java TO INTRODUCTION AN" - $19.95 in hardcover.',
+                'it is called "$19.95 - "AN INTRODUCTION TO java in hardcover.',
                 '',
             ],
             [
-                // RLI + PDI
+                // RLI + PDI: isolate prevents spillover; N1 keeps the Latin phrase intact.
                 self::decodeJsonString('"it is called \"\u2067AN INTRODUCTION TO java\u2069\" - $19.95 in hardcover."'),
-                'it is called "⁧java TO INTRODUCTION AN⁩" - $19.95 in hardcover.',
+                'it is called "⁧AN INTRODUCTION TO java⁩" - $19.95 in hardcover.',
                 '',
             ],
             [
@@ -223,10 +228,25 @@ class BidiTest extends TestUtil
                 '',
             ],
             [
-                // Arabic with forced LTR direction (covers getPel() returning 0 for forcedir='L')
+                // Arabic with forced LTR: N1 joins the two R words across the space into one
+                // RTL run, so visual word order is reversed relative to logical order.
                 'تشكيل اختبار',
-                self::decodeJsonString('"\ufede\ufef4\ufedc\ufeb8\ufe97\u0020\ufead\ufe8e\ufe92\ufe98\ufea7\ufe8d"'),
+                self::decodeJsonString('"\ufead\ufe8e\ufe92\ufe98\ufea7\ufe8d\u0020\ufede\ufef4\ufedc\ufeb8\ufe97"'),
                 'L',
+            ],
+            [
+                // Regression: Latin words inside an RTL paragraph must keep internal order
+                // (spaces/hyphen resolved as NI so "John Doe" stays one L run).
+                'تجربة - John Doe',
+                'John Doe - ' . self::decodeJsonString('"\ufe94\ufe91\ufeae\ufea0\ufe97"'),
+                '',
+            ],
+            [
+                // Mirror case: Arabic words inside an LTR paragraph.
+                'John Doe - تجربة خاصة',
+                'John Doe - '
+                    . self::decodeJsonString('"\ufe94\ufebb\ufe8e\ufea7\u0020\ufe94\ufe91\ufeae\ufea0\ufe97"'),
+                '',
             ],
         ];
     }

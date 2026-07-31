@@ -85,7 +85,8 @@ class TextDirectionTest extends TestUtil
     {
         $fromEnum = new Bidi('left to right', null, null, TextDirection::Rtl, true);
         $fromString = new Bidi('left to right', null, null, 'R', true);
-        $this->assertSame('right to left', $fromEnum->getString());
+        // All-L text with neutrals resolved via N1 stays LTR after L2 (double reverse).
+        $this->assertSame('left to right', $fromEnum->getString());
         $this->assertSame($fromString->getString(), $fromEnum->getString());
     }
 }

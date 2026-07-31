@@ -48,6 +48,34 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
     protected array $bstack = [];
 
     /**
+     * Bidirectional types classified as "NI" (Neutral or Isolate formatting) for N0–N2:
+     * B, S, WS, ON, FSI, LRI, RLI and PDI (UAX #9 abbreviations table).
+     *
+     * Isolate initiators and PDI are already re-typed to the literal 'NI' marker by StepX;
+     * other neutrals keep their original class ('B', 'S', 'WS', 'ON'). W6 has already folded
+     * 'ES', 'ET' and 'CS' into 'ON' by the time N runs, so they need no entry here.
+     *
+     * @var array<string, true>
+     */
+    private const NI_TYPES = [
+        'NI' => true,
+        'B' => true,
+        'S' => true,
+        'WS' => true,
+        'ON' => true,
+    ];
+
+    /**
+     * True when the resolved type is a neutral or isolate formatting type (NI).
+     *
+     * @param string $type Char type
+     */
+    private function isNI(string $type): bool
+    {
+        return isset(self::NI_TYPES[$type]);
+    }
+
+    /**
      * @return array{char: int, i: int, level: int, otype: string, pdimatch: int, pos: int, type: string, x: int}
      */
     private function getItem(int $idx): array
@@ -251,7 +279,7 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
      */
     protected function processN1(int $idx): void
     {
-        if ($this->getItem($idx)['type'] !== 'NI') {
+        if (!$this->isNI($this->getItem($idx)['type'])) {
             return;
         }
 
@@ -334,7 +362,7 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
     protected function getNextN1Char(int $idx): int
     {
         $jdx = $idx + 1;
-        while ($jdx < $this->seq['length'] && $this->getItem($jdx)['type'] === 'NI') {
+        while ($jdx < $this->seq['length'] && $this->isNI($this->getItem($jdx)['type'])) {
             ++$jdx;
         }
 
@@ -348,7 +376,7 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
      */
     protected function processN2(int $idx): void
     {
-        if ($this->getItem($idx)['type'] === 'NI') {
+        if ($this->isNI($this->getItem($idx)['type'])) {
             $this->setItemType($idx, $this->seq['edir']);
         }
     }

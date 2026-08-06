@@ -44,6 +44,34 @@ class StepXTest extends TestCase
     }
 
     /**
+     * X1 allows the embedding levels 0 through max_depth (125), so the level produced by
+     * 125 nested isolate initiators is still valid and the 126th one overflows.
+     */
+    public function testMaxDepth(): void
+    {
+        $ordarr = [];
+        for ($idx = 0; $idx < StepX::MAX_DEPTH; ++$idx) {
+            // Alternating RLI and LRI: each one adds exactly one level.
+            $ordarr[] = ($idx % 2) === 0 ? 0x2067 : 0x2066;
+        }
+
+        $ordarr[] = 0x05D0;
+        $stepx = new StepX($ordarr, 0);
+        $chardata = $stepx->getChrData();
+        $last = \end($chardata);
+        $this->assertIsArray($last);
+        $this->assertSame(StepX::MAX_DEPTH, $last['level']);
+
+        // One initiator more overflows: the letter stays at the last valid level.
+        \array_splice($ordarr, StepX::MAX_DEPTH, 0, [0x2066]);
+        $stepx = new StepX($ordarr, 0);
+        $chardata = $stepx->getChrData();
+        $last = \end($chardata);
+        $this->assertIsArray($last);
+        $this->assertSame(StepX::MAX_DEPTH, $last['level']);
+    }
+
+    /**
      * @return array<int, array{
      *           0: array<int>,
      *           1: int,
@@ -131,8 +159,8 @@ class StepXTest extends TestCase
                         'i' => -1,
                         'level' => 0,
                         'pdimatch' => -1,
-                        'type' => 'NI',
-                        'otype' => 'NI',
+                        'type' => 'RLI',
+                        'otype' => 'RLI',
                     ],
                     [
                         'x' => -1,
@@ -151,8 +179,8 @@ class StepXTest extends TestCase
                         'i' => -1,
                         'level' => 0,
                         'pdimatch' => -1,
-                        'type' => 'NI',
-                        'otype' => 'NI',
+                        'type' => 'PDI',
+                        'otype' => 'PDI',
                     ],
                     [
                         'x' => -1,
@@ -161,8 +189,8 @@ class StepXTest extends TestCase
                         'i' => -1,
                         'level' => 0,
                         'pdimatch' => -1,
-                        'type' => 'NI',
-                        'otype' => 'NI',
+                        'type' => 'RLI',
+                        'otype' => 'RLI',
                     ],
                     [
                         'x' => -1,
@@ -181,8 +209,8 @@ class StepXTest extends TestCase
                         'i' => -1,
                         'level' => 0,
                         'pdimatch' => -1,
-                        'type' => 'NI',
-                        'otype' => 'NI',
+                        'type' => 'PDI',
+                        'otype' => 'PDI',
                     ],
                     [
                         'x' => -1,
@@ -218,8 +246,8 @@ class StepXTest extends TestCase
                         'i' => -1,
                         'level' => 0,
                         'pdimatch' => -1,
-                        'type' => 'NI',
-                        'otype' => 'NI',
+                        'type' => 'RLI',
+                        'otype' => 'RLI',
                     ],
                     [
                         'x' => -1,
@@ -238,8 +266,8 @@ class StepXTest extends TestCase
                         'i' => -1,
                         'level' => 1,
                         'pdimatch' => -1,
-                        'type' => 'NI',
-                        'otype' => 'NI',
+                        'type' => 'LRI',
+                        'otype' => 'LRI',
                     ],
                     [
                         'x' => -1,
@@ -278,8 +306,8 @@ class StepXTest extends TestCase
                         'i' => -1,
                         'level' => 1,
                         'pdimatch' => -1,
-                        'type' => 'NI',
-                        'otype' => 'NI',
+                        'type' => 'PDI',
+                        'otype' => 'PDI',
                     ],
                     [
                         'x' => -1,
@@ -298,8 +326,8 @@ class StepXTest extends TestCase
                         'i' => -1,
                         'level' => 0,
                         'pdimatch' => -1,
-                        'type' => 'NI',
-                        'otype' => 'NI',
+                        'type' => 'PDI',
+                        'otype' => 'PDI',
                     ],
                     [
                         'x' => -1,
@@ -402,8 +430,8 @@ class StepXTest extends TestCase
                         'i' => -1,
                         'level' => 0,
                         'pdimatch' => -1,
-                        'type' => 'NI',
-                        'otype' => 'NI',
+                        'type' => 'RLI',
+                        'otype' => 'RLI',
                     ],
                     [
                         'x' => -1,
@@ -422,8 +450,8 @@ class StepXTest extends TestCase
                         'i' => -1,
                         'level' => 1,
                         'pdimatch' => -1,
-                        'type' => 'NI',
-                        'otype' => 'NI',
+                        'type' => 'LRI',
+                        'otype' => 'LRI',
                     ],
                     [
                         'x' => -1,
@@ -442,8 +470,8 @@ class StepXTest extends TestCase
                         'i' => -1,
                         'level' => 1,
                         'pdimatch' => -1,
-                        'type' => 'NI',
-                        'otype' => 'NI',
+                        'type' => 'PDI',
+                        'otype' => 'PDI',
                     ],
                     [
                         'x' => -1,
@@ -462,8 +490,8 @@ class StepXTest extends TestCase
                         'i' => -1,
                         'level' => 0,
                         'pdimatch' => -1,
-                        'type' => 'NI',
-                        'otype' => 'NI',
+                        'type' => 'PDI',
+                        'otype' => 'PDI',
                     ],
                     [
                         'x' => -1,
@@ -472,8 +500,8 @@ class StepXTest extends TestCase
                         'i' => -1,
                         'level' => 0,
                         'pdimatch' => -1,
-                        'type' => 'NI',
-                        'otype' => 'NI',
+                        'type' => 'RLI',
+                        'otype' => 'RLI',
                     ],
                     [
                         'x' => -1,
@@ -492,8 +520,8 @@ class StepXTest extends TestCase
                         'i' => -1,
                         'level' => 0,
                         'pdimatch' => -1,
-                        'type' => 'NI',
-                        'otype' => 'NI',
+                        'type' => 'PDI',
+                        'otype' => 'PDI',
                     ],
                     [
                         'x' => -1,
@@ -539,8 +567,8 @@ class StepXTest extends TestCase
                         'i' => -1,
                         'level' => 1,
                         'pdimatch' => -1,
-                        'type' => 'NI',
-                        'otype' => 'NI',
+                        'type' => 'LRI',
+                        'otype' => 'LRI',
                     ],
                     [
                         'x' => -1,
@@ -569,8 +597,8 @@ class StepXTest extends TestCase
                         'i' => -1,
                         'level' => 1,
                         'pdimatch' => -1,
-                        'type' => 'NI',
-                        'otype' => 'NI',
+                        'type' => 'PDI',
+                        'otype' => 'PDI',
                     ],
                     [
                         'x' => -1,
@@ -683,8 +711,8 @@ class StepXTest extends TestCase
                         'i' => -1,
                         'level' => 0,
                         'pdimatch' => -1,
-                        'type' => 'NI',
-                        'otype' => 'NI',
+                        'type' => 'FSI',
+                        'otype' => 'FSI',
                     ],
                     [
                         'x' => -1,
@@ -703,8 +731,8 @@ class StepXTest extends TestCase
                         'i' => -1,
                         'level' => 0,
                         'pdimatch' => -1,
-                        'type' => 'NI',
-                        'otype' => 'NI',
+                        'type' => 'PDI',
+                        'otype' => 'PDI',
                     ],
                     [
                         'x' => -1,
@@ -740,8 +768,8 @@ class StepXTest extends TestCase
                         'i' => -1,
                         'level' => 1,
                         'pdimatch' => -1,
-                        'type' => 'NI',
-                        'otype' => 'NI',
+                        'type' => 'FSI',
+                        'otype' => 'FSI',
                     ],
                     [
                         'x' => -1,
@@ -760,8 +788,8 @@ class StepXTest extends TestCase
                         'i' => -1,
                         'level' => 1,
                         'pdimatch' => -1,
-                        'type' => 'NI',
-                        'otype' => 'NI',
+                        'type' => 'PDI',
+                        'otype' => 'PDI',
                     ],
                     [
                         'x' => -1,
@@ -776,8 +804,8 @@ class StepXTest extends TestCase
                 ],
             ],
             [
-                // text1·BN·text2·BN·text3
-                [33, 1807, 34, 1807, 38],
+                // text1·BN·text2·BN·text3 (U+200B ZERO WIDTH SPACE)
+                [33, 8203, 34, 8203, 38],
                 0,
                 [
                     [
@@ -813,7 +841,8 @@ class StepXTest extends TestCase
                 ],
             ],
             [
-                // Test overflow: text1·130xLRE·LRI·PDF·PDI·PDF·PDI·text2
+                // Test overflow: text1·120xLRE·LRI·PDF·PDI·PDF·PDI·text2
+                // X6a keeps both PDIs: the first matches an overflow isolate, the second matches none.
                 [
                     33,
                     8234,
@@ -962,8 +991,28 @@ class StepXTest extends TestCase
                         'i' => -1,
                         'level' => 124,
                         'pdimatch' => -1,
-                        'type' => 'NI',
-                        'otype' => 'NI',
+                        'type' => 'LRI',
+                        'otype' => 'LRI',
+                    ],
+                    [
+                        'x' => -1,
+                        'pos' => 123,
+                        'char' => 8297,
+                        'i' => -1,
+                        'level' => 124,
+                        'pdimatch' => -1,
+                        'type' => 'PDI',
+                        'otype' => 'PDI',
+                    ],
+                    [
+                        'x' => -1,
+                        'pos' => 125,
+                        'char' => 8297,
+                        'i' => -1,
+                        'level' => 124,
+                        'pdimatch' => -1,
+                        'type' => 'PDI',
+                        'otype' => 'PDI',
                     ],
                     [
                         'x' => -1,
@@ -1073,15 +1122,15 @@ class StepXTest extends TestCase
                         'i' => -1,
                         'level' => 0,
                         'pdimatch' => -1,
-                        'type' => 'NI',
-                        'otype' => 'NI',
+                        'type' => 'FSI',
+                        'otype' => 'FSI',
                     ],
                     [
                         'x' => -1,
                         'pos' => 2,
                         'char' => 1488,
                         'i' => -1,
-                        'level' => 2,
+                        'level' => 1,
                         'pdimatch' => -1,
                         'type' => 'R',
                         'otype' => 'R',
@@ -1091,7 +1140,7 @@ class StepXTest extends TestCase
                         'pos' => 3,
                         'char' => 1489,
                         'i' => -1,
-                        'level' => 2,
+                        'level' => 1,
                         'pdimatch' => -1,
                         'type' => 'R',
                         'otype' => 'R',
@@ -1103,8 +1152,8 @@ class StepXTest extends TestCase
                         'i' => -1,
                         'level' => 0,
                         'pdimatch' => -1,
-                        'type' => 'NI',
-                        'otype' => 'NI',
+                        'type' => 'PDI',
+                        'otype' => 'PDI',
                     ],
                     [
                         'x' => -1,

@@ -38,15 +38,15 @@ It is built to handle multilingual text paths where normalization, code-point ha
 - Integration-ready conversion methods for document engines
 
 ### Bidirectional Support
-- Unicode Bidirectional Algorithm implementation
+- Unicode Bidirectional Algorithm (UAX #9) implementation, passing the full official `BidiCharacterTest.txt` conformance suite
 - Right-to-left and mixed-direction text processing
-- Supporting shaping/step logic for complex scripts
+- Arabic shaping driven by the Joining_Type property
 
 ### Character Substitution
 - Context-sensitive codepoint-level substitution via `Substitution::replaceChars()`
-- **Thai** — repositions leading vowels (Sara E/AE/O/AI, U+0E40–U+0E44, U+0E4D) to follow their base consonant, matching PDF visual-order glyph streams
-- **Devanagari** — moves left-positional matras (U+093F) to precede their base consonant cluster, including conjuncts joined by Virama (U+094D)
-- **Hangul** — composes Hangul Jamo sequences (U+1100–U+11FF, U+A960–U+A97F, U+D7B0–U+D7FF) into precomposed syllables (U+AC00–U+D7A3) per Unicode Standard §3.12
+- **Devanagari**: moves left-positional matras (U+093F, U+094E) to precede their base consonant cluster, including conjuncts joined by Virama (U+094D)
+- **Hangul**: composes Hangul Jamo sequences (U+1100-U+11FF, U+A960-U+A97F, U+D7B0-U+D7FF) into precomposed syllables (U+AC00-U+D7A3) per section 3.12 of the Unicode standard
+- **Thai**: returned unchanged, because Thai preposed vowels are already stored in visual order
 
 ---
 
@@ -90,12 +90,6 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 $sub = new \Com\Tecnick\Unicode\Substitution();
 
-// Thai: leading vowel repositioned after its base consonant
-// Logical order:  [U+0E40 SARA E, U+0E01 KO KAI]
-// Visual order:   [U+0E01 KO KAI, U+0E40 SARA E]
-$result = $sub->replaceChars([0x0E40, 0x0E01]);
-// $result === [0x0E01, 0x0E40]
-
 // Devanagari: left matra repositioned before its base consonant cluster
 // Logical order:  [U+0915 KA, U+093F VOWEL SIGN I]
 // Visual order:   [U+093F VOWEL SIGN I, U+0915 KA]
@@ -112,11 +106,26 @@ $result = $sub->replaceChars([0x1100, 0x1161, 0x11A8]);
 
 | Script | Unicode range(s) | Transformation |
 |---|---|---|
-| Thai | U+0E00–U+0E7F | Leading vowels repositioned after base consonant |
-| Devanagari | U+0900–U+097F | Left matras repositioned before consonant cluster |
-| Hangul Jamo | U+1100–U+11FF, U+A960–U+A97F, U+D7B0–U+D7FF | Jamo composed to precomposed syllables (U+AC00–U+D7A3) |
+| Devanagari | U+0900-U+097F | Left matras repositioned before consonant cluster |
+| Hangul Jamo | U+1100-U+11FF, U+A960-U+A97F, U+D7B0-U+D7FF | Jamo composed to precomposed syllables (U+AC00-U+D7A3) |
+| Thai | U+0E00-U+0E7F | None: the stored order is the display order |
 
 Codepoints belonging to unsupported scripts are passed through unchanged.
+
+---
+
+## Limitations
+
+- The paragraph separator is dropped during processing and appended again at the end of
+  the paragraph output instead of being reset by L1 and reversed by L2. A strict UAX #9
+  implementation would place it at the visual left edge of a right-to-left paragraph;
+  keeping it at the end of the string preserves line splitting for the consumers.
+- Rule L3 (combining marks applied to characters shown in a different order) is not
+  implemented.
+- Shaping is Arabic only. The other cursive scripts (Syriac, N'Ko, Mandaic, Adlam) are
+  returned unshaped.
+- `Bidi` and `Convert` require valid UTF-8: malformed byte sequences raise an exception,
+  while code points that cannot be encoded are replaced with '?'.
 
 ---
 

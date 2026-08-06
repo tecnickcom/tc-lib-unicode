@@ -26,7 +26,7 @@ use Com\Tecnick\Unicode\Bidi\StepP;
 use Com\Tecnick\Unicode\Bidi\StepW;
 use Com\Tecnick\Unicode\Bidi\StepX;
 use Com\Tecnick\Unicode\Bidi\StepXten;
-use Com\Tecnick\Unicode\Data\Pattern as UniPattern;
+use Com\Tecnick\Unicode\Data\Constant as UniConstant;
 use Com\Tecnick\Unicode\Data\Type as UniType;
 use Com\Tecnick\Unicode\Exception as UnicodeException;
 
@@ -43,6 +43,22 @@ use Com\Tecnick\Unicode\Exception as UnicodeException;
  */
 class Bidi
 {
+    /**
+     * The input contains strong right-to-left characters (bidi class R, AL or AN)
+     */
+    public const CONTAINS_RTL = 1;
+
+    /**
+     * The input contains Arabic characters (bidi class AL or AN)
+     */
+    public const CONTAINS_ARABIC = 2;
+
+    /**
+     * The input contains explicit formatting characters
+     * (LRE, RLE, PDF, LRO, RLO, LRI, RLI, FSI, PDI)
+     */
+    public const CONTAINS_FORMATTING = 4;
+
     /**
      * String to process
      */
@@ -63,16 +79,16 @@ class Bidi
     protected array $ordarr = [];
 
     /**
-     * Processed string
+     * Processed string (null until it is built)
      */
-    protected string $bidistr = '';
+    protected ?string $bidistr = null;
 
     /**
-     * Array of processed UTF-8 chars
+     * Array of processed UTF-8 chars (null until it is built)
      *
-     * @var array<string>
+     * @var ?array<string>
      */
-    protected array $bidichrarr = [];
+    protected ?array $bidichrarr = null;
 
     /**
      * Array of processed UTF-8 codepoints
@@ -92,20 +108,9 @@ class Bidi
     protected bool $shaping = true;
 
     /**
-     * Array of character data
-     *
-     * @var array<int, array{
-     *        'char': int,
-     *        'i': int,
-     *        'level': int,
-     *        'otype': string,
-     *        'pdimatch': int,
-     *        'pos': int,
-     *        'type': string,
-     *        'x': int,
-     *      }>
+     * Content flags of the input, as a combination of the CONTAINS_* constants
      */
-    protected array $chardata = [];
+    protected int $content = 0;
 
     /**
      * Convert object
@@ -137,8 +142,11 @@ class Bidi
 
         $this->conv = new Convert();
         $this->setInput($str, $chrarr, $ordarr, $forcedir);
+        $this->scanInput();
 
-        if (!$this->isRtlMode()) {
+        // The explicit formatting characters are removed by X9, so an input that contains
+        // them is processed even when it holds no right-to-left character.
+        if (!$this->isRtlMode() && !$this->hasFormatting()) {
             $this->bidistr = $this->str;
             $this->bidichrarr = $this->chrarr;
             $this->bidiordarr = $this->ordarr;
@@ -185,10 +193,41 @@ class Bidi
             $ordarr = $this->conv->chrArrToOrdArr($chrarr);
         }
 
+        if (\count($chrarr) !== \count($ordarr)) {
+            throw new UnicodeException('the input forms contain a different number of characters');
+        }
+
         $this->str = $str;
         $this->chrarr = $chrarr;
         $this->ordarr = $ordarr;
         $this->forcedir = TextDirection::fromLoose($forcedir)->value;
+    }
+
+    /**
+     * Classify the input once into the content flags used to decide whether the
+     * bidirectional algorithm and the shaping have to run.
+     */
+    protected function scanInput(): void
+    {
+        foreach ($this->ordarr as $ord) {
+            if (
+                $ord >= UniConstant::LRE && $ord <= UniConstant::RLO
+                || $ord >= UniConstant::LRI && $ord <= UniConstant::PDI
+            ) {
+                $this->content |= self::CONTAINS_FORMATTING;
+                continue;
+            }
+
+            $type = UniType::getType($ord);
+            if ($type === 'AL' || $type === 'AN') {
+                $this->content |= self::CONTAINS_ARABIC | self::CONTAINS_RTL;
+                continue;
+            }
+
+            if ($type === 'R') {
+                $this->content |= self::CONTAINS_RTL;
+            }
+        }
     }
 
     /**
@@ -210,7 +249,7 @@ class Bidi
      */
     public function getChrArray(): array
     {
-        if ($this->bidichrarr === []) {
+        if ($this->bidichrarr === null) {
             $this->bidichrarr = $this->conv->ordArrToChrArr($this->bidiordarr);
         }
 
@@ -234,7 +273,7 @@ class Bidi
      */
     public function getString(): string
     {
-        if ($this->bidistr === '') {
+        if ($this->bidistr === null) {
             $this->bidistr = \implode('', $this->getChrArray());
         }
 
@@ -248,14 +287,14 @@ class Bidi
      */
     public function getCharKeys(): array
     {
-        return \array_fill_keys(\array_values($this->bidiordarr), true);
+        return \array_fill_keys($this->bidiordarr, true);
     }
 
     /**
      * P1. Split the text into separate paragraphs.
      *     A paragraph separator is kept with the previous paragraph.
      *
-     * @return array<int, array<int>>
+     * @return array<int, array<int, int>>
      */
     protected function getParagraphs(): array
     {
@@ -265,8 +304,7 @@ class Bidi
         $pdx = 0; // paragraphs index
         foreach ($this->ordarr as $ord) {
             $paragraph[$pdx][] = $ord;
-            $charType = UniType::UNI[$ord] ?? null;
-            if ($charType === 'B') {
+            if (UniType::getType($ord) === 'B') {
                 ++$pdx;
                 $paragraph[$pdx] = [];
             }
@@ -305,11 +343,11 @@ class Bidi
                 $stepi = new StepI($stepn->getSequence());
                 $ilr = $stepi->getSequence();
                 if ($this->shaping) {
-                    $shaping = new Shaping($ilr);
+                    $shaping = new Shaping($ilr, $par);
                     $ilr = $shaping->getSequence();
                 }
 
-                $chardata = \array_merge($chardata, $ilr['item']);
+                \array_push($chardata, ...$ilr['item']);
 
                 if ($ilr['maxlevel'] > $maxlevel) {
                     $maxlevel = $ilr['maxlevel'];
@@ -328,8 +366,7 @@ class Bidi
                 continue;
             }
 
-            $lastCharType = UniType::UNI[$lastchar] ?? null;
-            if ($lastCharType !== 'B') {
+            if (UniType::getType($lastchar) !== 'B') {
                 continue;
             }
 
@@ -357,18 +394,26 @@ class Bidi
     }
 
     /**
-     * Check if the input string contains Arabic characters
+     * Check if the input contains Arabic characters
      */
     protected function isArabic(): bool
     {
-        return (bool) \preg_match(UniPattern::ARABIC, $this->str);
+        return ($this->content & self::CONTAINS_ARABIC) !== 0;
     }
 
     /**
-     * Check if the input string contains RTL characters to process
+     * Check if the input contains explicit formatting characters
+     */
+    protected function hasFormatting(): bool
+    {
+        return ($this->content & self::CONTAINS_FORMATTING) !== 0;
+    }
+
+    /**
+     * Check if the input contains right-to-left characters to process
      */
     protected function isRtlMode(): bool
     {
-        return $this->forcedir === 'R' || $this->isArabic() || (bool) \preg_match(UniPattern::RTL, $this->str);
+        return $this->forcedir === 'R' || ($this->content & self::CONTAINS_RTL) !== 0;
     }
 }

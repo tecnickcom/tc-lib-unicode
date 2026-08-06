@@ -67,26 +67,26 @@ class DevanagariTest extends TestUtil
                 [0x41, 0x42, 0x43],
             ],
 
-            // Single consonant — no matra follows, pass through unchanged
+            // Single consonant: no matra follows, pass through unchanged
             // U+0915 KA
             'consonant_only' => [
                 [0x0915],
                 [0x0915],
             ],
 
-            // Last standard consonant — U+0939 HA
+            // Last standard consonant: U+0939 HA
             'last_standard_consonant' => [
                 [0x0939],
                 [0x0939],
             ],
 
-            // First extended consonant — U+0958 QA, unchanged (no matra)
+            // First extended consonant: U+0958 QA, unchanged (no matra)
             'first_extended_consonant' => [
                 [0x0958],
                 [0x0958],
             ],
 
-            // Last extended consonant — U+095F YYA, unchanged (no matra)
+            // Last extended consonant: U+095F YYA, unchanged (no matra)
             'last_extended_consonant' => [
                 [0x095F],
                 [0x095F],
@@ -111,6 +111,13 @@ class DevanagariTest extends TestUtil
             'ka_with_i_vowel' => [
                 [0x0915, 0x093F],
                 [0x093F, 0x0915],
+            ],
+
+            // U+094E PRISHTHAMATRA E is the second vowel sign of Indic
+            // Positional Category Left: U+0915 KA + U+094E
+            'ka_with_prishthamatra_e' => [
+                [0x0915, 0x094E],
+                [0x094E, 0x0915],
             ],
 
             // Last standard consonant + left matra: U+0939 HA + U+093F
@@ -143,7 +150,7 @@ class DevanagariTest extends TestUtil
             // ends at the virama; the matra after virama is NOT moved
             // U+0915, U+094D, U+093F → U+0915, U+094D, U+093F
             // (U+094D followed by non-consonant ends the cluster at KA only,
-            // but then U+094D is the next codepoint — not a left matra)
+            // but then U+094D is the next codepoint: not a left matra)
             'virama_then_matra_no_reorder' => [
                 [0x0915, 0x094D, 0x093F],
                 [0x0915, 0x094D, 0x093F],

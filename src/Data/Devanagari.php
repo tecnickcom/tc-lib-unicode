@@ -15,9 +15,8 @@ declare(strict_types=1);
  *
  * This file is part of tc-lib-unicode software library.
  *
- * Source: https://unicode.org/Public/15.1.0/ucd/UnicodeData.txt
- *         https://unicode.org/Public/15.1.0/ucd/IndicPositionalCategory.txt
- * Unicode Standard version: 15.1
+ * Source: https://www.unicode.org/Public/17.0.0/ucd/UnicodeData.txt
+ *         https://www.unicode.org/Public/17.0.0/ucd/IndicPositionalCategory.txt
  */
 
 namespace Com\Tecnick\Unicode\Data;
@@ -46,15 +45,11 @@ final class Devanagari
      * the base in a PDF glyph stream. They are therefore repositioned to
      * precede the consonant cluster during substitution.
      *
-     * Codepoints:
-     *   U+093F DEVANAGARI VOWEL SIGN I
-     *
-     * Source: https://unicode.org/Public/15.1.0/ucd/IndicPositionalCategory.txt
-     *
      * @var array<int, true>
      */
     public const LEFT_MATRAS = [
-        0x093F => true,
+        0x093F => true, // DEVANAGARI VOWEL SIGN I
+        0x094E => true, // DEVANAGARI VOWEL SIGN PRISHTHAMATRA E
     ];
 
     /**
@@ -63,8 +58,6 @@ final class Devanagari
      * Joins two consonants into a conjunct cluster. When scanning a consonant
      * cluster for pre-base matra reordering, consecutive (consonant + VIRAMA)
      * pairs extend the cluster.
-     *
-     * Source: https://unicode.org/Public/15.1.0/ucd/UnicodeData.txt
      */
     public const VIRAMA = 0x094D;
 
@@ -72,8 +65,6 @@ final class Devanagari
      * First codepoint of the standard Devanagari consonant range.
      *
      * U+0915 DEVANAGARI LETTER KA
-     *
-     * Source: https://unicode.org/Public/15.1.0/ucd/UnicodeData.txt
      */
     public const BASE_CONSONANT_FIRST = 0x0915;
 
@@ -81,18 +72,14 @@ final class Devanagari
      * Last codepoint of the standard Devanagari consonant range.
      *
      * U+0939 DEVANAGARI LETTER HA
-     *
-     * Source: https://unicode.org/Public/15.1.0/ucd/UnicodeData.txt
      */
     public const BASE_CONSONANT_LAST = 0x0939;
 
     /**
      * First codepoint of the extended Devanagari consonant range
-     * (consonants with nukta — deprecated precomposed forms).
+     * (consonants with nukta, deprecated precomposed forms).
      *
      * U+0958 DEVANAGARI LETTER QA
-     *
-     * Source: https://unicode.org/Public/15.1.0/ucd/UnicodeData.txt
      */
     public const BASE_CONSONANT_EXT_FIRST = 0x0958;
 
@@ -100,8 +87,6 @@ final class Devanagari
      * Last codepoint of the extended Devanagari consonant range.
      *
      * U+095F DEVANAGARI LETTER YYA
-     *
-     * Source: https://unicode.org/Public/15.1.0/ucd/UnicodeData.txt
      */
     public const BASE_CONSONANT_EXT_LAST = 0x095F;
 }

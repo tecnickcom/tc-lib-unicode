@@ -15,10 +15,7 @@ declare(strict_types=1);
  *
  * This file is part of tc-lib-unicode software library.
  *
- * Source: The Unicode Standard, version 15.1, section 3.12 "Conjoining Jamo Behavior"
- *         https://www.unicode.org/versions/Unicode15.1.0/
- *         https://unicode.org/Public/15.1.0/ucd/UnicodeData.txt
- * Unicode Standard version: 15.1
+ * Source: section 3.12 "Conjoining Jamo Behavior" of the Unicode standard
  */
 
 namespace Com\Tecnick\Unicode\Data;
@@ -48,22 +45,16 @@ final class Hangul
 {
     /**
      * First precomposed Hangul syllable: U+AC00 HANGUL SYLLABLE GA.
-     *
-     * Source: Unicode Standard 15.1, section 3.12
      */
     public const SBASE = 0xAC00;
 
     /**
      * First Hangul leading consonant (choseong): U+1100 HANGUL CHOSEONG KIYEOK.
-     *
-     * Source: Unicode Standard 15.1, section 3.12
      */
     public const LBASE = 0x1100;
 
     /**
      * First Hangul vowel (jungseong): U+1161 HANGUL JUNGSEONG A.
-     *
-     * Source: Unicode Standard 15.1, section 3.12
      */
     public const VBASE = 0x1161;
 
@@ -73,8 +64,6 @@ final class Hangul
      * The first actual trailing consonant (jongseong) is U+11A8; TBase is
      * one below that, so that (T − TBase) gives a 1-based index and a T of
      * TBase itself encodes "no trailing consonant" (index 0).
-     *
-     * Source: Unicode Standard 15.1, section 3.12
      */
     public const TBASE = 0x11A7;
 
@@ -82,8 +71,6 @@ final class Hangul
      * Number of leading consonants (19).
      *
      * Covers U+1100–U+1112.
-     *
-     * Source: Unicode Standard 15.1, section 3.12
      */
     public const LCOUNT = 19;
 
@@ -91,8 +78,6 @@ final class Hangul
      * Number of vowels (21).
      *
      * Covers U+1161–U+1175.
-     *
-     * Source: Unicode Standard 15.1, section 3.12
      */
     public const VCOUNT = 21;
 
@@ -101,8 +86,6 @@ final class Hangul
      *
      * Effective trailing consonants: U+11A8–U+11C2 (27 codepoints).
      * The 28th slot represents absence of a trailing consonant.
-     *
-     * Source: Unicode Standard 15.1, section 3.12
      */
     public const TCOUNT = 28;
 
@@ -110,8 +93,6 @@ final class Hangul
      * Number of precomposed syllables per leading consonant.
      *
      * NCount = VCount × TCount = 21 × 28 = 588.
-     *
-     * Source: Unicode Standard 15.1, section 3.12
      */
     public const NCOUNT = self::VCOUNT * self::TCOUNT;
 
@@ -119,8 +100,6 @@ final class Hangul
      * Total number of precomposed Hangul syllables.
      *
      * SCount = LCount × NCount = 19 × 588 = 11172.
-     *
-     * Source: Unicode Standard 15.1, section 3.12
      */
     public const SCOUNT = self::LCOUNT * self::NCOUNT;
 }

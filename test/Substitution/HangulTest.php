@@ -76,6 +76,25 @@ class HangulTest extends TestUtil
                 [],
             ],
 
+            // Rule 2 with a precomposed LV syllable already in the input:
+            // U+AC00 (GA) + U+11A8 (KIYEOK) -> U+AC01 (GAG)
+            'precomposed_lv_plus_t' => [
+                [0xAC00, 0x11A8],
+                [0xAC01],
+            ],
+
+            // A syllable that already has a trailing consonant is not composed again
+            'lvt_plus_t' => [
+                [0xAC01, 0x11A8],
+                [0xAC01, 0x11A8],
+            ],
+
+            // A precomposed LV syllable followed by anything else is left alone
+            'precomposed_lv_plus_ascii' => [
+                [0xAC00, 0x41],
+                [0xAC00, 0x41],
+            ],
+
             // Pure ASCII: no Hangul, pass through unchanged
             'ascii_only' => [
                 [0x41, 0x42, 0x43],
@@ -89,8 +108,8 @@ class HangulTest extends TestUtil
                 [0x1100],
             ],
 
-            // First leading consonant, last leading consonant — boundary check
-            // U+1100, U+1112 — no vowels follow; both pass through
+            // First leading consonant, last leading consonant: boundary check
+            // U+1100, U+1112: no vowels follow; both pass through
             'leading_consonant_boundaries' => [
                 [0x1100, 0x1112],
                 [0x1100, 0x1112],
@@ -146,7 +165,7 @@ class HangulTest extends TestUtil
                 [0xAC1B],
             ],
 
-            // L + V + TBase (U+11A7) — TBase itself is NOT a valid trailing
+            // L + V + TBase (U+11A7): TBase itself is NOT a valid trailing
             // consonant; treated as next non-T codepoint. LV emitted, then
             // U+11A7 passed through unchanged.
             'l_plus_v_plus_tbase_not_trailing' => [
@@ -189,13 +208,13 @@ class HangulTest extends TestUtil
                 [0xAC01, 0xB098],
             ],
 
-            // L + first vowel out-of-range: U+1160 is just below VBASE — not a vowel
+            // L + first vowel out-of-range: U+1160 is just below VBASE: not a vowel
             'leading_consonant_then_below_vbase' => [
                 [0x1100, 0x1160],
                 [0x1100, 0x1160],
             ],
 
-            // L + first codepoint above vowel range: U+1176 — not a vowel
+            // L + first codepoint above vowel range: U+1176: not a vowel
             'leading_consonant_then_above_vrange' => [
                 [0x1100, 0x1176],
                 [0x1100, 0x1176],

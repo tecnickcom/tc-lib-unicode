@@ -161,15 +161,28 @@ class ConvertTest extends TestCase
     }
 
     /**
-     * Malformed UTF-8 is substituted with U+003F rather than throwing, matching mbstring's
-     * default substitution for the bulk conversion.
+     * Malformed UTF-8 raises an exception, like strToChrArr(): a byte sequence that is not
+     * valid UTF-8 is an input error, while an invalid code point is substituted with '?'.
      *
      * @throws \Com\Tecnick\Unicode\Exception
      */
-    public function testStrToOrdArrSubstitutesMalformed(): void
+    public function testStrToOrdArrRejectsMalformed(): void
+    {
+        $this->expectException(\Com\Tecnick\Unicode\Exception::class);
+        $convert = $this->getTestObject();
+        $convert->strToOrdArr("\xff\xfe");
+    }
+
+    /**
+     * Code points that cannot be encoded (negative, surrogate or above U+10FFFF) are
+     * substituted with '?'.
+     *
+     * @throws \Com\Tecnick\Unicode\Exception
+     */
+    public function testOrdArrToChrArrSubstitutesInvalid(): void
     {
         $convert = $this->getTestObject();
-        $this->assertSame([63, 63], $convert->strToOrdArr("\xff\xfe"));
+        $this->assertSame(['?', '?', '?', 'A'], $convert->ordArrToChrArr([-1, 0xD800, 0x110000, 0x41]));
     }
 
     public function testGetSubUniArrStr(): void

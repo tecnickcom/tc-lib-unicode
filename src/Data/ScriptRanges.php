@@ -15,8 +15,7 @@ declare(strict_types=1);
  *
  * This file is part of tc-lib-unicode software library.
  *
- * Source: https://unicode.org/Public/15.1.0/ucd/Blocks.txt
- * Unicode Standard version: 15.1
+ * Source: https://www.unicode.org/Public/17.0.0/ucd/Blocks.txt
  */
 
 namespace Com\Tecnick\Unicode\Data;
@@ -39,7 +38,6 @@ final class ScriptRanges
 {
     /**
      * Thai block: U+0E00–U+0E7F
-     * Source: https://unicode.org/Public/15.1.0/ucd/Blocks.txt
      *
      * @var array{int, int}
      */
@@ -47,7 +45,6 @@ final class ScriptRanges
 
     /**
      * Devanagari block: U+0900–U+097F
-     * Source: https://unicode.org/Public/15.1.0/ucd/Blocks.txt
      *
      * @var array{int, int}
      */
@@ -55,7 +52,6 @@ final class ScriptRanges
 
     /**
      * Bengali block: U+0980–U+09FF
-     * Source: https://unicode.org/Public/15.1.0/ucd/Blocks.txt
      *
      * @var array{int, int}
      */
@@ -63,7 +59,6 @@ final class ScriptRanges
 
     /**
      * Hangul Jamo block: U+1100–U+11FF
-     * Source: https://unicode.org/Public/15.1.0/ucd/Blocks.txt
      *
      * @var array{int, int}
      */
@@ -71,7 +66,6 @@ final class ScriptRanges
 
     /**
      * Hangul Jamo Extended-A block: U+A960–U+A97F
-     * Source: https://unicode.org/Public/15.1.0/ucd/Blocks.txt
      *
      * @var array{int, int}
      */
@@ -79,7 +73,6 @@ final class ScriptRanges
 
     /**
      * Hangul Jamo Extended-B block: U+D7B0–U+D7FF
-     * Source: https://unicode.org/Public/15.1.0/ucd/Blocks.txt
      *
      * @var array{int, int}
      */

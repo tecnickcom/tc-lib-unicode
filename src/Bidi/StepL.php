@@ -194,9 +194,9 @@ class StepL
      *     (a) the resolved directionality of that character is R, and
      *     (b) the Bidi_Mirrored property value of that character is true.
      *
-     * The resolved directionality is R exactly when the embedding level is odd, which also covers
-     * neutral mirrored characters (brackets, guillemets) resolved into an RTL run — not only
-     * strong-R types. Each eligible character is mirrored exactly once, after reordering (L2).
+     * The resolved directionality is R exactly when the embedding level is odd, which also
+     * covers the neutral mirrored characters (brackets, guillemets) resolved into a
+     * right-to-left run. Each character is mirrored once, after the reordering of L2.
      */
     protected function processL4(): void
     {

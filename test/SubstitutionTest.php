@@ -89,18 +89,17 @@ class SubstitutionTest extends TestUtil
                 [0x0E01, 0x0E02, 0x0E03],
             ],
 
-            // Thai with a leading vowel: dispatcher delegates to ThaiHandler
-            // U+0E40 (SARA E) + U+0E01 (KO KAI) → U+0E01, U+0E40
-            'thai_vowel_reposition' => [
+            // Thai with a preposed vowel: the dispatcher delegates to ThaiHandler,
+            // which keeps the stored order
+            'thai_preposed_vowel' => [
                 [0x0E40, 0x0E01],
-                [0x0E01, 0x0E40],
+                [0x0E40, 0x0E01],
             ],
 
-            // Mixed script: Thai cluster plus ASCII; only Thai part transformed
-            // 0x41, U+0E40, U+0E01, 0x42 → 0x41, U+0E01, U+0E40, 0x42
+            // Mixed script: Thai cluster plus ASCII
             'mixed_ascii_thai' => [
                 [0x41, 0x0E40, 0x0E01, 0x42],
-                [0x41, 0x0E01, 0x0E40, 0x42],
+                [0x41, 0x0E40, 0x0E01, 0x42],
             ],
 
             // Devanagari consonant without matra: handler runs, nothing moved
@@ -110,7 +109,7 @@ class SubstitutionTest extends TestUtil
                 [0x0915, 0x0916],
             ],
 
-            // Devanagari: detectScripts short-circuit — second Devanagari
+            // Devanagari: detectScripts short-circuit: second Devanagari
             // codepoint skips the range check once already detected
             // U+0915, U+0916, U+0917
             'devanagari_multiple_consonants' => [
@@ -133,7 +132,7 @@ class SubstitutionTest extends TestUtil
             ],
 
             // Devanagari codepoint in block but outside consonant range:
-            // U+0900 INVERTED CANDRABINDU (combining mark) — no matra reorder
+            // U+0900 INVERTED CANDRABINDU (combining mark): no matra reorder
             'devanagari_non_consonant' => [
                 [0x0900, 0x093F],
                 [0x0900, 0x093F],
@@ -160,8 +159,8 @@ class SubstitutionTest extends TestUtil
                 [0xD7B0],
             ],
 
-            // Hangul: detectScripts short-circuit — second Hangul Jamo codepoint skips check
-            // U+1100, U+1102 — both L, no V, so no composition
+            // Hangul: detectScripts short-circuit: second Hangul Jamo codepoint skips check
+            // U+1100, U+1102: both L, no V, so no composition
             'hangul_multiple_leading_consonants' => [
                 [0x1100, 0x1102],
                 [0x1100, 0x1102],

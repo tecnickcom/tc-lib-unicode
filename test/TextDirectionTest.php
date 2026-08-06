@@ -83,9 +83,11 @@ class TextDirectionTest extends TestUtil
      */
     public function testBidiAcceptsEnum(): void
     {
-        $fromEnum = new Bidi('left to right', null, null, TextDirection::Rtl, true);
-        $fromString = new Bidi('left to right', null, null, 'R', true);
-        $this->assertSame('right to left', $fromEnum->getString());
+        // The trailing space makes the forced RTL direction visible in the output:
+        // L1.4 resets it to the paragraph level, moving it to the visual left.
+        $fromEnum = new Bidi('left to right ', null, null, TextDirection::Rtl, true);
+        $fromString = new Bidi('left to right ', null, null, 'R', true);
+        $this->assertSame(' left to right', $fromEnum->getString());
         $this->assertSame($fromString->getString(), $fromEnum->getString());
     }
 }

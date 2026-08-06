@@ -250,7 +250,9 @@ class StepX
         //       directional status stack.
         //     - Otherwise, this is an overflow RLE. If the overflow isolate count is zero, increment the
         //       overflow embedding|isolate count by one. Leave all other variables unchanged.
-        if ($cel >= self::MAX_DEPTH || $this->oic !== 0 || $this->oec !== 0) {
+        // X1 allows the embedding levels 0 through max_depth, so a new level equal to
+        // MAX_DEPTH is still valid.
+        if ($cel > self::MAX_DEPTH || $this->oic !== 0 || $this->oec !== 0) {
             if ($isolate) {
                 ++$this->oic;
                 return;
@@ -281,7 +283,9 @@ class StepX
      */
     protected function pushChar(int $pos, int $ord, array $edss): void
     {
-        $unitype = UniType::UNI[$ord] ?? $edss['dos'];
+        // The original type is the bidirectional type of the codepoint; the resolved type is
+        // the directional override status when the last stack entry is not neutral (X6).
+        $unitype = UniType::getType($ord);
         $this->chardata[] = [
             'char' => $ord,
             'i' => -1,
@@ -309,7 +313,7 @@ class StepX
         //     - Whenever the directional override status of the last entry on the directional status stack
         //       is not neutral, reset the current character type according to the directional override
         //       status of the last entry on the directional status stack.
-        $charType = UniType::UNI[$ord] ?? null;
+        $charType = UniType::getType($ord);
         if ($charType === 'B' || $charType === 'BN') {
             return;
         }
@@ -365,14 +369,18 @@ class StepX
         // X6a. With each PDI, perform the following steps:
         //      - If the overflow isolate count is greater than zero, this PDI matches an overflow isolate
         //        initiator. Decrement the overflow isolate count by one.
+        // X9 retains the PDI, so it is pushed with the level of the current stack entry in
+        // every case, including the two cases below where it matches no valid initiator.
         if ($this->oic > 0) {
             --$this->oic;
+            $this->pushChar($pos, $ord, $edss);
             return;
         }
 
         //      - Otherwise, if the valid isolate count is zero, this PDI does not match any isolate
         //        initiator, valid or overflow. Do nothing.
         if ($this->vic === 0) {
+            $this->pushChar($pos, $ord, $edss);
             return;
         }
 
@@ -428,12 +436,41 @@ class StepX
         //      matching PDI, or if there is no matching PDI, the end of the paragraph, as if this sequence
         //      of characters were a paragraph. If these rules decide on paragraph embedding level 1, treat
         //      the FSI as an RLI in rule X5a. Otherwise, treat it as an LRI in rule X5b.
-        $stepp = new StepP(\array_slice($this->ordarr, $pos));
+        $stepp = new StepP($this->getIsolateContent($pos));
         if ($stepp->getPel() === 0) {
             $this->setDss($this->getLEven($edss['cel']), UniConstant::LRI, 'NI', true);
             return;
         }
 
         $this->setDss($this->getLOdd($edss['cel']), UniConstant::RLI, 'NI', true);
+    }
+
+    /**
+     * Return the codepoints between the isolate initiator at the given position and its
+     * matching PDI (BD9), or the end of the paragraph when there is no matching PDI.
+     *
+     * @param int $pos Position of the isolate initiator
+     *
+     * @return array<int>
+     */
+    protected function getIsolateContent(int $pos): array
+    {
+        $content = [];
+        $depth = 0;
+        foreach (\array_slice($this->ordarr, $pos + 1) as $ord) {
+            if ($ord === UniConstant::PDI) {
+                if ($depth === 0) {
+                    break;
+                }
+
+                --$depth;
+            } elseif ($ord >= UniConstant::LRI && $ord <= UniConstant::FSI) {
+                ++$depth;
+            }
+
+            $content[] = $ord;
+        }
+
+        return $content;
     }
 }

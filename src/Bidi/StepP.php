@@ -59,11 +59,11 @@ class StepP
         $isolate = 0;
         foreach ($this->ordarr as $ord) {
             $isolate = $this->getIsolateLevel($ord, $isolate);
-            $type = UniType::UNI[$ord] ?? null;
-            if ($isolate !== 0 || $type === null) {
+            if ($isolate !== 0) {
                 continue;
             }
 
+            $type = UniType::getType($ord);
             if ($type === 'L') {
                 return 0;
             }

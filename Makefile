@@ -95,6 +95,12 @@ PHPDOC=$(shell which phpDocumentor)
 # Mago version
 MAGOVERSION=1.43.0
 
+# Version of the Unicode Character Database used by the conformance test
+UCDVERSION=17.0.0
+
+# Directory of the Unicode Character Database conformance data
+UCDDIR=$(TARGETDIR)/ucd/$(UCDVERSION)
+
 # --- MAKE TARGETS ---
 
 # Display general help about this command
@@ -261,9 +267,17 @@ tag:
 	git push origin --tags && \
 	git pull
 
+## Download the Unicode Character Database conformance data
+.PHONY: ucd
+ucd: $(UCDDIR)/BidiCharacterTest.txt
+
+$(UCDDIR)/BidiCharacterTest.txt:
+	mkdir -p "$(UCDDIR)"
+	curl --proto '=https' --tlsv1.2 --silent --show-error --fail --location --output "$@" "https://www.unicode.org/Public/$(UCDVERSION)/ucd/BidiCharacterTest.txt"
+
 ## Run unit tests
 .PHONY: test
-test:
+test: ucd
 	cp phpunit.xml.dist phpunit.xml
 	#./vendor/bin/phpunit --migrate-configuration || true
 	XDEBUG_MODE=coverage $(PHP) -d zend.assertions=1 -d assert.exception=1 ./vendor/bin/phpunit --stderr test

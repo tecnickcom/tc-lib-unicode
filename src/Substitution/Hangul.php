@@ -23,25 +23,19 @@ use Com\Tecnick\Unicode\Data\Hangul as HangulData;
 /**
  * Com\Tecnick\Unicode\Substitution\Hangul
  *
- * Composes Hangul Jamo sequences into precomposed Hangul syllables per the
- * Unicode Standard, version 15.1, section 3.12 "Conjoining Jamo Behavior".
+ * Composes Hangul Jamo sequences into precomposed syllables, as defined by section
+ * 3.12 "Conjoining Jamo Behavior" of the Unicode standard. Both rules are applied
+ * left to right in a single pass:
  *
- * Two composition rules are applied left-to-right in a single pass:
+ *   Rule 1, L + V to an LV syllable: a leading consonant (choseong, U+1100 to U+1112)
+ *   followed by a vowel (jungseong, U+1161 to U+1175) becomes
+ *   S = SBase + (L - LBase) * NCount + (V - VBase) * TCount.
  *
- *   Rule 1 — L + V → LV syllable
- *     When a leading consonant (choseong, U+1100–U+1112) is immediately
- *     followed by a vowel (jungseong, U+1161–U+1175) the pair is replaced
- *     by the corresponding precomposed syllable:
- *       S = SBase + (L − LBase) × NCount + (V − VBase) × TCount
+ *   Rule 2, LV + T to an LVT syllable: an LV syllable, produced by rule 1 or already
+ *   present in the input, followed by a trailing consonant (jongseong, U+11A8 to
+ *   U+11C2) becomes S = LV + (T - TBase).
  *
- *   Rule 2 — LV + T → LVT syllable
- *     When the syllable produced by Rule 1 (or an existing LV precomposed
- *     syllable already in the input) is immediately followed by a trailing
- *     consonant (jongseong, U+11A8–U+11C2) the pair is merged:
- *       S = LV + (T − TBase)
- *
- * Codepoints that do not participate in either rule are passed through
- * unchanged.
+ * The other codepoints are returned unchanged.
  *
  * @since     2026-04-30
  * @category  Library
@@ -97,6 +91,15 @@ final class Hangul
             if ($this->isLeadingConsonant($codepoint) && ($idx + 1) < $len) {
                 $idx = $this->composeLV($idx, $len, $result);
                 continue;
+            }
+
+            if ($this->isLvSyllable($codepoint) && ($idx + 1) < $len) {
+                $tChar = $this->ordarr[$idx + 1] ?? null;
+                if ($tChar !== null && $this->isTrailingConsonant($tChar)) {
+                    $result[] = $codepoint + ($tChar - HangulData::TBASE);
+                    $idx += 2;
+                    continue;
+                }
             }
 
             $result[] = $codepoint;
@@ -157,6 +160,19 @@ final class Hangul
         $lIndex = $lChar - HangulData::LBASE;
         $vIndex = $vChar - HangulData::VBASE;
         return HangulData::SBASE + ($lIndex * HangulData::NCOUNT) + ($vIndex * HangulData::TCOUNT);
+    }
+
+    /**
+     * Returns true when $codepoint is a precomposed LV syllable: a syllable of the
+     * U+AC00-U+D7A3 range that has no trailing consonant yet.
+     */
+    private function isLvSyllable(int $codepoint): bool
+    {
+        if ($codepoint < HangulData::SBASE || $codepoint >= (HangulData::SBASE + HangulData::SCOUNT)) {
+            return false;
+        }
+
+        return (($codepoint - HangulData::SBASE) % HangulData::TCOUNT) === 0;
     }
 
     /**

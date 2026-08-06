@@ -84,65 +84,60 @@ class ThaiTest extends TestUtil
             ],
 
             // Leading vowel followed by a tone mark (not a base consonant):
-            // leave unchanged — U+0E40, U+0E48
+            // leave unchanged: U+0E40, U+0E48
             'leading_vowel_then_tone_mark' => [
                 [0x0E40, 0x0E48],
                 [0x0E40, 0x0E48],
             ],
 
             // Leading vowel followed by an ASCII character (not a base
-            // consonant): leave unchanged — U+0E40, 0x41
+            // consonant): leave unchanged: U+0E40, 0x41
             'leading_vowel_then_ascii' => [
                 [0x0E40, 0x41],
                 [0x0E40, 0x41],
             ],
 
-            // Simple reposition: U+0E40 (SARA E) + U+0E01 (KO KAI)
-            // → U+0E01, U+0E40
+            // Preposed vowel: stored and displayed before the consonant
+            // U+0E40 (SARA E) + U+0E01 (KO KAI)
             'sara_e_before_ko_kai' => [
                 [0x0E40, 0x0E01],
-                [0x0E01, 0x0E40],
+                [0x0E40, 0x0E01],
             ],
 
             // U+0E41 (SARA AE) + U+0E02 (KHO KHAI)
             'sara_ae_before_kho_khai' => [
                 [0x0E41, 0x0E02],
-                [0x0E02, 0x0E41],
+                [0x0E41, 0x0E02],
             ],
 
             // U+0E44 (SARA AI MAIMALAI) + last base consonant U+0E2E
             'sara_ai_before_ho_nokhuk' => [
                 [0x0E44, 0x0E2E],
-                [0x0E2E, 0x0E44],
+                [0x0E44, 0x0E2E],
             ],
 
-            // Multiple consecutive leading vowels before one consonant
-            // U+0E40, U+0E41, U+0E01 → U+0E01, U+0E40, U+0E41
+            // Multiple consecutive preposed vowels before one consonant
             'two_leading_vowels_then_consonant' => [
                 [0x0E40, 0x0E41, 0x0E01],
-                [0x0E01, 0x0E40, 0x0E41],
+                [0x0E40, 0x0E41, 0x0E01],
             ],
 
-            // Leading vowel + consonant + tone mark: only the vowel is moved;
-            // the tone mark stays after the consonant
-            // U+0E40, U+0E01, U+0E48 → U+0E01, U+0E40, U+0E48
+            // Preposed vowel + consonant + tone mark
             'vowel_consonant_tone' => [
                 [0x0E40, 0x0E01, 0x0E48],
-                [0x0E01, 0x0E40, 0x0E48],
+                [0x0E40, 0x0E01, 0x0E48],
             ],
 
             // Mixed: ASCII + Thai cluster + ASCII
-            // 0x41, U+0E40, U+0E01, U+0E48, 0x42 → 0x41, U+0E01, U+0E40, U+0E48, 0x42
             'mixed_ascii_thai' => [
                 [0x41, 0x0E40, 0x0E01, 0x0E48, 0x42],
-                [0x41, 0x0E01, 0x0E40, 0x0E48, 0x42],
+                [0x41, 0x0E40, 0x0E01, 0x0E48, 0x42],
             ],
 
             // Two separate Thai clusters in one array
-            // U+0E40, U+0E01, U+0E44, U+0E2E → U+0E01, U+0E40, U+0E2E, U+0E44
             'two_clusters' => [
                 [0x0E40, 0x0E01, 0x0E44, 0x0E2E],
-                [0x0E01, 0x0E40, 0x0E2E, 0x0E44],
+                [0x0E40, 0x0E01, 0x0E44, 0x0E2E],
             ],
 
             // Multiple consecutive leading vowels followed by non-consonant
@@ -157,6 +152,6 @@ class ThaiTest extends TestUtil
     public function testNormalizesSparseIndexes(): void
     {
         $obj = new Thai([3 => 0x0E40, 7 => 0x0E01]);
-        $this->assertSame([0x0E01, 0x0E40], $obj->getOrdarr());
+        $this->assertSame([0x0E40, 0x0E01], $obj->getOrdarr());
     }
 }

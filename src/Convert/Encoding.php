@@ -44,8 +44,13 @@ class Encoding
     {
         $latarr = [];
         foreach ($ordarr as $chr) {
+            if ($chr < 0) {
+                $latarr[] = 63; // '?' character
+                continue;
+            }
+
             if ($chr < 256) {
-                $latarr[] = $chr & 0xFF;
+                $latarr[] = $chr;
                 continue;
             }
 
@@ -84,7 +89,8 @@ class Encoding
     }
 
     /**
-     * Convert an hexadecimal string (byte string - as in the PDF standard) to string
+     * Convert an hexadecimal string (byte string - as in the PDF standard) to string.
+     * Pairs of characters that are not hexadecimal digits are converted to a NUL byte.
      *
      * @param string $hex Hex code to convert
      */
@@ -97,7 +103,8 @@ class Encoding
         $str = '';
         $bytes = \str_split($hex, 2);
         foreach ($bytes as $byte) {
-            $str .= \chr((int) \hexdec($byte) & 0xFF);
+            // hexdec() raises a deprecation notice on non-hexadecimal characters.
+            $str .= \ctype_xdigit($byte) ? \chr((int) \hexdec($byte) & 0xFF) : "\x00";
         }
 
         return $str;

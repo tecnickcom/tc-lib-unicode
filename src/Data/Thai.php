@@ -15,8 +15,7 @@ declare(strict_types=1);
  *
  * This file is part of tc-lib-unicode software library.
  *
- * Source: https://unicode.org/Public/15.1.0/ucd/UnicodeData.txt
- * Unicode Standard version: 15.1
+ * Source: https://www.unicode.org/Public/17.0.0/ucd/UnicodeData.txt
  */
 
 namespace Com\Tecnick\Unicode\Data;
@@ -50,9 +49,7 @@ final class Thai
      *   U+0E42 THAI CHARACTER SARA O
      *   U+0E43 THAI CHARACTER SARA AI MAIMUAN
      *   U+0E44 THAI CHARACTER SARA AI MAIMALAI
-     *   U+0E4D THAI CHARACTER NIKHAHIT (leading form used with some vowels)
      *
-     * Source: https://unicode.org/Public/15.1.0/ucd/UnicodeData.txt
      *
      * @var array<int, true>
      */
@@ -62,7 +59,6 @@ final class Thai
         0x0E42 => true,
         0x0E43 => true,
         0x0E44 => true,
-        0x0E4D => true,
     ];
 
     /**
@@ -75,7 +71,6 @@ final class Thai
      *   U+0E4A THAI CHARACTER MAI TRI
      *   U+0E4B THAI CHARACTER MAI JATTAWA
      *
-     * Source: https://unicode.org/Public/15.1.0/ucd/UnicodeData.txt
      *
      * @var array<int, true>
      */
@@ -89,15 +84,11 @@ final class Thai
     /**
      * Thai base consonant range: U+0E01–U+0E2E
      * (THAI CHARACTER KO KAI through THAI CHARACTER HO NOKHUK)
-     *
-     * Source: https://unicode.org/Public/15.1.0/ucd/UnicodeData.txt
      */
     public const BASE_CONSONANT_FIRST = 0x0E01;
 
     /**
      * Thai base consonant range upper bound: U+0E2E
-     *
-     * Source: https://unicode.org/Public/15.1.0/ucd/UnicodeData.txt
      */
     public const BASE_CONSONANT_LAST = 0x0E2E;
 }

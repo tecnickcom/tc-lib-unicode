@@ -150,7 +150,7 @@ class StepW extends \Com\Tecnick\Unicode\Bidi\StepBase
     protected function processW4(int $idx): void
     {
         $item = $this->getItem($idx);
-        if (!\in_array($item['type'], ['ES', 'CS'], true)) {
+        if ($item['type'] !== 'ES' && $item['type'] !== 'CS') {
             return;
         }
 
@@ -160,10 +160,15 @@ class StepW extends \Com\Tecnick\Unicode\Bidi\StepBase
             return;
         }
 
-        $prevItem = $this->getItem($bdx);
-        $nextItem = $this->getItem($fdx);
-        if ($prevItem['type'] === $nextItem['type'] && \in_array($prevItem['type'], ['EN', 'AN'], true)) {
-            $this->setItemType($idx, $prevItem['type']);
+        $prev = $this->getItem($bdx)['type'];
+        if ($prev !== $this->getItem($fdx)['type']) {
+            return;
+        }
+
+        // A European separator only joins two European numbers, while a common separator
+        // joins two numbers of the same type (EN,EN or AN,AN).
+        if ($prev === 'EN' || $prev === 'AN' && $item['type'] === 'CS') {
+            $this->setItemType($idx, $prev);
         }
     }
 

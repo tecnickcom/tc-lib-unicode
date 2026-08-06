@@ -23,6 +23,10 @@ use Com\Tecnick\Unicode\Exception as UniException;
 /**
  * Com\Tecnick\Unicode\Convert
  *
+ * Malformed input policy: a string or char array that is not valid UTF-8 raises an
+ * exception, while a code point that cannot be encoded (negative, surrogate or greater
+ * than U+10FFFF) is replaced with '?'.
+ *
  * @since     2015-07-13
  * @category  Library
  * @package   Unicode
@@ -129,7 +133,11 @@ class Convert extends \Com\Tecnick\Unicode\Convert\Encoding
             return [];
         }
 
-        $str = \mb_convert_encoding(\pack('N*', ...$ords), 'UTF-8', 'UCS-4BE');
+        // Surrogate code points are not valid UTF-8 but are passed through by
+        // mb_convert_encoding(), so they are substituted like the other invalid values.
+        $valid = \array_map(static fn(int $ord): int => $ord >= 0xD800 && $ord <= 0xDFFF ? 0x3F : $ord, $ords);
+
+        $str = \mb_convert_encoding(\pack('N*', ...$valid), 'UTF-8', 'UCS-4BE');
         if ($str === false) {
             throw new UniException('Error converting code points');
         }
@@ -150,6 +158,10 @@ class Convert extends \Com\Tecnick\Unicode\Convert\Encoding
     {
         if ($str === '') {
             return [];
+        }
+
+        if (!\mb_check_encoding($str, 'UTF-8')) {
+            throw new UniException('Invalid UTF-8 string');
         }
 
         $ucs = \mb_convert_encoding($str, 'UCS-4BE', 'UTF-8');

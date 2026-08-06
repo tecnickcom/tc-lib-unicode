@@ -16,9 +16,10 @@ BuildArch: noarch
 
 Requires:  php(language) >= 8.2.0
 Requires:  php-composer(%{c_vendor}/tc-lib-unicode-data) < 3.0.0
-Requires:  php-composer(%{c_vendor}/tc-lib-unicode-data) >= 3.0.0
-Requires:  php-pcre
+Requires:  php-composer(%{c_vendor}/tc-lib-unicode-data) >= 3.0.1
+Requires:  php-ctype
 Requires:  php-mbstring
+Requires:  php-pcre
 
 Provides:  php-composer(%{c_vendor}/%{gh_project}) = %{version}
 Provides:  php-%{gh_project} = %{version}

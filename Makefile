@@ -93,7 +93,7 @@ COMPOSER=$(PHP) -d "apc.enable_cli=0" $(shell which composer)
 PHPDOC=$(shell which phpDocumentor)
 
 # Mago version
-MAGOVERSION=1.43.0
+MAGOVERSION=1.46.0
 
 # Version of the Unicode Character Database used by the conformance test
 UCDVERSION=17.0.0
@@ -212,7 +212,9 @@ endif
 ## Format the source code
 .PHONY: format
 format:
-	./vendor/bin/mago fmt src test example
+	./vendor/bin/mago --config ./mago.src.toml fmt src
+	./vendor/bin/mago --config ./mago.test.toml fmt test
+	./vendor/bin/mago --config ./mago.src.toml fmt example
 
 ## Analyze and Lint the source code
 .PHONY: lint

@@ -24,6 +24,8 @@ use Com\Tecnick\Unicode\Data\Type as UniType;
 /**
  * Com\Tecnick\Unicode\Bidi\StepP
  *
+ * P steps of the Bidirectional Algorithm: paragraph embedding level (P2 and P3).
+ *
  * @since     2015-07-13
  * @category  Library
  * @package   Unicode

@@ -4,7 +4,7 @@ php-version = "8.2.0"
 
 [source]
 workspace = "."
-paths = ["src", "test"]
+paths = ["src", "example"]
 includes = ["vendor"]
 excludes = []
 
@@ -17,28 +17,21 @@ tab-width = 4
 use-tabs = false
 
 [linter]
-integrations = ["phpunit"]
+integrations = []
 
 [linter.rules]
 ambiguous-function-call = { enabled = false }
 literal-named-argument = { enabled = false }
-assertion-style = { enabled = false }
 cyclomatic-complexity = { enabled = false }
-excessive-parameter-list = { enabled = false }
-halstead = { enabled = false, effort-threshold = 7000 }
-identity-comparison = { enabled = false }
+excessive-parameter-list = { enabled = true }
+halstead = { enabled = true, effort-threshold = 7000 }
+identity-comparison = { enabled = true }
 kan-defect = { enabled = false }
 no-boolean-flag-parameter = { enabled = false }
 no-else-clause = { enabled = false }
-no-empty = { enabled = false }
-no-empty-catch-clause = { enabled = false }
-no-isset = { enabled = false }
-readable-literal = { enabled = false }
-str-contains = { enabled = false }
-strict-assertions = { enabled = false }
-strict-behavior = { enabled = false }
-strict-types = { enabled = false }
+no-empty = { enabled = true }
 too-many-methods = { enabled = false }
+no-isset = { enabled = true, allow-array-checks = true }
 
 [analyzer]
 plugins = []
@@ -51,9 +44,6 @@ unchecked-exceptions = [
 	"Error",
 	"LogicException",
 	"ReflectionException",
-	"PHPUnit\\Framework\\Exception",
-	"PHPUnit\\Framework\\ExpectationFailedException",
-	"PHPUnit\\Framework\\UnknownClassOrInterfaceException",
 ]
 unchecked-exception-classes = []
 check-missing-override = true

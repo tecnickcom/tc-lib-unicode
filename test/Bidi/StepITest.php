@@ -21,7 +21,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Bidi Test
+ * Bidi StepI test
  *
  * @since     2011-05-23
  * @category  Library

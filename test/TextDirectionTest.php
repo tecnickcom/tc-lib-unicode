@@ -76,8 +76,8 @@ class TextDirectionTest extends TestUtil
     }
 
     /**
-     * The widened Bidi constructor accepts a TextDirection and behaves exactly
-     * like the equivalent legacy string.
+     * The Bidi constructor accepts a TextDirection case and the equivalent string
+     * interchangeably.
      *
      * @throws \Com\Tecnick\Unicode\Exception
      */

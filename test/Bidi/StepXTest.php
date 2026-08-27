@@ -21,7 +21,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Bidi Test
+ * Bidi StepX test
  *
  * @since     2011-05-23
  * @category  Library
@@ -41,6 +41,38 @@ class StepXTest extends TestCase
     {
         $stepx = new StepX($ordarr, $pel);
         $this->assertEquals($expected, $stepx->getChrData());
+    }
+
+    /**
+     * The character positions are used as offsets to find the content of an isolate, so
+     * an input whose keys do not start at zero resolves like the same input reindexed.
+     */
+    public function testNonSequentialKeys(): void
+    {
+        // FSI, HEBREW LETTER ALEF, PDI: X5c has to see the alef and treat the FSI as RTL.
+        $ordarr = [0x2068, 0x05D0, 0x2069];
+        $shifted = [];
+        foreach ($ordarr as $idx => $ord) {
+            $shifted[5 + $idx] = $ord;
+        }
+
+        $this->assertSame([0, 1, 0], self::levels(new StepX($ordarr, 0)));
+        $this->assertSame([0, 1, 0], self::levels(new StepX($shifted, 0)));
+    }
+
+    /**
+     * Embedding level of each character of a processed sequence.
+     *
+     * @return array<int, int>
+     */
+    private static function levels(StepX $stepx): array
+    {
+        $levels = [];
+        foreach ($stepx->getChrData() as $item) {
+            $levels[] = $item['level'];
+        }
+
+        return $levels;
     }
 
     /**

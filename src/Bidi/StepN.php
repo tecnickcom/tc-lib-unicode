@@ -24,6 +24,9 @@ use Com\Tecnick\Unicode\Data\Type as UniType;
 /**
  * Com\Tecnick\Unicode\Bidi\StepN
  *
+ * N steps of the Bidirectional Algorithm: resolving neutral and isolate formatting
+ * types (N0 to N2).
+ *
  * @since     2015-07-13
  * @category  Library
  * @package   Unicode
@@ -60,8 +63,10 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
     protected bool $bstackFull = false;
 
     /**
-     * Neutral or Isolate formatting types per UAX #9: B, S, WS, ON, FSI, LRI, RLI and PDI.
-     * 'NI' is the type StepX gives to a character inside a neutral directional override.
+     * Isolate formatting types per UAX #9. Together with the neutral types B, S, WS and
+     * ON of UniType::NEUTRAL they form the NI types resolved by the N rules.
+     * 'NI' itself is not a bidirectional character type: it is accepted as a synonym of
+     * the whole set.
      *
      * @var array<string, string>
      */
@@ -165,10 +170,8 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
                 $char = 0x232A;
             }
 
-            // Find the matching opening bracket: scan the stack from the top and stop at the
-            // first (nearest) match, popping through and including the matched entry. Per BD16
-            // a closing bracket pairs with the nearest opener; without stopping here, multiple
-            // openers of the same type would be paired to the same closer and the stack emptied.
+            // BD16: a closing bracket pairs with the nearest matching opening bracket, so
+            // the stack is scanned from the top and popped through the first match only.
             $tmpstack = $this->bstack;
             while ($tmpstack !== []) {
                 $item = \array_pop($tmpstack);
@@ -309,8 +312,7 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
             return;
         }
 
-        $bdx = $idx - 1;
-        $prev = $this->processN1prev($bdx);
+        $prev = $this->processN1prev($idx - 1);
         if ($prev === '') {
             return;
         }
@@ -335,10 +337,9 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
      *
      * @return string Previous direction
      */
-    protected function processN1prev(int &$bdx): string
+    protected function processN1prev(int $bdx): string
     {
         if ($bdx < 0) {
-            $bdx = 0;
             return $this->seq['sos'];
         }
 
@@ -361,10 +362,9 @@ class StepN extends \Com\Tecnick\Unicode\Bidi\StepBase
      *
      * @return string Next direction
      */
-    protected function processN1next(int &$jdx): string
+    protected function processN1next(int $jdx): string
     {
         if ($jdx >= $this->seq['length']) {
-            $jdx = $this->seq['length'];
             return $this->seq['eos'];
         }
 

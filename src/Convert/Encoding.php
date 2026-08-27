@@ -23,6 +23,8 @@ use Com\Tecnick\Unicode\Data\Latin as Latin;
 /**
  * Com\Tecnick\Unicode\Convert\Encoding
  *
+ * Conversions between UTF-8, Latin1, UTF-16BE and hexadecimal byte strings.
+ *
  * @since     2015-07-13
  * @category  Library
  * @package   Unicode
@@ -34,7 +36,10 @@ use Com\Tecnick\Unicode\Data\Latin as Latin;
 class Encoding
 {
     /**
-     * Converts UTF-8 code array to Latin1 codes
+     * Converts UTF-8 code array to Latin1 codes.
+     * A code point that has no Latin1 counterpart is replaced with '?', except
+     * U+FFFD REPLACEMENT CHARACTER, which is dropped: the returned array is then
+     * shorter than the input one.
      *
      * @param array<int> $ordarr Array containing UTF-8 code points
      *
@@ -91,6 +96,8 @@ class Encoding
     /**
      * Convert an hexadecimal string (byte string - as in the PDF standard) to string.
      * Pairs of characters that are not hexadecimal digits are converted to a NUL byte.
+     * An odd number of digits is completed with a trailing zero, as the last digit of
+     * the final byte.
      *
      * @param string $hex Hex code to convert
      */
@@ -98,6 +105,10 @@ class Encoding
     {
         if (\strlen($hex) === 0) {
             return '';
+        }
+
+        if ((\strlen($hex) % 2) !== 0) {
+            $hex .= '0';
         }
 
         $str = '';

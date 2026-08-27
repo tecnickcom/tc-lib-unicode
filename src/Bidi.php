@@ -33,6 +33,10 @@ use Com\Tecnick\Unicode\Exception as UnicodeException;
 /**
  * Com\Tecnick\Unicode\Bidi
  *
+ * Unicode Bidirectional Algorithm (UAX #9): reorders each paragraph of the input from
+ * logical to visual order and applies the Arabic shaping.
+ * https://www.unicode.org/reports/tr9/
+ *
  * @since     2015-07-13
  * @category  Library
  * @package   Unicode
@@ -58,6 +62,12 @@ class Bidi
      * (LRE, RLE, PDF, LRO, RLO, LRI, RLI, FSI, PDI)
      */
     public const CONTAINS_FORMATTING = 4;
+
+    /**
+     * The input contains characters of bidi class BN, which rule X9 removes
+     * (ZWJ, ZWNJ, ZWNBSP, SOFT HYPHEN and most of the control characters)
+     */
+    public const CONTAINS_REMOVED = 8;
 
     /**
      * String to process
@@ -118,8 +128,7 @@ class Bidi
     protected Convert $conv;
 
     /**
-     * Reverse the RTL substrings using the Bidirectional Algorithm
-     * http://unicode.org/reports/tr9/
+     * Process the input with the Bidirectional Algorithm
      *
      * @param ?string $str      String to convert (if null it will be generated from $chrarr or $ordarr)
      * @param ?array<string>  $chrarr   Array of UTF-8 chars (if empty it will be generated from $str or $ordarr)
@@ -144,9 +153,10 @@ class Bidi
         $this->setInput($str, $chrarr, $ordarr, $forcedir);
         $this->scanInput();
 
-        // The explicit formatting characters are removed by X9, so an input that contains
-        // them is processed even when it holds no right-to-left character.
-        if (!$this->isRtlMode() && !$this->hasFormatting()) {
+        // The algorithm is the identity on left-to-right text with nothing for rule X9 to
+        // remove: the explicit formatting characters and the characters of bidi class BN
+        // are dropped whatever the direction is.
+        if (!$this->isRtlMode() && !$this->hasFormatting() && !$this->hasRemoved()) {
             $this->bidistr = $this->str;
             $this->bidichrarr = $this->chrarr;
             $this->bidiordarr = $this->ordarr;
@@ -226,6 +236,11 @@ class Bidi
 
             if ($type === 'R') {
                 $this->content |= self::CONTAINS_RTL;
+                continue;
+            }
+
+            if ($type === 'BN') {
+                $this->content |= self::CONTAINS_REMOVED;
             }
         }
     }
@@ -325,8 +340,7 @@ class Bidi
 
         // Within each paragraph, apply all the other rules of this algorithm.
         foreach ($paragraph as $par) {
-            // A trailing paragraph separator produces an empty final paragraph; it contributes
-            // nothing and would otherwise run through the full Step* pipeline for no result.
+            // A trailing paragraph separator produces an empty final paragraph.
             if ($par === []) {
                 continue;
             }
@@ -335,6 +349,9 @@ class Bidi
             $stepx = new StepX($par, $pel);
             $stepx10 = new StepXten($stepx->getChrData(), $pel);
             $ilrs = $stepx10->getIsolatedLevelRunSequences();
+            // The joining context depends only on the paragraph, so it is shared by all
+            // the isolating run sequences of that paragraph.
+            $joining = $this->shaping ? Shaping::getJoiningTypes($par) : [];
             $chardata = [];
             $maxlevel = 0;
             foreach ($ilrs as $ilr) {
@@ -343,7 +360,7 @@ class Bidi
                 $stepi = new StepI($stepn->getSequence());
                 $ilr = $stepi->getSequence();
                 if ($this->shaping) {
-                    $shaping = new Shaping($ilr, $par);
+                    $shaping = new Shaping($ilr, $par, $joining);
                     $ilr = $shaping->getSequence();
                 }
 
@@ -407,6 +424,14 @@ class Bidi
     protected function hasFormatting(): bool
     {
         return ($this->content & self::CONTAINS_FORMATTING) !== 0;
+    }
+
+    /**
+     * Check if the input contains characters that rule X9 removes
+     */
+    protected function hasRemoved(): bool
+    {
+        return ($this->content & self::CONTAINS_REMOVED) !== 0;
     }
 
     /**

@@ -38,6 +38,42 @@ use Com\Tecnick\Unicode\Exception as UniException;
 class Convert extends \Com\Tecnick\Unicode\Convert\Encoding
 {
     /**
+     * Highest Unicode code point.
+     */
+    protected const MAX_CODEPOINT = 0x10_FFFF;
+
+    /**
+     * First code point of the surrogate range.
+     */
+    protected const FIRST_SURROGATE = 0xD800;
+
+    /**
+     * Last code point of the surrogate range.
+     */
+    protected const LAST_SURROGATE = 0xDFFF;
+
+    /**
+     * Returns the code point unchanged, or the one of '?' when it cannot be encoded.
+     * Surrogates and out-of-range values are substituted here because
+     * mb_convert_encoding() passes surrogates through and pack('N') keeps only the low
+     * 32 bits.
+     *
+     * @param int $ord Unicode code point
+     */
+    protected static function encodableOrd(int $ord): int
+    {
+        if ($ord < 0 || $ord > self::MAX_CODEPOINT) {
+            return 0x3F; // '?' character
+        }
+
+        if ($ord >= self::FIRST_SURROGATE && $ord <= self::LAST_SURROGATE) {
+            return 0x3F; // '?' character
+        }
+
+        return $ord;
+    }
+
+    /**
      * Returns the unicode string containing the character specified by value
      *
      * @param int $ord Unicode character value to convert
@@ -48,7 +84,7 @@ class Convert extends \Com\Tecnick\Unicode\Convert\Encoding
      */
     public function chr(int $ord): string
     {
-        $result = \mb_convert_encoding(\pack('N', $ord), 'UTF-8', 'UCS-4BE');
+        $result = \mb_convert_encoding(\pack('N', self::encodableOrd($ord)), 'UTF-8', 'UCS-4BE');
         if ($result === false) {
             throw new UniException('Error converting character');
         }
@@ -68,6 +104,10 @@ class Convert extends \Com\Tecnick\Unicode\Convert\Encoding
      */
     public function ord(string $chr): int
     {
+        if (!\mb_check_encoding($chr, 'UTF-8')) {
+            throw new UniException('Invalid UTF-8 string');
+        }
+
         $ucs = \mb_convert_encoding($chr, 'UCS-4BE', 'UTF-8');
         if ($ucs === false || \strlen($ucs) < 4) {
             throw new UniException('Error converting string');
@@ -133,9 +173,7 @@ class Convert extends \Com\Tecnick\Unicode\Convert\Encoding
             return [];
         }
 
-        // Surrogate code points are not valid UTF-8 but are passed through by
-        // mb_convert_encoding(), so they are substituted like the other invalid values.
-        $valid = \array_map(static fn(int $ord): int => $ord >= 0xD800 && $ord <= 0xDFFF ? 0x3F : $ord, $ords);
+        $valid = \array_map(self::encodableOrd(...), $ords);
 
         $str = \mb_convert_encoding(\pack('N*', ...$valid), 'UTF-8', 'UCS-4BE');
         if ($str === false) {
@@ -183,6 +221,7 @@ class Convert extends \Com\Tecnick\Unicode\Convert\Encoding
      * @param array<string> $uniarr The input array of characters
      * @param int   $start  The position of the starting element
      * @param int|null   $end    The position of the first element that will not be returned.
+     *                           An $end that is not after $start returns an empty string.
      *
      * @return string
      */
@@ -192,6 +231,8 @@ class Convert extends \Com\Tecnick\Unicode\Convert\Encoding
             $end = \count($uniarr);
         }
 
-        return \implode('', \array_slice($uniarr, $start, $end - $start));
+        // A negative length makes array_slice() stop that many elements before the end of
+        // the array, so an empty range is clamped to zero.
+        return \implode('', \array_slice($uniarr, $start, \max(0, $end - $start)));
     }
 }

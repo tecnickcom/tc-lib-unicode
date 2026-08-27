@@ -17,10 +17,11 @@
 namespace Test;
 
 use Com\Tecnick\Unicode\Bidi;
+use Com\Tecnick\Unicode\Bidi\Shaping;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
- * Bidi Test
+ * Bidi test
  *
  * @since     2011-05-23
  * @category  Library
@@ -203,10 +204,10 @@ class BidiTest extends TestUtil
                 '',
             ],
             [
-                // RLE + PDF. The all-L phrase inside the embedding stays one LTR run,
-                // and the legacy embedding spills over: sos of the run after PDF is R, so N1
-                // resolves '" - ' between it and the number to R, pulling '" - $19.95' into
-                // the RTL context (the spillover problem that isolates were made to solve).
+                // RLE + PDF. The all-L phrase inside the embedding stays one LTR run and
+                // the embedding spills over: sos of the run after PDF is R, so N1 resolves
+                // '" - ' between it and the number to R, pulling '" - $19.95' into the RTL
+                // context.
                 self::decodeJsonString('"it is called \"\u202bAN INTRODUCTION TO java\u202c\" - $19.95 in hardcover."'),
                 'it is called "$19.95 - "AN INTRODUCTION TO java in hardcover.',
                 '',
@@ -247,8 +248,7 @@ class BidiTest extends TestUtil
     }
 
     /**
-     * Regression test for https://github.com/tecnickcom/tc-lib-unicode/issues/12
-     * Arabic shaping must replace a lam-alef pair with a single ligature glyph
+     * Arabic shaping replaces a lam-alef pair with a single ligature glyph
      * without deleting any other character of the run.
      *
      * @param array<int> $expected Shaped codepoints in visual order
@@ -276,9 +276,62 @@ class BidiTest extends TestUtil
             ['لالا', [0xFEFB, 0xFEFB]],
             // both words shape identically (the second merge must not delete the first char)
             ['خلال خلال', [0xFEDD, 0xFEFC, 0xFEA7, 0x0020, 0xFEDD, 0xFEFC, 0xFEA7]],
-            // NSM between the pair: the ligature still forms around the shadda
-            ['لّا', [0xFEFB, 0x0651]],
+            // NSM between the pair: the ligature still forms around the shadda, and the
+            // shadda keeps following it, so in visual order it comes first
+            ['لّا', [0x0651, 0xFEFB]],
         ];
+    }
+
+    /**
+     * A ligature replaces the first of the characters it covers and the others are
+     * deleted, so the transparent characters between them keep following their base.
+     * The order has to be the same one a letter that is not part of a ligature gets.
+     *
+     * @param array<int> $expected Shaped codepoints in visual order
+     *
+     * @throws \Com\Tecnick\Unicode\Exception
+     */
+    #[DataProvider('ligatureMarkOrderDataProvider')]
+    public function testLigatureMarkOrder(string $str, array $expected): void
+    {
+        $bidi = new Bidi($str);
+        $this->assertSame($expected, $bidi->getOrdArray());
+    }
+
+    /**
+     * @return array<string, array{string, array<int>}>
+     */
+    public static function ligatureMarkOrderDataProvider(): array
+    {
+        return [
+            // reference: a letter that is not part of a ligature, BEH + FATHA
+            'beh fatha' => ["\u{0628}\u{064E}", [0x064E, 0xFE8F]],
+            // LAM + FATHA + ALEF: the fatha belongs to the lam and stays after the ligature
+            'lam fatha alef' => ["\u{0644}\u{064E}\u{0627}", [0x064E, 0xFEFB]],
+            // LAM + SHADDA + FATHA + ALEF: the two marks merge into one glyph
+            'lam shadda fatha alef' => ["\u{0644}\u{0651}\u{064E}\u{0627}", [0xFC60, 0xFEFB]],
+            // BEH + LAM + FATHA + ALEF: the ligature takes the final form
+            'beh lam fatha alef' => ["\u{0628}\u{0644}\u{064E}\u{0627}", [0x064E, 0xFEFC, 0xFE91]],
+        ];
+    }
+
+    /**
+     * The paragraph is the only source of the joining context of Shaping: without it
+     * every character would be shaped as isolated, so it cannot be optional.
+     *
+     * @throws \ReflectionException
+     */
+    public function testShapingRequiresTheParagraph(): void
+    {
+        $names = [];
+        $optional = [];
+        foreach ((new \ReflectionMethod(Shaping::class, '__construct'))->getParameters() as $parameter) {
+            $names[] = $parameter->getName();
+            $optional[$parameter->getName()] = $parameter->isOptional();
+        }
+
+        $this->assertSame(['seq', 'paragraph', 'joining'], $names);
+        $this->assertFalse($optional['paragraph'] ?? true, 'the paragraph must be a required argument');
     }
 
     /**
@@ -375,8 +428,9 @@ class BidiTest extends TestUtil
         return [
             // the four characters become one glyph
             'allah' => ['الله', [0xFDF2]],
-            // the combining marks are transparent and are kept after the ligature
-            'vocalized allah' => ['اللّٰه', [0xFDF2, 0xFC63]],
+            // the combining marks are transparent and keep following the ligature,
+            // so in visual order they come first
+            'vocalized allah' => ['اللّٰه', [0xFC63, 0xFDF2]],
             // without the alef the word is shaped letter by letter
             'lillah' => ['لله', [0xFEEA, 0xFEE0, 0xFEDF]],
             'three lam and heh' => ['للله', [0xFEEA, 0xFEE0, 0xFEE0, 0xFEDF]],
@@ -386,8 +440,7 @@ class BidiTest extends TestUtil
     }
 
     /**
-     * Regression test for https://github.com/tecnickcom/tc-lib-unicode/issues/13
-     * Rules N1/N2 must resolve ordinary neutrals (WS, ON, S), not only the literal
+     * Rules N1 and N2 resolve the ordinary neutrals (WS, ON, S) as well as the literal
      * 'NI'-typed isolate formatting characters: a neutral between two strong characters
      * of the same direction takes that direction, keeping multi-word runs together.
      *
@@ -449,6 +502,39 @@ class BidiTest extends TestUtil
             $bidi->getString(),
             'the isolate formatting characters are retained',
         );
+    }
+
+    /**
+     * X9 also removes every character of bidi class BN, so the left-to-right fast path
+     * cannot return them either: the same input must give the same answer whether or not
+     * it holds a right-to-left character.
+     *
+     * @param string $chr A character of bidi class BN
+     *
+     * @throws \Com\Tecnick\Unicode\Exception
+     */
+    #[DataProvider('removedCharactersDataProvider')]
+    public function testRemovedCharactersAreConsistent(string $chr): void
+    {
+        $bidi = new Bidi('a' . $chr . 'b');
+        $this->assertSame('ab', $bidi->getString(), 'left-to-right input');
+
+        $bidi = new Bidi(self::decodeJsonString('"\u05d0"') . $chr . 'b');
+        $this->assertSame(self::decodeJsonString('"b\u05d0"'), $bidi->getString(), 'right-to-left input');
+    }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function removedCharactersDataProvider(): array
+    {
+        return [
+            'ZWJ' => ["\u{200D}"],
+            'ZWNJ' => ["\u{200C}"],
+            'soft hyphen' => ["\u{00AD}"],
+            'zero width no-break space' => ["\u{FEFF}"],
+            'null' => ["\u{0000}"],
+        ];
     }
 
     /**

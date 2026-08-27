@@ -1,6 +1,6 @@
 # tc-lib-unicode
 
-> UTF-8 and Unicode processing utilities, including bidirectional text handling.
+> PHP library to process UTF-8 and Unicode text.
 
 [![Latest Stable Version](https://poser.pugx.org/tecnickcom/tc-lib-unicode/version)](https://packagist.org/packages/tecnickcom/tc-lib-unicode)
 [![Build](https://github.com/tecnickcom/tc-lib-unicode/actions/workflows/check.yml/badge.svg)](https://github.com/tecnickcom/tc-lib-unicode/actions/workflows/check.yml)
@@ -16,9 +16,7 @@
 
 ## Overview
 
-`tc-lib-unicode` provides Unicode conversion helpers and bidirectional algorithm support for robust multilingual text processing.
-
-It is built to handle multilingual text paths where normalization, code-point handling, and bidirectional ordering directly affect rendering quality. By isolating Unicode-heavy operations, dependent libraries can keep text processing accurate and easier to audit.
+`tc-lib-unicode` converts between UTF-8 strings, character arrays and code point arrays, reorders text with the Unicode Bidirectional Algorithm (UAX #9) and applies script-specific character substitutions.
 
 | | |
 |---|---|
@@ -32,13 +30,12 @@ It is built to handle multilingual text paths where normalization, code-point ha
 
 ## Features
 
-### Unicode Utilities
-- UTF-8 character and ordinal conversion helpers
-- String/character array transformations
-- Integration-ready conversion methods for document engines
+### Conversion
+- Conversions between UTF-8 strings, character arrays and code point arrays
+- Latin1, UTF-16BE and hexadecimal string conversions
 
 ### Bidirectional Support
-- Unicode Bidirectional Algorithm (UAX #9) implementation, passing the full official `BidiCharacterTest.txt` conformance suite
+- Unicode Bidirectional Algorithm (UAX #9), verified against the official `BidiCharacterTest.txt` and `BidiTest.txt` conformance suites
 - Right-to-left and mixed-direction text processing
 - Arabic shaping driven by the Joining_Type property
 
@@ -53,7 +50,7 @@ It is built to handle multilingual text paths where normalization, code-point ha
 ## Requirements
 
 - PHP 8.2 or later
-- Extension: `mbstring`
+- Extensions: `ctype`, `mbstring`, `pcre`
 - Composer
 
 ---
@@ -116,10 +113,9 @@ Codepoints belonging to unsupported scripts are passed through unchanged.
 
 ## Limitations
 
-- The paragraph separator is dropped during processing and appended again at the end of
-  the paragraph output instead of being reset by L1 and reversed by L2. A strict UAX #9
-  implementation would place it at the visual left edge of a right-to-left paragraph;
-  keeping it at the end of the string preserves line splitting for the consumers.
+- The paragraph separator is emitted at the end of the paragraph output instead of being
+  reset by L1 and reordered by L2, which would place it at the visual left edge of a
+  right-to-left paragraph.
 - Rule L3 (combining marks applied to characters shown in a different order) is not
   implemented.
 - Shaping is Arabic only. The other cursive scripts (Syriac, N'Ko, Mandaic, Adlam) are
@@ -138,8 +134,7 @@ make qa
 make server
 ```
 
-`make server` starts the local PHP development server for the `example/` directory on `http://localhost:8000`.
-Use a custom port with `make server PORT=8080`.
+`make server` serves the `example/` directory on <http://localhost:8000>. Use a custom port with `make server PORT=8080`.
 
 ---
 

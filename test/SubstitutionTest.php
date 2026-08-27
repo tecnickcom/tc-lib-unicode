@@ -20,7 +20,7 @@ use Com\Tecnick\Unicode\Substitution;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
- * Substitution dispatcher test
+ * Substitution test
  *
  * @since     2026-04-30
  * @category  Library

@@ -100,7 +100,7 @@ class DevanagariTest extends TestUtil
             ],
 
             // Left matra followed by consonant (orphaned leading matra):
-            // the matra is not recognised as following a cluster, unchanged
+            // the matra is not recognized as following a cluster, unchanged
             // U+093F, U+0915
             'matra_then_consonant_no_reorder' => [
                 [0x093F, 0x0915],
@@ -175,6 +175,56 @@ class DevanagariTest extends TestUtil
             'mixed_ascii_devanagari' => [
                 [0x41, 0x0915, 0x093F, 0x42],
                 [0x41, 0x093F, 0x0915, 0x42],
+            ],
+
+            // U+093C NUKTA belongs to the consonant it follows, so it is part of the
+            // cluster and the matra moves in front of both
+            'nukta_with_matra' => [
+                [0x0915, 0x093C, 0x093F],
+                [0x093F, 0x0915, 0x093C],
+            ],
+
+            // Nukta on the first consonant of a conjunct: the matra must not end up
+            // between the virama and the consonant it joins
+            'nukta_in_conjunct_head' => [
+                [0x0915, 0x093C, 0x094D, 0x0915, 0x093F],
+                [0x093F, 0x0915, 0x093C, 0x094D, 0x0915],
+            ],
+
+            // Nukta on the last consonant of a conjunct
+            'nukta_in_conjunct_tail' => [
+                [0x0915, 0x094D, 0x0915, 0x093C, 0x093F],
+                [0x093F, 0x0915, 0x094D, 0x0915, 0x093C],
+            ],
+
+            // Nukta with no matra after it: unchanged
+            'nukta_without_matra' => [
+                [0x0915, 0x093C],
+                [0x0915, 0x093C],
+            ],
+
+            // Orphaned nukta with no preceding consonant: unchanged
+            'orphaned_nukta' => [
+                [0x093C, 0x093F],
+                [0x093C, 0x093F],
+            ],
+
+            // First additional consonant: U+0978 MARWARI DDA + left matra
+            'first_additional_consonant_with_matra' => [
+                [0x0978, 0x093F],
+                [0x093F, 0x0978],
+            ],
+
+            // Last additional consonant: U+097F BBA + left matra
+            'last_additional_consonant_with_matra' => [
+                [0x097F, 0x093F],
+                [0x093F, 0x097F],
+            ],
+
+            // Conjunct of an additional and a standard consonant
+            'additional_consonant_conjunct' => [
+                [0x0979, 0x094D, 0x0915, 0x093F],
+                [0x093F, 0x0979, 0x094D, 0x0915],
             ],
         ];
     }

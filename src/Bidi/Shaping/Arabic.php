@@ -128,14 +128,32 @@ abstract class Arabic
     protected array $seqindex = [];
 
     /**
+     * Joining_Type of every position of the given paragraph.
+     *
+     * @param array<int, int> $paragraph Codepoints of the paragraph, in logical order
+     *
+     * @return array<int, string>
+     */
+    public static function getJoiningTypes(array $paragraph): array
+    {
+        $joining = [];
+        foreach ($paragraph as $pos => $ord) {
+            $joining[$pos] = UniArabic::getJoiningType($ord);
+        }
+
+        return $joining;
+    }
+
+    /**
      * Build the joining type of every paragraph position and the map from a paragraph
-     * position to the sequence item that holds it.
+     * position to the sequence item that holds it. The joining types are kept when they
+     * have been supplied by the caller: they depend only on the paragraph, which is
+     * shared by all the isolating run sequences of that paragraph.
      */
     protected function setJoiningContext(): void
     {
-        $this->joining = [];
-        foreach ($this->paragraph as $pos => $ord) {
-            $this->joining[$pos] = UniArabic::getJoiningType($ord);
+        if ($this->joining === []) {
+            $this->joining = self::getJoiningTypes($this->paragraph);
         }
 
         $this->seqindex = [];

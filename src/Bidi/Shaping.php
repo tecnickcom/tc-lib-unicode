@@ -23,6 +23,9 @@ use Com\Tecnick\Unicode\Data\Arabic as UniArabic;
 /**
  * Com\Tecnick\Unicode\Bidi\Shaping
  *
+ * Arabic shaping: replaces the characters of an isolating run sequence with their
+ * positional presentation forms and ligatures.
+ *
  * @since     2015-07-13
  * @category  Library
  * @package   Unicode
@@ -42,20 +45,27 @@ class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
     protected const ALEF = 0x0627;
 
     /**
-     * Shaping
-     * Cursively connected scripts, such as Arabic or Syriac,
-     * require the selection of positional character shapes that depend on adjacent characters.
-     * Shaping is logically applied after the Bidirectional Algorithm is used and is limited to
-     * characters within the same directional run.
+     * Shape an isolating run sequence, after the Bidirectional Algorithm.
      *
-     * @param SeqData         $seq       Isolated run sequence array
-     * @param array<int, int> $paragraph Codepoints of the paragraph, in logical order
+     * The joining context is read from the paragraph, so two letters separated only by
+     * characters of Joining_Type Transparent join even when those characters put them in
+     * different isolating run sequences: the explicit embedding codes (LRE, RLE, LRO, RLO
+     * and PDF) are Transparent.
+     *
+     * @param SeqData            $seq       Isolated run sequence array
+     * @param array<int, int>    $paragraph Codepoints of the paragraph, in logical order.
+     *                                      Required: it is the only source of the joining
+     *                                      context, and an empty one shapes every
+     *                                      character as isolated.
+     * @param array<int, string> $joining   Joining_Type of each paragraph position
+     *                                      (computed from $paragraph when empty)
      */
-    public function __construct(array $seq, array $paragraph = [])
+    public function __construct(array $seq, array $paragraph, array $joining = [])
     {
         $this->seq = $seq;
         $this->newchardata = $seq['item'];
         $this->paragraph = $paragraph;
+        $this->joining = $joining;
         $this->process();
     }
 
@@ -120,8 +130,11 @@ class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
 
     /**
      * Replace an alef preceded by a lam with the corresponding lam-alef ligature and
-     * delete the lam. The ligature takes the final form when the lam connects to the
+     * delete the alef. The ligature takes the final form when the lam connects to the
      * character before it.
+     *
+     * The ligature is written into the slot of the lam, the first of the two characters,
+     * so that combining marks between the lam and the alef keep following their base.
      *
      * @param int $idx  Index of the sequence item of the alef
      * @param int $char Codepoint of the alef
@@ -149,8 +162,8 @@ class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
             return false;
         }
 
-        $this->setNewChar($lamIdx, -1);
-        $this->setNewChar($idx, $ligature);
+        $this->setNewChar($lamIdx, $ligature);
+        $this->setNewChar($idx, -1);
 
         return true;
     }
@@ -161,6 +174,9 @@ class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
      * them are kept. The ligature has an isolated form only, so it is used just when the
      * alef does not connect to the character before it and the heh does not connect to
      * the one after it.
+     *
+     * The ligature is written into the slot of the alef, the first of the four
+     * characters, so that the marks keep following their base.
      *
      * @param int $idx  Index of the sequence item of the heh
      * @param int $char Codepoint of the heh
@@ -187,8 +203,9 @@ class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
             return false;
         }
 
+        $alefIdx = $this->seqindex[$alef] ?? null;
         $deleted = [];
-        foreach ([$alef, $first, $second] as $position) {
+        foreach ([$first, $second] as $position) {
             $deletedIdx = $this->seqindex[$position] ?? null;
             if ($deletedIdx === null) {
                 // The word is split between two runs: shape the characters individually.
@@ -198,11 +215,16 @@ class Shaping extends \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
             $deleted[] = $deletedIdx;
         }
 
+        if ($alefIdx === null) {
+            return false;
+        }
+
         foreach ($deleted as $deletedIdx) {
             $this->setNewChar($deletedIdx, -1);
         }
 
-        $this->setNewChar($idx, UniArabic::LIGATURE_ALLAH_ISOLATED_FORM);
+        $this->setNewChar($idx, -1);
+        $this->setNewChar($alefIdx, UniArabic::LIGATURE_ALLAH_ISOLATED_FORM);
 
         return true;
     }

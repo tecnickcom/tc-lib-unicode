@@ -21,7 +21,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use Test\TestUtil;
 
 /**
- * Hangul Jamo composition test
+ * Hangul substitution test
  *
  * @since     2026-04-30
  * @category  Library
@@ -47,25 +47,14 @@ class HangulTest extends TestUtil
     /**
      * @return array<string, array{0: array<int, int>, 1: array<int, int>}>
      *
-     * Expected values verified against Unicode conformance data (NormalizationTest.txt,
-     * Hangul section) and the algorithmic formula in Unicode Standard 15.1 §3.12:
-     *   S = SBase(AC00) + (L−1100)×NCount(588) + (V−1161)×TCount(28) + (T−11A7)
+     * The expected values follow the formula of section 3.12 of the Unicode standard,
+     * with LBase=1100, VBase=1161, TBase=11A7, NCount=588 and TCount=28:
+     *   S = SBase + (L-LBase)*NCount + (V-VBase)*TCount + (T-TBase)
      *
-     * Spot-checks:
-     *   가 (U+AC00) = AC00 + (1100−1100)×588 + (1161−1161)×28 + 0 = AC00
-     *   나 (U+B098) = AC00 + (1102−1100)×588 + (1161−1161)×28 = AC00 + 2×588 = AC00+1176 = B1D8? No wait:
-     *     L=U+1102 (NIEUN), V=U+1161 (A)
-     *     S = AC00 + (1102-1100)*588 + (1161-1161)*28 = AC00 + 2*588 = AC00 + 1176 = 0xB1D8  -- that's 나 but wait
-     *     Actually 나 = U+B098:  B098 - AC00 = 1176 - hmm, 0xB098 - 0xAC00 = 0x498 = 1176. Yes.
-     *     (1102-1100)*588 = 2*588 = 1176. Correct.
-     *   닭 (U+B2ED) = AC00 + (1103-1100)*588 + (1161-1161)*28 + (11AF-11A7) -- wait닭 has T=U+11BC?
-     *     닭: L=U+1103 (TIKEUT), V=U+1161 (A), T=U+11BC (IEUNG)? No.
-     *     Let's just use simple known values:
-     *   가 U+AC00: L=U+1100, V=U+1161 → AC00 + 0 + 0 = AC00 ✓
-     *   각 U+AC01: L=U+1100, V=U+1161, T=U+11A8 → AC00 + 0 + (11A8-11A7)=1 = AC01 ✓
-     *   갈 U+AC08: L=U+1100, V=U+1161, T=U+11AF → AC00 + 7 = AC07? 11AF-11A7=8, so AC00+8=AC08 ✓
-     *   나 U+B098: L=U+1102, V=U+1161 → AC00+2*588=AC00+0x498=B098 -- 0xAC00+0x498=0xB098?
-     *     0xAC00=44032, 2*588=1176, 44032+1176=45208=0xB098. ✓
+     *   U+AC00 (가) = AC00 + (1100-1100)*588 + (1161-1161)*28
+     *   U+AC01 (각) = AC00 + (1100-1100)*588 + (1161-1161)*28 + (11A8-11A7)
+     *   U+AC08 (갈) = AC00 + (1100-1100)*588 + (1161-1161)*28 + (11AF-11A7)
+     *   U+B098 (나) = AC00 + (1102-1100)*588 + (1161-1161)*28
      */
     public static function hangulDataProvider(): array
     {
@@ -143,8 +132,7 @@ class HangulTest extends TestUtil
             ],
 
             // L + V boundary: last L (U+1112) + last V (U+1175) → syllable
-            // S = AC00 + 18*588 + 20*28 = AC00 + 10584 + 560 = AC00 + 11144 = D7A4 - 28 = D784?
-            // 0xAC00 + 18*588 + 20*28 = 44032 + 10584 + 560 = 55176 = 0xD788
+            // AC00 + 18*588 + 20*28 = 44032 + 10584 + 560 = 55176 = 0xD788
             'l_plus_v_boundary' => [
                 [0x1112, 0x1175],
                 [0xD788],
@@ -152,14 +140,14 @@ class HangulTest extends TestUtil
 
             // L + V + T → LVT syllable
             // U+1100 + U+1161 + U+11A8 → U+AC01 각 (GAK)
-            // LV = AC00, T = 11A8 − 11A7 = 1 → AC00 + 1 = AC01
+            // LV = AC00, T = 11A8 - 11A7 = 1 → AC00 + 1 = AC01
             'l_plus_v_plus_t_gak' => [
                 [0x1100, 0x1161, 0x11A8],
                 [0xAC01],
             ],
 
             // L + V + T with T = last valid trailing consonant (U+11C2)
-            // U+1100 + U+1161 + U+11C2 → AC00 + (11C2 − 11A7) = AC00 + 27 = AC1B
+            // U+1100 + U+1161 + U+11C2 → AC00 + (11C2 - 11A7) = AC00 + 27 = AC1B
             'l_plus_v_plus_t_last_trailing' => [
                 [0x1100, 0x1161, 0x11C2],
                 [0xAC1B],

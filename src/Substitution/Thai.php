@@ -23,9 +23,8 @@ namespace Com\Tecnick\Unicode\Substitution;
  *
  * Thai codepoints are returned unchanged.
  *
- * Thai preposed vowels (sara E, sara AE, sara O, sara AI) are the documented
- * exception to the logical order of Unicode: they are stored before the consonant
- * they follow in pronunciation and are displayed in that same position, so a
+ * Thai preposed vowels (sara E, sara AE, sara O, sara AI) are stored before the
+ * consonant they follow in pronunciation and are displayed in that same position, so a
  * left-to-right glyph stream needs no reordering.
  *
  * @since     2026-04-30

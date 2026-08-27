@@ -37,42 +37,42 @@ namespace Com\Tecnick\Unicode\Data;
 final class ScriptRanges
 {
     /**
-     * Thai block: U+0E00–U+0E7F
+     * Thai block: U+0E00-U+0E7F
      *
      * @var array{int, int}
      */
     public const THAI = [0x0E00, 0x0E7F];
 
     /**
-     * Devanagari block: U+0900–U+097F
+     * Devanagari block: U+0900-U+097F
      *
      * @var array{int, int}
      */
     public const DEVANAGARI = [0x0900, 0x097F];
 
     /**
-     * Bengali block: U+0980–U+09FF
+     * Bengali block: U+0980-U+09FF
      *
      * @var array{int, int}
      */
     public const BENGALI = [0x0980, 0x09FF];
 
     /**
-     * Hangul Jamo block: U+1100–U+11FF
+     * Hangul Jamo block: U+1100-U+11FF
      *
      * @var array{int, int}
      */
     public const HANGUL_JAMO = [0x1100, 0x11FF];
 
     /**
-     * Hangul Jamo Extended-A block: U+A960–U+A97F
+     * Hangul Jamo Extended-A block: U+A960-U+A97F
      *
      * @var array{int, int}
      */
     public const HANGUL_JAMO_EXT_A = [0xA960, 0xA97F];
 
     /**
-     * Hangul Jamo Extended-B block: U+D7B0–U+D7FF
+     * Hangul Jamo Extended-B block: U+D7B0-U+D7FF
      *
      * @var array{int, int}
      */

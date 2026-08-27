@@ -21,7 +21,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Bidi Test
+ * Bidi StepN test
  *
  * @since     2011-05-23
  * @category  Library
@@ -65,9 +65,8 @@ class StepNTest extends TestCase
     }
 
     /**
-     * BD16 regression: a closing bracket pairs with the nearest matching opening bracket.
-     * For nested same-type brackets "(())" the pairs must be (1,2) and (0,3); the previous
-     * implementation produced a spurious (0,2) pair and dropped the outer (0,3) pair.
+     * BD16: a closing bracket pairs with the nearest matching opening bracket, so the
+     * nested same-type brackets "(())" give the pairs (1,2) and (0,3).
      *
      * @throws \ReflectionException
      */

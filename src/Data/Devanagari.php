@@ -62,6 +62,15 @@ final class Devanagari
     public const VIRAMA = 0x094D;
 
     /**
+     * Devanagari Nukta (U+093C).
+     *
+     * Combining dot that turns a base consonant into another consonant. It belongs to
+     * the consonant it follows, so it is part of the cluster scanned for pre-base matra
+     * reordering.
+     */
+    public const NUKTA = 0x093C;
+
+    /**
      * First codepoint of the standard Devanagari consonant range.
      *
      * U+0915 DEVANAGARI LETTER KA
@@ -89,4 +98,18 @@ final class Devanagari
      * U+095F DEVANAGARI LETTER YYA
      */
     public const BASE_CONSONANT_EXT_LAST = 0x095F;
+
+    /**
+     * First codepoint of the additional Devanagari consonant range.
+     *
+     * U+0978 DEVANAGARI LETTER MARWARI DDA
+     */
+    public const BASE_CONSONANT_ADD_FIRST = 0x0978;
+
+    /**
+     * Last codepoint of the additional Devanagari consonant range.
+     *
+     * U+097F DEVANAGARI LETTER BBA
+     */
+    public const BASE_CONSONANT_ADD_LAST = 0x097F;
 }

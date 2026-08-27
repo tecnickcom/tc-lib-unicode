@@ -178,7 +178,7 @@ final class Hangul
     /**
      * Returns true when $codepoint is a Hangul leading consonant (choseong).
      *
-     * Range: U+1100–U+1112 (LCount = 19 entries).
+     * Range: U+1100-U+1112 (LCount = 19 entries).
      */
     private function isLeadingConsonant(int $codepoint): bool
     {
@@ -188,7 +188,7 @@ final class Hangul
     /**
      * Returns true when $codepoint is a Hangul vowel (jungseong).
      *
-     * Range: U+1161–U+1175 (VCount = 21 entries).
+     * Range: U+1161-U+1175 (VCount = 21 entries).
      */
     private function isVowel(int $codepoint): bool
     {
@@ -198,7 +198,7 @@ final class Hangul
     /**
      * Returns true when $codepoint is a Hangul trailing consonant (jongseong).
      *
-     * Range: U+11A8–U+11C2 (TCount − 1 = 27 entries; TBase = U+11A7 is
+     * Range: U+11A8-U+11C2 (TCount - 1 = 27 entries; TBase = U+11A7 is
      * not itself a valid trailing consonant).
      */
     private function isTrailingConsonant(int $codepoint): bool

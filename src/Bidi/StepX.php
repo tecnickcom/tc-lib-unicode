@@ -24,6 +24,8 @@ use Com\Tecnick\Unicode\Data\Type as UniType;
 /**
  * Com\Tecnick\Unicode\Bidi\StepX
  *
+ * X steps of the Bidirectional Algorithm: explicit levels and directions (X1 to X9).
+ *
  * @since     2015-07-13
  * @category  Library
  * @package   Unicode
@@ -92,6 +94,9 @@ class StepX
         protected array $ordarr,
         int $pel,
     ) {
+        // The character positions are used as offsets by getIsolateContent(), so the keys
+        // have to be sequential from zero.
+        $this->ordarr = \array_values($this->ordarr);
         //     - Push onto the stack an entry consisting of the paragraph embedding level,
         //       a neutral directional override status, and a false directional isolate status.
         $this->dss[] = [

@@ -21,7 +21,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Convert Test
+ * Convert test
  *
  * @since     2011-05-23
  * @category  Library
@@ -185,6 +185,52 @@ class ConvertTest extends TestCase
         $this->assertSame(['?', '?', '?', 'A'], $convert->ordArrToChrArr([-1, 0xD800, 0x110000, 0x41]));
     }
 
+    /**
+     * chr() substitutes the code points that cannot be encoded with '?', like
+     * ordArrToChrArr(), and always returns valid UTF-8.
+     *
+     * @throws \Com\Tecnick\Unicode\Exception
+     */
+    #[DataProvider('chrInvalidDataProvider')]
+    public function testChrSubstitutesInvalid(int $ord): void
+    {
+        $convert = $this->getTestObject();
+        $chr = $convert->chr($ord);
+        $this->assertSame('?', $chr);
+        $this->assertSame([$chr], $convert->ordArrToChrArr([$ord]));
+        $this->assertSame([$chr], $convert->strToChrArr($chr));
+    }
+
+    /**
+     * @return array<string, array{0:int}>
+     */
+    public static function chrInvalidDataProvider(): array
+    {
+        return [
+            'negative' => [-1],
+            'first surrogate' => [0xD800],
+            'last surrogate' => [0xDFFF],
+            'above the last code point' => [0x110000],
+            // pack('N') keeps only the low 32 bits: without a range check these would be
+            // encoded as 'A', U+0001 and a lone surrogate.
+            'wrapping to a letter' => [0x100000041],
+            'wrapping to a negative' => [-4294967295],
+            'wrapping to a surrogate' => [0x10000D800],
+        ];
+    }
+
+    /**
+     * ord() rejects malformed UTF-8 instead of returning the substitution character.
+     *
+     * @throws \Com\Tecnick\Unicode\Exception
+     */
+    public function testOrdInvalidUtf8Exception(): void
+    {
+        $this->expectException(\Com\Tecnick\Unicode\Exception::class);
+        $convert = $this->getTestObject();
+        $convert->ord("\xC3\x28");
+    }
+
     public function testGetSubUniArrStr(): void
     {
         $convert = $this->getTestObject();
@@ -193,6 +239,30 @@ class ConvertTest extends TestCase
 
         $res = $convert->getSubUniArrStr(['0', 'A', '¶', 'ÿ', 'Ā', 'Ƞ', 'Δ', 'א', '台', '서'], 2, 8);
         $this->assertEquals('¶ÿĀȠΔא', $res);
+    }
+
+    /**
+     * An end that is not after the start returns an empty string, instead of the negative
+     * length being read by array_slice() as an offset from the end of the array.
+     */
+    #[DataProvider('getSubUniArrStrEmptyDataProvider')]
+    public function testGetSubUniArrStrEmptyRange(int $start, int $end): void
+    {
+        $convert = $this->getTestObject();
+        $this->assertSame('', $convert->getSubUniArrStr(['a', 'b', 'c', 'd', 'e'], $start, $end));
+    }
+
+    /**
+     * @return array<string, array{0:int,1:int}>
+     */
+    public static function getSubUniArrStrEmptyDataProvider(): array
+    {
+        return [
+            'end before start' => [2, 1],
+            'end at zero' => [1, 0],
+            'negative end' => [0, -1],
+            'same position' => [3, 3],
+        ];
     }
 
     public function testUniArrToLatinArr(): void
@@ -243,6 +313,31 @@ class ConvertTest extends TestCase
             ['AB', '4142'],
             ['ABC', '414243'],
             ["\n", '0a'],
+        ];
+    }
+
+    /**
+     * An odd number of digits is completed with a trailing zero, as in the PDF standard,
+     * and a pair that is not hexadecimal becomes a NUL byte.
+     */
+    #[DataProvider('hexToStrOddDataProvider')]
+    public function testHexToStrOdd(string $hex, string $expected): void
+    {
+        $convert = $this->getTestObject();
+        $this->assertSame($expected, \bin2hex($convert->hexToStr($hex)));
+    }
+
+    /**
+     * @return array<string, array{0:string,1:string}>
+     */
+    public static function hexToStrOddDataProvider(): array
+    {
+        return [
+            'one digit' => ['a', 'a0'],
+            'three digits' => ['abc', 'abc0'],
+            'five digits' => ['41424', '414240'],
+            'not hexadecimal' => ['zz', '00'],
+            'trailing not hexadecimal' => ['41zz', '4100'],
         ];
     }
 

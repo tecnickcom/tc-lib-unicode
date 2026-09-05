@@ -12,7 +12,7 @@ Vcs-Browser: https://github.com/~#VENDOR#~/~#PROJECT#~
 Package: ~#PKGNAME#~
 Provides: php-~#PROJECT#~
 Architecture: all
-Depends: php (>= 8.2.0), php-ctype, php-mbstring, php-tecnickcom-tc-lib-unicode-data (<< 3.0.0), php-tecnickcom-tc-lib-unicode-data (>= 3.0.5), ${misc:Depends}
+Depends: php (>= 8.2.0), php-ctype, php-mbstring, php-tecnickcom-tc-lib-unicode-data (<< 3.0.0), php-tecnickcom-tc-lib-unicode-data (>= 3.0.6), ${misc:Depends}
 Description: PHP library to process UTF-8 and Unicode text
  Conversions between UTF-8 strings, character arrays and code point
  arrays, the Unicode bidirectional algorithm (UAX #9) with Arabic

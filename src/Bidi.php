@@ -34,7 +34,8 @@ use Com\Tecnick\Unicode\Exception as UnicodeException;
  * Com\Tecnick\Unicode\Bidi
  *
  * Unicode Bidirectional Algorithm (UAX #9): reorders each paragraph of the input from
- * logical to visual order and applies the Arabic shaping.
+ * logical to visual order and applies the Arabic shaping. The shaped logical order with
+ * the resolved levels is also available, to reorder each line after line breaking.
  * https://www.unicode.org/reports/tr9/
  *
  * @since     2015-07-13
@@ -108,14 +109,22 @@ class Bidi
     protected array $bidiordarr = [];
 
     /**
+     * Logical order output, after rule X9 and the shaping: codepoints ('ord'), resolved
+     * embedding levels ('level') and paragraph embedding levels ('pel'), one entry per
+     * codepoint.
+     *
+     * @var array{ord: array<int>, level: array<int>, pel: array<int>}
+     */
+    protected array $logical = [
+        'ord' => [],
+        'level' => [],
+        'pel' => [],
+    ];
+
+    /**
      * If 'R' forces RTL, if 'L' forces LTR
      */
     protected string $forcedir = '';
-
-    /**
-     * If true enable shaping
-     */
-    protected bool $shaping = true;
 
     /**
      * Content flags of the input, as a combination of the CONTAINS_* constants
@@ -160,12 +169,16 @@ class Bidi
             $this->bidistr = $this->str;
             $this->bidichrarr = $this->chrarr;
             $this->bidiordarr = $this->ordarr;
+            $levels = \array_fill(0, \count($this->ordarr), 0);
+            $this->logical = [
+                'ord' => $this->ordarr,
+                'level' => $levels,
+                'pel' => $levels,
+            ];
             return;
         }
 
-        $this->shaping = $shaping && $this->isArabic();
-
-        $this->process();
+        $this->process($shaping && $this->isArabic());
     }
 
     /**
@@ -256,6 +269,86 @@ class Bidi
     }
 
     /**
+     * Returns the codepoints in logical order, without the characters removed by rule X9
+     * and with the Arabic shaping applied (rules L1 to L4 not applied).
+     *
+     * @return array<int>
+     */
+    public function getLogicalOrdArray(): array
+    {
+        return $this->logical['ord'];
+    }
+
+    /**
+     * Returns the resolved embedding level of each entry of getLogicalOrdArray().
+     *
+     * @return array<int>
+     */
+    public function getLogicalLevels(): array
+    {
+        return $this->logical['level'];
+    }
+
+    /**
+     * Returns the paragraph embedding level of each entry of getLogicalOrdArray().
+     *
+     * @return array<int>
+     */
+    public function getLogicalParagraphLevels(): array
+    {
+        return $this->logical['pel'];
+    }
+
+    /**
+     * Reorders one line of one paragraph from logical to visual order (rules L1, L2 and L4).
+     *
+     * @param array<int> $ordarr Codepoints of the line in logical order
+     * @param array<int> $levels Resolved embedding level of each codepoint
+     * @param int        $pel    Paragraph embedding level
+     *
+     * @return array<int> Codepoints in visual order
+     *
+     * @throws UnicodeException
+     */
+    public static function reorderLine(array $ordarr, array $levels, int $pel): array
+    {
+        $ordarr = \array_values($ordarr);
+        $levels = \array_values($levels);
+        if (\count($ordarr) !== \count($levels)) {
+            throw new UnicodeException('the codepoints and the levels have a different number of entries');
+        }
+
+        $maxlevel = $pel;
+        $chardata = [];
+        foreach ($ordarr as $idx => $ord) {
+            $level = $levels[$idx] ?? $pel;
+            $type = UniType::getType($ord);
+            $chardata[] = [
+                'char' => $ord,
+                'i' => $idx,
+                'level' => $level,
+                'otype' => $type,
+                'pdimatch' => -1,
+                'pos' => $idx,
+                'type' => $type,
+                'x' => $level,
+            ];
+
+            if ($level > $maxlevel) {
+                $maxlevel = $level;
+            }
+        }
+
+        $stepl = new StepL($chardata, $pel, $maxlevel);
+        $visual = [];
+        foreach ($stepl->getChrData() as $chardatum) {
+            $visual[] = $chardatum['char'];
+        }
+
+        return $visual;
+    }
+
+    /**
      * Returns the processed array of UTF-8 chars
      *
      * @return array<string>
@@ -331,9 +424,11 @@ class Bidi
     /**
      * Process the string
      *
+     * @param bool $shaping If true apply the Arabic shaping
+     *
      * @SuppressWarnings("PHPMD.CyclomaticComplexity")
      */
-    protected function process(): void
+    protected function process(bool $shaping): void
     {
         // split the text into separate paragraphs.
         $paragraph = $this->getParagraphs();
@@ -351,7 +446,7 @@ class Bidi
             $ilrs = $stepx10->getIsolatedLevelRunSequences();
             // The joining context depends only on the paragraph, so it is shared by all
             // the isolating run sequences of that paragraph.
-            $joining = $this->shaping ? Shaping::getJoiningTypes($par) : [];
+            $joining = $shaping ? Shaping::getJoiningTypes($par) : [];
             $chardata = [];
             $maxlevel = 0;
             foreach ($ilrs as $ilr) {
@@ -359,9 +454,8 @@ class Bidi
                 $stepn = new StepN($stepw->getSequence());
                 $stepi = new StepI($stepn->getSequence());
                 $ilr = $stepi->getSequence();
-                if ($this->shaping) {
-                    $shaping = new Shaping($ilr, $par, $joining);
-                    $ilr = $shaping->getSequence();
+                if ($shaping) {
+                    $ilr = (new Shaping($ilr, $par, $joining))->getSequence();
                 }
 
                 \array_push($chardata, ...$ilr['item']);
@@ -369,6 +463,14 @@ class Bidi
                 if ($ilr['maxlevel'] > $maxlevel) {
                     $maxlevel = $ilr['maxlevel'];
                 }
+            }
+
+            // logical order, before the L rules
+            \usort($chardata, static fn($apos, $bpos): int => $apos['pos'] - $bpos['pos']);
+            foreach ($chardata as $chardatum) {
+                $this->logical['ord'][] = $chardatum['char'];
+                $this->logical['level'][] = $chardatum['level'];
+                $this->logical['pel'][] = $pel;
             }
 
             $stepl = new StepL($chardata, $pel, $maxlevel);
@@ -388,6 +490,9 @@ class Bidi
             }
 
             $this->bidiordarr[] = $lastchar;
+            $this->logical['ord'][] = $lastchar;
+            $this->logical['level'][] = $pel;
+            $this->logical['pel'][] = $pel;
         }
     }
 

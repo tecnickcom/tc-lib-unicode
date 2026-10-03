@@ -632,4 +632,115 @@ class BidiTest extends TestUtil
         $bidi = new Bidi(null, null, $ordarr, 'R', false);
         $this->assertSame($expected, \array_values($bidi->getOrdArray()));
     }
+
+    /**
+     * Left-to-right text without removed characters is returned unchanged in logical order,
+     * at level 0.
+     *
+     * @throws \Com\Tecnick\Unicode\Exception
+     */
+    public function testLogicalOutputOfLeftToRightText(): void
+    {
+        $bidi = new Bidi('ab c');
+        $this->assertSame([0x61, 0x62, 0x20, 0x63], $bidi->getLogicalOrdArray());
+        $this->assertSame([0, 0, 0, 0], $bidi->getLogicalLevels());
+        $this->assertSame([0, 0, 0, 0], $bidi->getLogicalParagraphLevels());
+    }
+
+    /**
+     * The logical output drops the characters removed by X9, keeps the paragraph
+     * separators at the paragraph level and reports the level of each paragraph.
+     *
+     * @throws \Com\Tecnick\Unicode\Exception
+     */
+    public function testLogicalOutputOfMixedParagraphs(): void
+    {
+        $ordarr = [0x61, 0x20, 0x05D0, 0x00AD, 0x05D1, 0x20, 0x62, 0x0A, 0x05D2, 0x20, 0x63];
+        $bidi = new Bidi(null, null, $ordarr, '', false);
+        $this->assertSame(
+            [0x61, 0x20, 0x05D0, 0x05D1, 0x20, 0x62, 0x0A, 0x05D2, 0x20, 0x63],
+            $bidi->getLogicalOrdArray(),
+        );
+        $this->assertSame([0, 0, 1, 1, 0, 0, 0, 1, 1, 2], $bidi->getLogicalLevels());
+        $this->assertSame([0, 0, 0, 0, 0, 0, 0, 1, 1, 1], $bidi->getLogicalParagraphLevels());
+    }
+
+    /**
+     * The Arabic shaping is applied to the logical output, and a lam-alef ligature
+     * replaces two logical characters.
+     *
+     * @throws \Com\Tecnick\Unicode\Exception
+     */
+    public function testLogicalOutputIsShaped(): void
+    {
+        $bidi = new Bidi(null, null, [0x0644, 0x0627]);
+        $this->assertSame([0xFEFB], $bidi->getLogicalOrdArray());
+        $this->assertSame([1], $bidi->getLogicalLevels());
+        $this->assertSame([1], $bidi->getLogicalParagraphLevels());
+    }
+
+    /**
+     * Reordering the logical output as a single line gives the visual order of the
+     * whole paragraph.
+     *
+     * @throws \Com\Tecnick\Unicode\Exception
+     */
+    public function testReorderLineOfTheWholeParagraph(): void
+    {
+        $bidi = new Bidi(self::decodeJsonString('"ab \u05d0\u05d1 (\u05d2) 12 cd"'));
+        $pels = $bidi->getLogicalParagraphLevels();
+        $this->assertSame($bidi->getOrdArray(), Bidi::reorderLine(
+            $bidi->getLogicalOrdArray(),
+            $bidi->getLogicalLevels(),
+            $pels[0] ?? 0,
+        ));
+    }
+
+    /**
+     * A right-to-left run broken across two lines keeps its logical start on the first
+     * line, each line being reordered on its own.
+     *
+     * @throws \Com\Tecnick\Unicode\Exception
+     */
+    public function testReorderLineOfABrokenRun(): void
+    {
+        // a W1 W2 W3 b, broken after W2
+        $ordarr = [0x61, 0x20, 0x05D0, 0x20, 0x05D1, 0x20, 0x05D2, 0x20, 0x62];
+        $bidi = new Bidi(null, null, $ordarr, 'L', false);
+        $logical = $bidi->getLogicalOrdArray();
+        $levels = $bidi->getLogicalLevels();
+
+        $this->assertSame(
+            [0x61, 0x20, 0x05D1, 0x20, 0x05D0],
+            Bidi::reorderLine(\array_slice($logical, 0, 5), \array_slice($levels, 0, 5), 0),
+        );
+        $this->assertSame(
+            [0x05D2, 0x20, 0x62],
+            Bidi::reorderLine(\array_slice($logical, 6), \array_slice($levels, 6), 0),
+        );
+    }
+
+    /**
+     * L1 moves the whitespace at the end of a line to the paragraph level and L4 mirrors
+     * the brackets of a right-to-left run.
+     *
+     * @throws \Com\Tecnick\Unicode\Exception
+     */
+    public function testReorderLineAppliesL1AndL4(): void
+    {
+        $this->assertSame([0x05D1, 0x05D0, 0x20], Bidi::reorderLine([0x05D0, 0x05D1, 0x20], [1, 1, 1], 0));
+        $this->assertSame([0x28, 0x05D0, 0x29], Bidi::reorderLine([0x28, 0x05D0, 0x29], [1, 1, 1], 1));
+        $this->assertSame([], Bidi::reorderLine([], [], 0));
+    }
+
+    /**
+     * The codepoints and the levels must have the same number of entries.
+     *
+     * @throws \Com\Tecnick\Unicode\Exception
+     */
+    public function testReorderLineMismatchedLevels(): void
+    {
+        $this->bcExpectException(\Com\Tecnick\Unicode\Exception::class);
+        Bidi::reorderLine([0x61, 0x62], [0], 0);
+    }
 }

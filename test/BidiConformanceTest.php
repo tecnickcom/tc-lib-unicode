@@ -18,11 +18,13 @@ namespace Test;
 
 use Com\Tecnick\Unicode\Bidi;
 use Com\Tecnick\Unicode\Data\Mirror as UniMirror;
+use Com\Tecnick\Unicode\Data\Type as UniType;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Runs the official BidiCharacterTest.txt conformance suite of the Unicode Character
- * Database against the bidirectional algorithm.
+ * Database against the bidirectional algorithm, both on the whole paragraph and through
+ * the logical output reordered with Bidi::reorderLine().
  *
  * The data file is downloaded by "make ucd" into target/ucd/<version>/; the test is
  * skipped when it is not available.
@@ -140,11 +142,52 @@ class BidiConformanceTest extends TestCase
         try {
             $bidi = new Bidi(null, null, $ordarr, self::DIRECTION[$direction] ?? '', false);
             $result = \array_values($bidi->getOrdArray());
+            $lines = self::reorderParagraphs($bidi);
         } catch (\Throwable) {
             return false;
         }
 
-        return $result === $expected;
+        return $result === $expected && $lines === $result;
+    }
+
+    /**
+     * Reorders the logical output of each paragraph as a single line with Bidi::reorderLine().
+     *
+     * @return array<int, int>
+     *
+     * @throws \Com\Tecnick\Unicode\Exception
+     */
+    private static function reorderParagraphs(Bidi $bidi): array
+    {
+        $ordarr = $bidi->getLogicalOrdArray();
+        $levels = $bidi->getLogicalLevels();
+        $pels = $bidi->getLogicalParagraphLevels();
+        $visual = [];
+        $start = 0;
+        $num = \count($ordarr);
+        for ($idx = 0; $idx <= $num; ++$idx) {
+            $ord = $ordarr[$idx] ?? null;
+            if ($ord !== null && UniType::getType($ord) !== 'B') {
+                continue;
+            }
+
+            $len = $idx - $start;
+            if ($len > 0) {
+                \array_push($visual, ...Bidi::reorderLine(
+                    \array_slice($ordarr, $start, $len),
+                    \array_slice($levels, $start, $len),
+                    $pels[$start] ?? 0,
+                ));
+            }
+
+            if ($ord !== null) {
+                $visual[] = $ord;
+            }
+
+            $start = $idx + 1;
+        }
+
+        return $visual;
     }
 
     /**

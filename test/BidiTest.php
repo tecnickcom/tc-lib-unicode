@@ -743,4 +743,89 @@ class BidiTest extends TestUtil
         $this->bcExpectException(\Com\Tecnick\Unicode\Exception::class);
         Bidi::reorderLine([0x61, 0x62], [0], 0);
     }
+
+    /**
+     * @return array<string, array{0: array<int>, 1: string, 2: array<int>, 3: array<int>, 4: array<int>}>
+     */
+    public static function keptBreakControlsProvider(): array
+    {
+        return [
+            'ideographs' => [
+                [0x543E, 0x200B, 0x8F29, 0x00AD, 0x78],
+                '',
+                [0x543E, 0x8F29, 0x78],
+                [0x543E, 0x200B, 0x8F29, 0x00AD, 0x78],
+                [0, 0, 0, 0, 0],
+            ],
+            'latin without other changes' => [
+                [0x61, 0x62, 0x00AD, 0x63],
+                '',
+                [0x61, 0x62, 0x63],
+                [0x61, 0x62, 0x00AD, 0x63],
+                [0, 0, 0, 0],
+            ],
+            'right-to-left and left-to-right runs' => [
+                [0x05D0, 0x05D1, 0x200B, 0x05D2, 0x20, 0x61, 0x62, 0x2060, 0x63],
+                '',
+                [0x05D0, 0x05D1, 0x05D2, 0x20, 0x61, 0x62, 0x63],
+                [0x05D0, 0x05D1, 0x200B, 0x05D2, 0x20, 0x61, 0x62, 0x2060, 0x63],
+                [1, 1, 1, 1, 1, 2, 2, 2, 2],
+            ],
+            'at the start of a right-to-left paragraph' => [
+                [0xFEFF, 0x05D0, 0x05D1],
+                'R',
+                [0x05D0, 0x05D1],
+                [0xFEFF, 0x05D0, 0x05D1],
+                [1, 1, 1],
+            ],
+            'other boundary neutrals are removed' => [
+                [0x61, 0x200D, 0x62, 0x200B, 0x63],
+                '',
+                [0x61, 0x62, 0x63],
+                [0x61, 0x62, 0x200B, 0x63],
+                [0, 0, 0, 0],
+            ],
+        ];
+    }
+
+    /**
+     * @param array<int> $input
+     * @param array<int> $removed
+     * @param array<int> $kept
+     * @param array<int> $levels
+     *
+     * @throws \Com\Tecnick\Unicode\Exception
+     */
+    #[DataProvider('keptBreakControlsProvider')]
+    public function testKeptLineBreakControls(
+        array $input,
+        string $forcedir,
+        array $removed,
+        array $kept,
+        array $levels,
+    ): void {
+        $bidi = new Bidi(null, null, $input, $forcedir);
+        $this->assertSame($removed, $bidi->getLogicalOrdArray());
+
+        $bidi = new Bidi(null, null, $input, $forcedir, true, true);
+        $this->assertSame($kept, $bidi->getLogicalOrdArray());
+        $this->assertSame($levels, $bidi->getLogicalLevels());
+        $this->assertCount(\count($kept), $bidi->getLogicalParagraphLevels());
+    }
+
+    /**
+     * The kept characters are transparent to the Arabic joining.
+     *
+     * @throws \Com\Tecnick\Unicode\Exception
+     */
+    public function testKeptLineBreakControlsDoNotChangeTheShaping(): void
+    {
+        $plain = new Bidi(null, null, [0x0628, 0x0628], '', true, true);
+        $kept = new Bidi(null, null, [0x0628, 0x200B, 0x0628], '', true, true);
+
+        $shaped = $kept->getLogicalOrdArray();
+        $this->assertSame(0x200B, $shaped[1] ?? null);
+        unset($shaped[1]);
+        $this->assertSame($plain->getLogicalOrdArray(), \array_values($shaped));
+    }
 }

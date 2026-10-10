@@ -45,6 +45,8 @@ use Com\Tecnick\Unicode\Exception as UnicodeException;
  * @copyright 2011-2026 Nicola Asuni - Tecnick.com LTD
  * @license   https://www.gnu.org/copyleft/lesser.html GNU-LGPL v3 (see LICENSE)
  * @link      https://github.com/tecnickcom/tc-lib-unicode
+ *
+ * @phpstan-import-type CharData from \Com\Tecnick\Unicode\Bidi\Shaping\Arabic
  */
 class Bidi
 {
@@ -69,6 +71,20 @@ class Bidi
      * (ZWJ, ZWNJ, ZWNBSP, SOFT HYPHEN and most of the control characters)
      */
     public const CONTAINS_REMOVED = 8;
+
+    /**
+     * Characters of bidi class BN that control line breaking and that are kept in the
+     * logical output when the constructor is called with $keepbreaks set to true:
+     * SOFT HYPHEN, ZERO WIDTH SPACE, WORD JOINER and ZERO WIDTH NO-BREAK SPACE.
+     *
+     * @var array<int, true>
+     */
+    public const LINE_BREAK_CONTROLS = [
+        0x00AD => true,
+        0x200B => true,
+        0x2060 => true,
+        0xFEFF => true,
+    ];
 
     /**
      * String to process
@@ -144,8 +160,14 @@ class Bidi
      * @param ?array<int>  $ordarr   Array of UTF-8 codepoints (if empty it will be generated from $str or $chrarr)
      * @param string|TextDirection $forcedir If 'R' forces RTL, if 'L' forces LTR ('' auto), or a TextDirection case
      * @param bool   $shaping  If true enable the shaping algorithm
+     * @param bool   $keepbreaks If true the LINE_BREAK_CONTROLS characters are kept in the
+     *                           logical output (getLogicalOrdArray()), each with the level of
+     *                           the character before it, or the paragraph level at the start.
+     *                           They take no part in the resolution of the levels.
      *
      * @throws UnicodeException
+     *
+     * @mago-expect lint:excessive-parameter-list
      */
     public function __construct(
         ?string $str = null,
@@ -153,6 +175,7 @@ class Bidi
         ?array $ordarr = null,
         string|TextDirection $forcedir = '',
         bool $shaping = true,
+        bool $keepbreaks = false,
     ) {
         if ($str === null && ($chrarr === null || $chrarr === []) && ($ordarr === null || $ordarr === [])) {
             throw new UnicodeException('empty input');
@@ -160,7 +183,7 @@ class Bidi
 
         $this->conv = new Convert();
         $this->setInput($str, $chrarr, $ordarr, $forcedir);
-        $this->scanInput();
+        $this->scanInput($keepbreaks);
 
         // The algorithm is the identity on left-to-right text with nothing for rule X9 to
         // remove: the explicit formatting characters and the characters of bidi class BN
@@ -178,7 +201,7 @@ class Bidi
             return;
         }
 
-        $this->process($shaping && $this->isArabic());
+        $this->process($shaping && $this->isArabic(), $keepbreaks);
     }
 
     /**
@@ -229,8 +252,10 @@ class Bidi
     /**
      * Classify the input once into the content flags used to decide whether the
      * bidirectional algorithm and the shaping have to run.
+     *
+     * @param bool $keepbreaks True if the LINE_BREAK_CONTROLS characters are kept.
      */
-    protected function scanInput(): void
+    protected function scanInput(bool $keepbreaks = false): void
     {
         foreach ($this->ordarr as $ord) {
             if (
@@ -252,7 +277,7 @@ class Bidi
                 continue;
             }
 
-            if ($type === 'BN') {
+            if ($type === 'BN' && !($keepbreaks && isset(self::LINE_BREAK_CONTROLS[$ord]))) {
                 $this->content |= self::CONTAINS_REMOVED;
             }
         }
@@ -425,10 +450,11 @@ class Bidi
      * Process the string
      *
      * @param bool $shaping If true apply the Arabic shaping
+     * @param bool $keepbreaks True to keep the LINE_BREAK_CONTROLS characters
      *
      * @SuppressWarnings("PHPMD.CyclomaticComplexity")
      */
-    protected function process(bool $shaping): void
+    protected function process(bool $shaping, bool $keepbreaks = false): void
     {
         // split the text into separate paragraphs.
         $paragraph = $this->getParagraphs();
@@ -467,11 +493,7 @@ class Bidi
 
             // logical order, before the L rules
             \usort($chardata, static fn($apos, $bpos): int => $apos['pos'] - $bpos['pos']);
-            foreach ($chardata as $chardatum) {
-                $this->logical['ord'][] = $chardatum['char'];
-                $this->logical['level'][] = $chardatum['level'];
-                $this->logical['pel'][] = $pel;
-            }
+            $this->addLogicalChars($par, $chardata, $pel, $keepbreaks);
 
             $stepl = new StepL($chardata, $pel, $maxlevel);
             $chardata = $stepl->getChrData();
@@ -494,6 +516,56 @@ class Bidi
             $this->logical['level'][] = $pel;
             $this->logical['pel'][] = $pel;
         }
+    }
+
+    /**
+     * Append the characters of a paragraph to the logical output, with the kept line
+     * break controls inserted back at their positions.
+     *
+     * @param array<int> $par      Paragraph codepoints.
+     * @param array<int, CharData> $chardata Resolved characters in logical order.
+     * @param int        $pel      Paragraph embedding level.
+     * @param bool       $keepbreaks True to insert the kept line break controls.
+     */
+    protected function addLogicalChars(array $par, array $chardata, int $pel, bool $keepbreaks): void
+    {
+        $kept = [];
+        if ($keepbreaks) {
+            foreach ($par as $pos => $ord) {
+                if (!isset(self::LINE_BREAK_CONTROLS[$ord])) {
+                    continue;
+                }
+
+                $kept[] = [$pos, $ord];
+            }
+        }
+
+        $level = $pel;
+        $next = 0;
+        foreach ($chardata as $chardatum) {
+            while (isset($kept[$next]) && $kept[$next][0] < $chardatum['pos']) {
+                $this->addLogicalChar($kept[$next][1], $level, $pel);
+                ++$next;
+            }
+
+            $this->addLogicalChar($chardatum['char'], $chardatum['level'], $pel);
+            $level = $chardatum['level'];
+        }
+
+        while (isset($kept[$next])) {
+            $this->addLogicalChar($kept[$next][1], $level, $pel);
+            ++$next;
+        }
+    }
+
+    /**
+     * Append one character to the logical output.
+     */
+    protected function addLogicalChar(int $ord, int $level, int $pel): void
+    {
+        $this->logical['ord'][] = $ord;
+        $this->logical['level'][] = $level;
+        $this->logical['pel'][] = $pel;
     }
 
     /**

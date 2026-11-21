@@ -381,6 +381,36 @@ class ConvertTest extends TestCase
         ];
     }
 
+    #[DataProvider('getCanonicalEncodingDataProvider')]
+    public function testGetCanonicalEncoding(string $name, string $exp): void
+    {
+        $convert = $this->getTestObject();
+        $this->assertSame($exp, $convert->getCanonicalEncoding($name));
+    }
+
+    /**
+     * @return array<int, array{string, string}>
+     */
+    public static function getCanonicalEncodingDataProvider(): array
+    {
+        return [
+            ['iso-8859-1',       'ISO-8859-1'],
+            ['ISO-8859-1',       'ISO-8859-1'],
+            ['windows-1252',     'Windows-1252'],
+            ['WINDOWS-1252',     'Windows-1252'],
+            ['utf8',             'UTF-8'],
+            ['latin1',           'ISO-8859-1'],
+            ['no-such-encoding', 'no-such-encoding'],
+        ];
+    }
+
+    public function testToUTF8WithLowerCaseEncodingList(): void
+    {
+        $convert = $this->getTestObject();
+        $this->assertSame("\u{00E8}", $convert->toUTF8("\xE8", 'utf-8, iso-8859-1'));
+        $this->assertSame("\u{00E8}", $convert->toUTF8("\xE8", ['utf-8', 'iso-8859-1']));
+    }
+
     public function testToUTF8WithUndetectableEncoding(): void
     {
         // BASE64 and HTML-ENTITIES cannot detect a plain ASCII string,
